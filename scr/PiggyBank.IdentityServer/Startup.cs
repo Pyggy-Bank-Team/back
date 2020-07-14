@@ -25,7 +25,7 @@ namespace PiggyBank.IdentityServer
 
             //UserManager
             services.AddDbContext<IndeintityContext>(opt =>
-                    opt.UseSqlServer("Server=(local)\\SQL2016;Database=PiggyBank;Trusted_Connection=True;MultipleActiveResultSets=true"));
+                    opt.UseSqlServer(@"Data Source=SQL5050.site4now.net;Initial Catalog=DB_A63631_trest;User Id=DB_A63631_trest_admin;Password=sceby7imRCXK8hu;"));
             services.AddIdentity<IdentityUser, IdentityRole>(opt =>
             {
                 opt.Password.RequireDigit = false;

@@ -65,12 +65,12 @@ Global
 		{1A606064-649F-4E0A-B212-696DAA7B9952}.Release|x64.Build.0 = Release|x64
 		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Debug|Any CPU.ActiveCfg = Debug|Any CPU
 		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Debug|Any CPU.Build.0 = Debug|Any CPU
-		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Debug|x64.ActiveCfg = Debug|Any CPU
-		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Debug|x64.Build.0 = Debug|Any CPU
+		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Debug|x64.ActiveCfg = Debug|x64
+		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Debug|x64.Build.0 = Debug|x64
 		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Release|Any CPU.ActiveCfg = Release|Any CPU
 		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Release|Any CPU.Build.0 = Release|Any CPU
-		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Release|x64.ActiveCfg = Release|Any CPU
-		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Release|x64.Build.0 = Release|Any CPU
+		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Release|x64.ActiveCfg = Release|x64
+		{88E72E1C-5EF1-4965-B9ED-6464F04AF86B}.Release|x64.Build.0 = Release|x64
 	EndGlobalSection
 	GlobalSection(SolutionProperties) = preSolution
 		HideSolutionNode = FALSE

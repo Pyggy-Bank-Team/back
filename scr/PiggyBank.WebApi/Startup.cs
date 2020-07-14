@@ -22,7 +22,7 @@ namespace PiggyBank.WebApi
             services.AddControllers().AddNewtonsoftJson();
             services.AddTransient(x => new ServiceSettings
             {
-                ConnectionString = Configuration.GetConnectionString("dbConnection")
+                ConnectionString = @"Data Source=SQL5050.site4now.net;Initial Catalog=DB_A63631_trest;User Id=DB_A63631_trest_admin;Password=sceby7imRCXK8hu;"
             });
             services.AddTransient<IAccountService, PiggyService>();
             services.AddTransient<ICategoryService, PiggyService>();
@@ -61,7 +61,7 @@ namespace PiggyBank.WebApi
             services.AddAuthentication("Bearer")
             .AddJwtBearer("Bearer", options =>
             {
-                options.Authority = "https://localhost:44340/";
+                options.Authority = "http://dtrest1-001-site1.itempurl.com/";
                 options.RequireHttpsMetadata = false;
                 options.Audience = "api1";
             });

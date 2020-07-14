@@ -29,7 +29,7 @@ namespace PiggyBank.IdentityServer.Models
         public IndeintityContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<IndeintityContext>();
-            builder.UseSqlServer("Server=(local)\\SQL2016;Database=PiggyBank;Trusted_Connection=True;MultipleActiveResultSets=true");
+            builder.UseSqlServer("Data Source=SQL5050.site4now.net;Initial Catalog=DB_A63631_trest;User Id=DB_A63631_trest_admin;Password=sceby7imRCXK8hu;");
             return new IndeintityContext(builder.Options);
         }
     }
