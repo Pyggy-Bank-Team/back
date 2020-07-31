@@ -5,27 +5,31 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
+using PiggyBank.IdentityServer.Interfaces;
 using PiggyBank.IdentityServer.Models;
+using PiggyBank.IdentityServer.Services;
 
 namespace PiggyBank.IdentityServer
 {
     public class Startup
     {
         private readonly IConfiguration _configuration;
+
         public Startup(IConfiguration configuration)
             => _configuration = configuration;
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddIdentityServer()
-               .AddInMemoryApiResources(Config.Apis)
-               .AddInMemoryClients(Config.Clients)
-               .AddDeveloperSigningCredential()
-               .AddResourceOwnerValidator<ResourceOwnerPasswordValidator<IdentityUser>>();
+                .AddInMemoryApiResources(Config.Apis)
+                .AddInMemoryClients(Config.Clients)
+                .AddDeveloperSigningCredential()
+                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator<IdentityUser>>();
 
             //UserManager
             services.AddDbContext<IndeintityContext>(opt =>
-                    opt.UseSqlServer(@"Data Source=SQL5050.site4now.net;Initial Catalog=DB_A63631_trest;User Id=DB_A63631_trest_admin;Password=sceby7imRCXK8hu;"));
+                opt.UseSqlServer(_configuration.GetConnectionString("DbConnection")));
+
             services.AddIdentity<IdentityUser, IdentityRole>(opt =>
             {
                 opt.Password.RequireDigit = false;
@@ -35,6 +39,9 @@ namespace PiggyBank.IdentityServer
             }).AddEntityFrameworkStores<IndeintityContext>();
 
             services.AddControllers();
+            services.AddHttpClient();
+            services.AddSingleton(_configuration);
+            services.AddScoped<ITokenService, TokenService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -42,10 +49,7 @@ namespace PiggyBank.IdentityServer
             app.UseIdentityServer();
             app.UseRouting();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }
