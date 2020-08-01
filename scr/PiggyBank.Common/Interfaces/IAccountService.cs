@@ -1,7 +1,5 @@
 ﻿using PiggyBank.Common.Commands.Accounts;
-using PiggyBank.Common.Enums;
 using PiggyBank.Common.Models.Dto;
-using PiggyBank.Common.Models.Generic;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
