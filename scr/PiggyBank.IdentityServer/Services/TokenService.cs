@@ -34,10 +34,9 @@ namespace PiggyBank.IdentityServer.Services
 
             var response = await client.PostAsync($"{baseUrl}/connect/token", new FormUrlEncodedContent(body), token);
 
-            if (!response.IsSuccessStatusCode)
-                return null;
-
-            return JsonConvert.DeserializeObject<BearToken>(await response.Content.ReadAsStringAsync());
+            return !response.IsSuccessStatusCode
+                ? null
+                : JsonConvert.DeserializeObject<BearToken>(await response.Content.ReadAsStringAsync());
         }
     }
 }

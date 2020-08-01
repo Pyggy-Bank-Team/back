@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace PiggyBank.IdentityServer.Models
 {
-    public class IndeintityContext : IdentityDbContext
+    public class IndeintityContext : IdentityDbContext<ApplicationUser>
     {
         public IndeintityContext(DbContextOptions options)
             : base(options) { }
@@ -14,7 +14,7 @@ namespace PiggyBank.IdentityServer.Models
         {
             base.OnModelCreating(builder);
 
-            builder.Entity<IdentityUser>().ToTable("Users", "Idt");
+            builder.Entity<ApplicationUser>().ToTable("Users", "Idt");
             builder.Entity<IdentityRole>().ToTable("Roles", "Idt");
             builder.Entity<IdentityUserRole<string>>().ToTable("UserRoles", "Idt");
             builder.Entity<IdentityUserClaim<string>>().ToTable("UserClaims", "Idt");
@@ -22,6 +22,11 @@ namespace PiggyBank.IdentityServer.Models
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens", "Idt");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims", "Idt");
         }
+    }
+
+    public class ApplicationUser : IdentityUser
+    {
+        public string CurrencyBase { get; set; }
     }
 
     public class IndeintityContextFactory : IDesignTimeDbContextFactory<IndeintityContext>

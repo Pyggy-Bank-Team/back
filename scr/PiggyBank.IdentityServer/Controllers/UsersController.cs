@@ -4,22 +4,23 @@ using PiggyBank.IdentityServer.Dto;
 using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.IdentityServer.Interfaces;
+using PiggyBank.IdentityServer.Models;
 
 namespace PiggyBank.IdentityServer.Controllers
 {
     [ApiController, Route("[controller]")]
     public class UsersController : ControllerBase
     {
-        private readonly UserManager<IdentityUser> _userManager;
+        private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenService _tokenService;
 
-        public UsersController(UserManager<IdentityUser> userManager, ITokenService tokenService)
+        public UsersController(UserManager<ApplicationUser> userManager, ITokenService tokenService)
             => (_userManager, _tokenService) = (userManager, tokenService);
 
         [HttpPost]
         public async Task<IActionResult> Post(UserDto request, CancellationToken token)
         {
-            var user = new IdentityUser {UserName = request.UserName};
+            var user = new ApplicationUser { UserName = request.UserName, CurrencyBase = request.CurrencyBase };
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded)
@@ -36,7 +37,7 @@ namespace PiggyBank.IdentityServer.Controllers
                     code = "TokenIsNullOrEmpty",
                     description = "Can't generate token"
                 };
-                
+
                 return BadRequest(errorResponse);
             }
 

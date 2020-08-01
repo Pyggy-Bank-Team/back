@@ -24,13 +24,13 @@ namespace PiggyBank.IdentityServer
                 .AddInMemoryApiResources(Config.Apis)
                 .AddInMemoryClients(Config.Clients)
                 .AddDeveloperSigningCredential()
-                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator<IdentityUser>>();
+                .AddResourceOwnerValidator<ResourceOwnerPasswordValidator<ApplicationUser>>();
 
             //UserManager
             services.AddDbContext<IndeintityContext>(opt =>
                 opt.UseSqlServer(_configuration.GetConnectionString("DbConnection")));
 
-            services.AddIdentity<IdentityUser, IdentityRole>(opt =>
+            services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
             {
                 opt.Password.RequireDigit = false;
                 opt.Password.RequireLowercase = false;

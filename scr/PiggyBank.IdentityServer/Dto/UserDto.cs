@@ -9,5 +9,8 @@ namespace PiggyBank.IdentityServer.Dto
 
         [Required]
         public string Password { get; set; }
+
+        [Required]
+        public string CurrencyBase { get; set; }
     }
 }
