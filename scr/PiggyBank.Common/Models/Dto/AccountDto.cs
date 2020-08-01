@@ -13,6 +13,7 @@ namespace PiggyBank.Common.Models.Dto
 
         public AccountType Type { get; set; }
 
+        
         public string Currency { get; set; }
 
         public decimal Balance { get; set; }

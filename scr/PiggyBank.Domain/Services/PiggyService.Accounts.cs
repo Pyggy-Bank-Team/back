@@ -25,11 +25,8 @@ namespace PiggyBank.Domain.Services
         public Task<AccountDto> GetAccount(int accountId, CancellationToken token)
             => _queryDispatcher.Invoke<GetAccountByIdQuery, AccountDto>(accountId);
 
-        public Task<AccountInfoDto[]> GetAccounts(Guid userId, CancellationToken token)
-            => _queryDispatcher.Invoke<GetAccountsQuery, AccountInfoDto[]>(userId);
-
-        public Task<GenericGroup<AccountType, AccountInfoDto>[]> GetAccountsGroupByType(CancellationToken token)
-            => _queryDispatcher.Invoke<GetAccountsGroupByTypeQuery, GenericGroup<AccountType, AccountInfoDto>[]>();
+        public Task<AccountDto[]> GetAccounts(Guid userId, CancellationToken token)
+            => _queryDispatcher.Invoke<GetAccountsQuery, AccountDto[]>(userId);
 
         public Task UpdateAccount(UpdateAccountCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdateAccountHandler, UpdateAccountCommand>(command, token);

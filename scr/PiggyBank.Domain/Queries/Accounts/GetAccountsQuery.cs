@@ -8,14 +8,14 @@ using PiggyBank.Model.Models.Entities;
 
 namespace PiggyBank.Domain.Queries.Accounts
 {
-    public class GetAccountsQuery : BaseQuery<AccountInfoDto[]>
+    public class GetAccountsQuery : BaseQuery<AccountDto[]>
     {
         private readonly Guid _userId;
         public GetAccountsQuery(PiggyContext context, Guid userId) : base(context)
             => _userId = userId;
 
-        public override Task<AccountInfoDto[]> Invoke()
-            => GetRepository<Account>().Where(a => a.CreatedBy == _userId && !a.IsDeleted).Select(a => new AccountInfoDto
+        public override Task<AccountDto[]> Invoke()
+            => GetRepository<Account>().Where(a => a.CreatedBy == _userId && !a.IsDeleted).Select(a => new AccountDto
             {
                 Id = a.Id,
                 Type = a.Type,

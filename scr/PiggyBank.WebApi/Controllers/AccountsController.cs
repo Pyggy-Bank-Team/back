@@ -20,7 +20,7 @@ namespace PiggyBank.WebApi.Controllers
             => _service = service;
 
         [HttpGet]
-        public Task<AccountInfoDto[]> Get(CancellationToken token)
+        public Task<AccountDto[]> Get(CancellationToken token)
             => _service.GetAccounts(User.GetUserId(), token);
 
         [HttpPost]
@@ -30,8 +30,6 @@ namespace PiggyBank.WebApi.Controllers
             {
                 Balance = request.Balance,
                 Currency = request.Currency,
-                IsArchived = request.IsArchived,
-                IsDeleted = request.IsDeleted,
                 Title = request.Title,
                 Type = request.Type,
                 CreatedBy = User.GetUserId(),
@@ -43,14 +41,14 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPatch, Route("{accountId}/Update")]
+        [HttpPut, Route("{accountId}/Update")]
         public async Task<IActionResult> Update(int accountId, AccountDto request, CancellationToken token)
         {
             var command = new UpdateAccountCommand
             {
                 Balance = request.Balance,
                 Currency = request.Currency,
-                Id = request.Id,
+                Id = accountId,
                 Title = request.Title,
                 Type = request.Type
             };
