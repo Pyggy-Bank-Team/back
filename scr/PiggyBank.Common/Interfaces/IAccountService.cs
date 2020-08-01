@@ -37,5 +37,7 @@ namespace PiggyBank.Common.Interfaces
         /// Archive exists entity
         /// </summary>
         Task ArchiveAccount(int id, CancellationToken token);
+
+        Task PartialUpdateAccount(PartialUpdateAccountCommand command, CancellationToken token);
     }
 }

@@ -26,6 +26,9 @@ namespace PiggyBank.Domain.Services
         public Task<AccountDto[]> GetAccounts(Guid userId, CancellationToken token)
             => _queryDispatcher.Invoke<GetAccountsQuery, AccountDto[]>(userId);
 
+        public Task PartialUpdateAccount(PartialUpdateAccountCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<PartialUpdateAccountHandler, PartialUpdateAccountCommand>(command, token);
+
         public Task UpdateAccount(UpdateAccountCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdateAccountHandler, UpdateAccountCommand>(command, token);
     }
