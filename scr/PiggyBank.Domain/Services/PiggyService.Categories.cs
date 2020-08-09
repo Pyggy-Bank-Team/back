@@ -26,6 +26,9 @@ namespace PiggyBank.Domain.Services
         public Task<CategoryDto> GetCategory(int id, CancellationToken token)
             => _queryDispatcher.Invoke<GetCategoryByIdQuery, CategoryDto>(id);
 
+        public Task PartialUpdateCategory(PartialUpdateCategoryCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<PartialUpdateCategoryHandler, PartialUpdateCategoryCommand>(command, token);
+
         public Task UpdateCategory(UpdateCategoryCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdateCategoryHandler, UpdateCategoryCommand>(command, token);
     }

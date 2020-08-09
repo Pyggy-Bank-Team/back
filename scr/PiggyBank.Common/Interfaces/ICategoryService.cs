@@ -28,6 +28,8 @@ namespace PiggyBank.Common.Interfaces
         /// </summary>
         Task UpdateCategory(UpdateCategoryCommand command, CancellationToken token);
 
+        Task PartialUpdateCategory(PartialUpdateCategoryCommand command, CancellationToken token);
+
         /// <summary>
         /// Delete exists entity
         /// </summary>

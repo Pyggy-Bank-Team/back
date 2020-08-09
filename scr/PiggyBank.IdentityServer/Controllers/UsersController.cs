@@ -5,6 +5,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.IdentityServer.Interfaces;
 using PiggyBank.IdentityServer.Models;
+using PiggyBank.IdentityServer.Exntensions;
 
 namespace PiggyBank.IdentityServer.Controllers
 {
@@ -42,6 +43,21 @@ namespace PiggyBank.IdentityServer.Controllers
             }
 
             return Ok(tokenResult);
+        }
+
+
+        [HttpPatch, Route("currency")]
+        public async Task<IActionResult> UpdateCurrency(CurrencyDto request, CancellationToken token)
+        {
+            var user = await _userManager.FindByIdAsync(User.GetUserId().ToString());
+
+            if (request.PreviousCurrency != request.NewCurrency)
+            {
+                user.CurrencyBase = request.NewCurrency;
+                await _userManager.UpdateAsync(user);
+            }
+
+            return Ok();
         }
     }
 }

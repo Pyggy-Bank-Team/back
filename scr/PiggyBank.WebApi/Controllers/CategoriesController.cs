@@ -43,12 +43,12 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPatch, Route("{categoryId}/Update")]
+        [HttpPut, Route("{categoryId}")]
         public async Task<IActionResult> Update(int categoryId, CategoryDto request, CancellationToken token)
         {
             var command = new UpdateCategoryCommand
             {
-                Id = request.Id,
+                Id = categoryId,
                 Title = request.Title,
                 Type = request.Type,
                 HexColor = request.HexColor
@@ -59,7 +59,23 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpDelete, Route("{categoryId}/Delete")]
+        [HttpPatch, Route("{categoryId}")]
+        public async Task<IActionResult> PartialUpdate(int categoryId, PartialCategoryDto request, CancellationToken token)
+        {
+            var command = new PartialUpdateCategoryCommand
+            {
+                Id = categoryId,
+                Title = request.Title,
+                Type = request.Type,
+                HexColor = request.HexColor
+            };
+
+            await _service.PartialUpdateCategory(command, token);
+
+            return Ok();
+        }
+
+        [HttpDelete, Route("{categoryId}")]
         public async Task<IActionResult> Delete(int categoryId, CancellationToken token)
         {
             await _service.DeleteCategory(categoryId, token);
