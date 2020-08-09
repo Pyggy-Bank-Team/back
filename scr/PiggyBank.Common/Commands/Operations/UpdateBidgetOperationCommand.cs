@@ -1,9 +1,12 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
-namespace PiggyBank.Common.Models.Dto
+namespace PiggyBank.Common.Commands.Operations
 {
-    public class BudgetOperationDto
+    public class UpdateBidgetOperationCommand
     {
+        public int Id { get; set; }
+
         [Range(1, int.MaxValue)]
         public int AccountId { get; set; }
 

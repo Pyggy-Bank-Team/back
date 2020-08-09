@@ -38,9 +38,7 @@ namespace PiggyBank.Domain.Services
         public Task<OperationDto[]> GetOperations(Guid userId, CancellationToken token)
             => _queryDispatcher.Invoke<GetOperationsQuery, OperationDto[]>(userId);
 
-        public Task UpdateOperation(UpdateOperationCommand command, CancellationToken token)
-        {
-            throw new NotImplementedException();
-        }
+        public Task UpdateBidgetOperation(UpdateBidgetOperationCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<UpdateBugetOperationHandler, UpdateBidgetOperationCommand>(command, token);
     }
 }

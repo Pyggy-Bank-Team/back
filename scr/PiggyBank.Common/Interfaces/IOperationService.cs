@@ -39,11 +39,6 @@ namespace PiggyBank.Common.Interfaces
         Task<OperationDto> GetOperation(int id, CancellationToken token);
 
         /// <summary>
-        /// Update exists entity
-        /// </summary>
-        Task UpdateOperation(UpdateOperationCommand command, CancellationToken token);
-
-        /// <summary>
         /// Delete budget operation
         /// </summary>
         Task DeleteBudgetOperation(int id, CancellationToken token);
@@ -57,5 +52,7 @@ namespace PiggyBank.Common.Interfaces
         /// Delee transfer operation
         /// </summary>
         Task DeleteTransferOperation(int operationId, CancellationToken token);
+
+        Task UpdateBidgetOperation(UpdateBidgetOperationCommand command, CancellationToken token);
     }
 }

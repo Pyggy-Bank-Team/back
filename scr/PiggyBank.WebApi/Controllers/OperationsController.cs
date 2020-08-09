@@ -30,7 +30,7 @@ namespace PiggyBank.WebApi.Controllers
             var command = new AddBudgetOperationCommand
             {
                 AccountId = request.AccountId,
-                Amount = request.Amount.GetValueOrDefault(),
+                Amount = request.Amount,
                 CategoryId = request.CategoryId,
                 Comment = request.Comment,
                 CreatedOn = DateTime.UtcNow,
@@ -46,6 +46,23 @@ namespace PiggyBank.WebApi.Controllers
         public async Task<IActionResult> DelteBudgetOperation(int operationId, CancellationToken token)
         {
             await _service.DeleteBudgetOperation(operationId, token);
+            return Ok();
+        }
+
+        [HttpPut, Route("{operationId}")]
+        public async Task<IActionResult> UpdateBuget(int operationId, BudgetOperationDto request, CancellationToken token)
+        {
+            var command = new UpdateBidgetOperationCommand
+            {
+                Id = operationId,
+                AccountId = request.AccountId,
+                CategoryId = request.CategoryId,
+                Amount = request.Amount,
+                Comment = request.Comment
+            };
+
+            await _service.UpdateBidgetOperation(command, token);
+
             return Ok();
         }
 
