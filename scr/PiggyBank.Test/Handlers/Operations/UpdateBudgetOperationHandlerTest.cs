@@ -38,7 +38,7 @@ namespace PiggyBank.Test.Handlers.Operations
 
             _context.SaveChanges();
 
-            var handler = new UpdateBugetOperationHandler(_context, command);
+            var handler = new UpdateBudgetOperationHandler(_context, command);
             await handler.Invoke(CancellationToken.None);
             _context.SaveChanges();
 

@@ -39,6 +39,6 @@ namespace PiggyBank.Domain.Services
             => _queryDispatcher.Invoke<GetOperationsQuery, OperationDto[]>(userId);
 
         public Task UpdateBidgetOperation(UpdateBidgetOperationCommand command, CancellationToken token)
-            => _handlerDispatcher.Invoke<UpdateBugetOperationHandler, UpdateBidgetOperationCommand>(command, token);
+            => _handlerDispatcher.Invoke<UpdateBudgetOperationHandler, UpdateBidgetOperationCommand>(command, token);
     }
 }

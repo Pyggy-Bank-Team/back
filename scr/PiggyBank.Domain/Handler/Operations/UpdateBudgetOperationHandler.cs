@@ -7,9 +7,9 @@ using System.Threading.Tasks;
 
 namespace PiggyBank.Domain.Handler.Operations
 {
-    public class UpdateBugetOperationHandler : BaseHandler<UpdateBidgetOperationCommand>
+    public class UpdateBudgetOperationHandler : BaseHandler<UpdateBidgetOperationCommand>
     {
-        public UpdateBugetOperationHandler(PiggyContext context, UpdateBidgetOperationCommand command) 
+        public UpdateBudgetOperationHandler(PiggyContext context, UpdateBidgetOperationCommand command) 
             : base(context, command) { }
 
         public override async Task Invoke(CancellationToken token)
