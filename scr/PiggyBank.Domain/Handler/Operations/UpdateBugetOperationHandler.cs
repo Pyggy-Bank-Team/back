@@ -20,6 +20,7 @@ namespace PiggyBank.Domain.Handler.Operations
             if (operation == null)
                 return;
 
+            //TODO: checking of CategoryId and AccountId
             operation.Amount = Command.Amount;
             operation.Comment = Command.Comment;
             operation.CategoryId = Command.CategoryId;

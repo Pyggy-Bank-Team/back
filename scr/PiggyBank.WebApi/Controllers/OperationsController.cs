@@ -104,7 +104,7 @@ namespace PiggyBank.WebApi.Controllers
         {
             var command = new AddPlanOperationCommand
             {
-                Amount = request.Amount.GetValueOrDefault(),
+                Amount = request.Amount,
                 CategoryId = request.CategoryId,
                 Comment = request.Comment,
                 PlanDate = request.PlanDate.GetValueOrDefault(),
