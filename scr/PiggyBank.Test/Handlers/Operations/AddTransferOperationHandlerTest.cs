@@ -7,6 +7,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Operations.Transfer;
+using PiggyBank.Domain.Handler.Operations.Transfer;
 using Xunit;
 
 namespace PiggyBank.Test.Handlers.Operations

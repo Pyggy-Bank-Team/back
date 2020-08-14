@@ -1,13 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Operations;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Enums;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace PiggyBank.Domain.Handler.Operations
+namespace PiggyBank.Domain.Handler.Operations.Transfer
 {
     public class AddTransferOperationHandler : BaseHandler<AddTransferOperationCommand>
     {

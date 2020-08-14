@@ -3,6 +3,9 @@ using PiggyBank.Common.Models.Dto;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Operations.Budget;
+using PiggyBank.Common.Commands.Operations.Transfer;
+using PiggyBank.Common.Models.Dto.Operations;
 
 namespace PiggyBank.Common.Interfaces
 {
@@ -56,5 +59,7 @@ namespace PiggyBank.Common.Interfaces
         Task UpdateBidgetOperation(UpdateBidgetOperationCommand command, CancellationToken token);
 
         Task UpdatePartialBidgetOperation(UpdatePartialBidgetOperationCommand command, CancellationToken token);
+
+        Task UpdateTransferOperation(UpdateTransferOperationCommand command, CancellationToken token);
     }
 }

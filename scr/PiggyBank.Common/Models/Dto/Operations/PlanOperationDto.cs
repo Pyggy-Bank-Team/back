@@ -1,7 +1,7 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
 
-namespace PiggyBank.Common.Models.Dto
+namespace PiggyBank.Common.Models.Dto.Operations
 {
     public class PlanOperationDto : BudgetOperationDto
     {

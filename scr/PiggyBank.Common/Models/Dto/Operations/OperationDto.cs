@@ -1,7 +1,7 @@
-﻿using PiggyBank.Common.Enums;
-using System;
+﻿using System;
+using PiggyBank.Common.Enums;
 
-namespace PiggyBank.Common.Models.Dto
+namespace PiggyBank.Common.Models.Dto.Operations
 {
     public class OperationDto
     {

@@ -1,30 +1,29 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Operations.Budget;
+using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 
-namespace PiggyBank.Domain.Handler.Operations.Budget
+namespace PiggyBank.Domain.Handler.Operations.Transfer
 {
-    public class UpdateBudgetOperationHandler : BaseHandler<UpdateBidgetOperationCommand>
+    public class UpdateTransferOperationHandler : BaseHandler<UpdateTransferOperationCommand>
     {
-        public UpdateBudgetOperationHandler(PiggyContext context, UpdateBidgetOperationCommand command) 
+        public UpdateTransferOperationHandler(PiggyContext context, UpdateTransferOperationCommand command) 
             : base(context, command) { }
 
         public override async Task Invoke(CancellationToken token)
         {
-            var repository = GetRepository<BudgetOperation>();
+            var repository = GetRepository<TransferOperation>();
             var operation = await repository.FirstOrDefaultAsync(o => o.Id == Command.Id, token);
 
             if (operation == null)
                 return;
 
-            //TODO: checking of CategoryId and AccountId
             operation.Amount = Command.Amount;
             operation.Comment = Command.Comment;
-            operation.CategoryId = Command.CategoryId;
-            operation.AccountId = Command.AccountId;
+            operation.From = Command.From;
+            operation.To = Command.To;
 
             repository.Update(operation);
         }

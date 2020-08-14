@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PiggyBank.Common.Commands.Operations
+namespace PiggyBank.Common.Commands.Operations.Budget
 {
     public class UpdatePartialBidgetOperationCommand
     {

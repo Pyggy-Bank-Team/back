@@ -7,6 +7,9 @@ using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Operations.Budget;
+using PiggyBank.Common.Commands.Operations.Transfer;
+using PiggyBank.Common.Models.Dto.Operations;
 
 namespace PiggyBank.WebApi.Controllers
 {
@@ -92,7 +95,7 @@ namespace PiggyBank.WebApi.Controllers
         {
             var command = new AddTransferOperationCommand
             {
-                Amount = request.Amount.GetValueOrDefault(),
+                Amount = request.Amount,
                 From = request.From,
                 To = request.To,
                 Comment = request.Comment,
@@ -105,10 +108,27 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpDelete, Route("Transfer/{operationId}/Delete")]
-        public async Task<IActionResult> DelteTransferOperation(int operationId, CancellationToken token)
+        [HttpDelete, Route("Transfer/{operationId}")]
+        public async Task<IActionResult> DeleteTransferOperation(int operationId, CancellationToken token)
         {
             await _service.DeleteTransferOperation(operationId, token);
+            return Ok();
+        }
+
+        [HttpPut, Route("Transfer/{operationId}")]
+        public async Task<IActionResult> UpdateTransferOperation(int operationId, TransferOperationDto request, CancellationToken token)
+        {
+            var command = new UpdateTransferOperationCommand
+            {
+                Id = operationId,
+                Amount = request.Amount,
+                To = request.To,
+                From = request.From,
+                Comment = request.Comment
+            };
+
+            await _service.UpdateTransferOperation(command, token);
+
             return Ok();
         }
 

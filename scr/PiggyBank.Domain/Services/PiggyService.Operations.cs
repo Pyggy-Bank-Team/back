@@ -1,12 +1,15 @@
 ﻿using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Interfaces;
-using PiggyBank.Common.Models.Dto;
 using PiggyBank.Domain.Handler.Operations;
 using PiggyBank.Domain.Queries.Operations;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Operations.Budget;
+using PiggyBank.Common.Commands.Operations.Transfer;
+using PiggyBank.Common.Models.Dto.Operations;
 using PiggyBank.Domain.Handler.Operations.Budget;
+using PiggyBank.Domain.Handler.Operations.Transfer;
 
 namespace PiggyBank.Domain.Services
 {
@@ -44,5 +47,8 @@ namespace PiggyBank.Domain.Services
 
         public Task UpdatePartialBidgetOperation(UpdatePartialBidgetOperationCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdatePartialBudgetOperationHandler, UpdatePartialBidgetOperationCommand>(command, token);
+
+        public Task UpdateTransferOperation(UpdateTransferOperationCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<UpdateTransferOperationHandler, UpdateTransferOperationCommand>(command, token);
     }
 }

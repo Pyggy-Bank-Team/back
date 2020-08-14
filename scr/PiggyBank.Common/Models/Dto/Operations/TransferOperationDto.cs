@@ -1,6 +1,6 @@
 ﻿using System.ComponentModel.DataAnnotations;
 
-namespace PiggyBank.Common.Models.Dto
+namespace PiggyBank.Common.Models.Dto.Operations
 {
     public class TransferOperationDto
     {
@@ -11,7 +11,7 @@ namespace PiggyBank.Common.Models.Dto
         public int To { get; set; }
 
         [Required]
-        public decimal? Amount { get; set; }
+        public decimal Amount { get; set; }
 
         public string Comment { get; set; }
     }

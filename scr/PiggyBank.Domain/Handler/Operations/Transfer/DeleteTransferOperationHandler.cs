@@ -1,11 +1,11 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PiggyBank.Model;
+using PiggyBank.Model.Models.Entities;
 
-namespace PiggyBank.Domain.Handler.Operations
+namespace PiggyBank.Domain.Handler.Operations.Transfer
 {
     public class DeleteTransferOperationHandler : BaseHandler<int>
     {

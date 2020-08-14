@@ -4,6 +4,7 @@ using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using System.Linq;
 using System.Threading.Tasks;
+using PiggyBank.Common.Models.Dto.Operations;
 
 namespace PiggyBank.Domain.Queries.Operations
 {
