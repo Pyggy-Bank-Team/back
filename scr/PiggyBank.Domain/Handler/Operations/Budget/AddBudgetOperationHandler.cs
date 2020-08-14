@@ -1,15 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Enums;
 using PiggyBank.Domain.Models.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace PiggyBank.Domain.Handler.Operations
+namespace PiggyBank.Domain.Handler.Operations.Budget
 {
     public class AddBudgetOperationHandler : BaseHandler<AddBudgetOperationCommand>
     {
@@ -25,7 +25,7 @@ namespace PiggyBank.Domain.Handler.Operations
             var category = await GetRepository<Category>().FirstOrDefaultAsync(c => c.Id == Command.CategoryId && !c.IsDeleted, token)
                 ?? throw new ArgumentException($"Can't found category by {Command.CategoryId}");
 
-            var shapshot = new OperationSnapshot
+            var snapshot = new OperationSnapshot
             {
                 CategoryType = category.Type
             };
@@ -38,7 +38,7 @@ namespace PiggyBank.Domain.Handler.Operations
                 AccountId = Command.AccountId,
                 CategoryId = Command.CategoryId,
                 CreatedOn = Command.CreatedOn,
-                Shapshot = JsonConvert.SerializeObject(shapshot),
+                Shapshot = JsonConvert.SerializeObject(snapshot),
                 CreatedBy = Command.CreatedBy
             };
 

@@ -1,16 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PiggyBank.Common.Enums;
-using PiggyBank.Domain.Handler.Operations;
+using PiggyBank.Domain.Handler.Operations.Budget;
 using PiggyBank.Domain.Models.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 using Xunit;
 
-namespace PiggyBank.Test.Handlers.Operations
+namespace PiggyBank.Test.Handlers.Operations.Budget
 {
     public class DeleteBudgetOperationHanlderTest : IDisposable
     {

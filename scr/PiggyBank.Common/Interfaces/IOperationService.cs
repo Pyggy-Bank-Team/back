@@ -49,10 +49,12 @@ namespace PiggyBank.Common.Interfaces
         Task DeletePlanOperation(int operationId, CancellationToken token);
 
         /// <summary>
-        /// Delee transfer operation
+        /// Delete transfer operation
         /// </summary>
         Task DeleteTransferOperation(int operationId, CancellationToken token);
 
         Task UpdateBidgetOperation(UpdateBidgetOperationCommand command, CancellationToken token);
+
+        Task UpdatePartialBidgetOperation(UpdatePartialBidgetOperationCommand command, CancellationToken token);
     }
 }

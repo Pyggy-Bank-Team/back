@@ -6,6 +6,7 @@ using PiggyBank.Domain.Queries.Operations;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Domain.Handler.Operations.Budget;
 
 namespace PiggyBank.Domain.Services
 {
@@ -40,5 +41,8 @@ namespace PiggyBank.Domain.Services
 
         public Task UpdateBidgetOperation(UpdateBidgetOperationCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdateBudgetOperationHandler, UpdateBidgetOperationCommand>(command, token);
+
+        public Task UpdatePartialBidgetOperation(UpdatePartialBidgetOperationCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<UpdatePartialBudgetOperationHandler, UpdatePartialBidgetOperationCommand>(command, token);
     }
 }

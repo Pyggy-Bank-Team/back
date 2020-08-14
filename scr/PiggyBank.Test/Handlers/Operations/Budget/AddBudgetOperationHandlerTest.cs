@@ -1,16 +1,16 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Operations;
-using PiggyBank.Common.Enums;
-using PiggyBank.Domain.Handler.Operations;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Commands.Operations;
+using PiggyBank.Common.Enums;
+using PiggyBank.Domain.Handler.Operations.Budget;
+using PiggyBank.Model;
+using PiggyBank.Model.Models.Entities;
 using Xunit;
 
-namespace PiggyBank.Test.Handlers.Operations
+namespace PiggyBank.Test.Handlers.Operations.Budget
 {
     public class AddBudgetOperationHandlerTest : IDisposable
     {
@@ -23,7 +23,8 @@ namespace PiggyBank.Test.Handlers.Operations
         [Fact]
         public async Task Invoke_OperationIsValid_OperationWasAdded()
         {
-            var addOperaion = new AddBudgetOperationCommand
+            var addBudgetOperationCommand
+                = new AddBudgetOperationCommand
             {
                 AccountId = 1,
                 Amount = 100,
@@ -42,11 +43,11 @@ namespace PiggyBank.Test.Handlers.Operations
                 Id = 1
             });
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            var handler = new AddBudgetOperationHandler(_context, addOperaion);
+            var handler = new AddBudgetOperationHandler(_context, addBudgetOperationCommand);
             await handler.Invoke(CancellationToken.None);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var operation = _context.BudgetOperations.First();
 

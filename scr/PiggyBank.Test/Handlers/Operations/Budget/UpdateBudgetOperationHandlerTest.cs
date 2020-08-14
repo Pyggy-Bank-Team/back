@@ -1,15 +1,15 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Operations;
-using PiggyBank.Domain.Handler.Operations;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
-using System;
+﻿using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Commands.Operations;
+using PiggyBank.Domain.Handler.Operations.Budget;
+using PiggyBank.Model;
+using PiggyBank.Model.Models.Entities;
 using Xunit;
 
-namespace PiggyBank.Test.Handlers.Operations
+namespace PiggyBank.Test.Handlers.Operations.Budget
 {
     public class UpdateBudgetOperationHandlerTest : IDisposable
     {
@@ -20,7 +20,7 @@ namespace PiggyBank.Test.Handlers.Operations
 
 
         [Fact]
-        public async Task Invoke_CommandHasAmountAndComment_OperationSuccessfull()
+        public async Task Invoke_CommandHasAmountAndComment_OperationSuccessful()
         {
             var command = new UpdateBidgetOperationCommand
             {
@@ -36,11 +36,11 @@ namespace PiggyBank.Test.Handlers.Operations
                 Comment = "Old new"
             });
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var handler = new UpdateBudgetOperationHandler(_context, command);
             await handler.Invoke(CancellationToken.None);
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var operation = _context.BudgetOperations.First();
 
