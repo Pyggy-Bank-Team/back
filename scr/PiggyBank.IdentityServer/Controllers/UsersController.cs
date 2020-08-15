@@ -1,11 +1,13 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.IdentityModel.Tokens.Jwt;
+using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PiggyBank.IdentityServer.Dto;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.Extensions.Primitives;
 using PiggyBank.IdentityServer.Interfaces;
 using PiggyBank.IdentityServer.Models;
-using PiggyBank.IdentityServer.Exntensions;
 
 namespace PiggyBank.IdentityServer.Controllers
 {
@@ -21,7 +23,7 @@ namespace PiggyBank.IdentityServer.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(UserDto request, CancellationToken token)
         {
-            var user = new ApplicationUser { UserName = request.UserName, CurrencyBase = request.CurrencyBase };
+            var user = new ApplicationUser {UserName = request.UserName, CurrencyBase = request.CurrencyBase};
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded)
@@ -49,7 +51,15 @@ namespace PiggyBank.IdentityServer.Controllers
         [HttpPatch, Route("currency")]
         public async Task<IActionResult> UpdateCurrency(CurrencyDto request, CancellationToken token)
         {
-            var user = await _userManager.FindByIdAsync(User.GetUserId().ToString());
+            var bearerToken = Request.Headers["Authorization"];
+
+            if (StringValues.IsNullOrEmpty(bearerToken) || bearerToken.Count > 1 || !bearerToken.Any(s => s.Contains("Bearer")))
+                return BadRequest();
+
+            var bearerTokenValue = bearerToken.First().Split(" ")[1];
+            var handler = new JwtSecurityToken(bearerTokenValue);
+
+            var user = await _userManager.FindByIdAsync(handler.Subject);
 
             if (request.PreviousCurrency != request.NewCurrency)
             {
