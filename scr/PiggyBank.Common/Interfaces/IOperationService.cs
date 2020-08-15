@@ -61,5 +61,7 @@ namespace PiggyBank.Common.Interfaces
         Task UpdatePartialBidgetOperation(UpdatePartialBidgetOperationCommand command, CancellationToken token);
 
         Task UpdateTransferOperation(UpdateTransferOperationCommand command, CancellationToken token);
+
+        Task UpdatePartialTransferOperation(UpdatePartialTransferOperationCommand command, CancellationToken token);
     }
 }

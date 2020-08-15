@@ -28,7 +28,7 @@ namespace PiggyBank.Domain.Services
             => _handlerDispatcher.Invoke<ApplyPlanOperationHandler, int>(planOperationId, token);
 
         public Task DeleteBudgetOperation(int id, CancellationToken token)
-            => _handlerDispatcher.Invoke<DeleteBudgetOperationHanlder, int>(id, token);
+            => _handlerDispatcher.Invoke<DeleteBudgetOperationHandler, int>(id, token);
 
         public Task DeletePlanOperation(int operationId, CancellationToken token)
             => _handlerDispatcher.Invoke<DeletePlanOperationHandler, int>(operationId, token);
@@ -50,5 +50,8 @@ namespace PiggyBank.Domain.Services
 
         public Task UpdateTransferOperation(UpdateTransferOperationCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdateTransferOperationHandler, UpdateTransferOperationCommand>(command, token);
+
+        public Task UpdatePartialTransferOperation(UpdatePartialTransferOperationCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<UpdatePartialTransferOperationHandler, UpdatePartialTransferOperationCommand>(command, token);
     }
 }

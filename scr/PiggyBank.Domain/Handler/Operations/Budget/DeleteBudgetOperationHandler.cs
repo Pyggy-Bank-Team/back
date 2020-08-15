@@ -10,9 +10,9 @@ using PiggyBank.Model.Models.Entities;
 
 namespace PiggyBank.Domain.Handler.Operations.Budget
 {
-    public class DeleteBudgetOperationHanlder : BaseHandler<int>
+    public class DeleteBudgetOperationHandler : BaseHandler<int>
     {
-        public DeleteBudgetOperationHanlder(PiggyContext context, int command)
+        public DeleteBudgetOperationHandler(PiggyContext context, int command)
             : base(context, command) { }
 
         public override async Task Invoke(CancellationToken token)

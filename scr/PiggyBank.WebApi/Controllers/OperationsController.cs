@@ -2,7 +2,6 @@
 using Microsoft.AspNetCore.Mvc;
 using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Interfaces;
-using PiggyBank.Common.Models.Dto;
 using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
@@ -128,6 +127,23 @@ namespace PiggyBank.WebApi.Controllers
             };
 
             await _service.UpdateTransferOperation(command, token);
+
+            return Ok();
+        }
+
+        [HttpPatch, Route("Transfer/{operationId}")]
+        public async Task<IActionResult> UpdatePartialTransferOperation(int operationId, PartialTransferOperationDto request, CancellationToken token)
+        {
+            var command = new UpdatePartialTransferOperationCommand
+            {
+                Id = operationId,
+                Amount = request.Amount,
+                Comment = request.Comment,
+                From = request.From,
+                To = request.To
+            };
+
+            await _service.UpdatePartialTransferOperation(command, token);
 
             return Ok();
         }

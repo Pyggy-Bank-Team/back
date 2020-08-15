@@ -36,7 +36,7 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
             });
             _context.SaveChanges();
 
-            await new DeleteBudgetOperationHanlder(_context, 1).Invoke(CancellationToken.None);
+            await new DeleteBudgetOperationHandler(_context, 1).Invoke(CancellationToken.None);
             _context.SaveChanges();
 
             var operation = await _context.BudgetOperations.FirstAsync();
@@ -61,7 +61,7 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
             });
             _context.SaveChanges();
 
-            await new DeleteBudgetOperationHanlder(_context, 1).Invoke(CancellationToken.None);
+            await new DeleteBudgetOperationHandler(_context, 1).Invoke(CancellationToken.None);
             _context.SaveChanges();
 
             var operation = await _context.BudgetOperations.FirstAsync();
@@ -86,7 +86,7 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
             });
             _context.SaveChanges();
 
-            await new DeleteBudgetOperationHanlder(_context, 1).Invoke(CancellationToken.None);
+            await new DeleteBudgetOperationHandler(_context, 1).Invoke(CancellationToken.None);
             _context.SaveChanges();
 
             var operation = await _context.BudgetOperations.FirstAsync();
