@@ -1,11 +1,9 @@
-﻿using System.IdentityModel.Tokens.Jwt;
-using System.Linq;
-using Microsoft.AspNetCore.Identity;
+﻿using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PiggyBank.IdentityServer.Dto;
 using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.Extensions.Primitives;
+using PiggyBank.IdentityServer.Extensions;
 using PiggyBank.IdentityServer.Interfaces;
 using PiggyBank.IdentityServer.Models;
 
@@ -51,15 +49,19 @@ namespace PiggyBank.IdentityServer.Controllers
         [HttpPatch, Route("currency")]
         public async Task<IActionResult> UpdateCurrency(CurrencyDto request, CancellationToken token)
         {
-            var bearerToken = Request.Headers["Authorization"];
+            var userId = Request.GetUserId();
 
-            if (StringValues.IsNullOrEmpty(bearerToken) || bearerToken.Count > 1 || !bearerToken.Any(s => s.Contains("Bearer")))
-                return BadRequest();
+            if (string.IsNullOrEmpty(userId))
+            {
+                var errorResponse = new
+                {
+                    code = "NotFound",
+                    description = "Bearer token not found"
+                };
+                return BadRequest(errorResponse);
+            }
 
-            var bearerTokenValue = bearerToken.First().Split(" ")[1];
-            var handler = new JwtSecurityToken(bearerTokenValue);
-
-            var user = await _userManager.FindByIdAsync(handler.Subject);
+            var user = await _userManager.FindByIdAsync(userId);
 
             if (request.PreviousCurrency != request.NewCurrency)
             {
