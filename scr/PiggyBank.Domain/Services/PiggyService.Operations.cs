@@ -6,9 +6,11 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations.Budget;
+using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models.Dto.Operations;
 using PiggyBank.Domain.Handler.Operations.Budget;
+using PiggyBank.Domain.Handler.Operations.Plan;
 using PiggyBank.Domain.Handler.Operations.Transfer;
 
 namespace PiggyBank.Domain.Services
@@ -53,5 +55,8 @@ namespace PiggyBank.Domain.Services
 
         public Task UpdatePartialTransferOperation(UpdatePartialTransferOperationCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdatePartialTransferOperationHandler, UpdatePartialTransferOperationCommand>(command, token);
+
+        public Task UpdatePlaneOperation(UpdatePlanOperationCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<UpdatePlanOperationHandler, UpdatePlanOperationCommand>(command, token);
     }
 }

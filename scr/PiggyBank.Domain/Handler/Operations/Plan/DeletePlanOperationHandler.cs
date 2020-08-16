@@ -1,10 +1,10 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace PiggyBank.Domain.Handler.Operations
+namespace PiggyBank.Domain.Handler.Operations.Plan
 {
     public class DeletePlanOperationHandler : BaseHandler<int>
     {

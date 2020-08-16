@@ -8,6 +8,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Operations.Plan;
+using PiggyBank.Domain.Handler.Operations.Plan;
 using Xunit;
 
 namespace PiggyBank.Test.Handlers.Operations

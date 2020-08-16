@@ -1,12 +1,12 @@
-﻿using Microsoft.EntityFrameworkCore;
+﻿using System;
+using System.Threading;
+using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Enums;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
-using System;
-using System.Threading;
-using System.Threading.Tasks;
 
-namespace PiggyBank.Domain.Handler.Operations
+namespace PiggyBank.Domain.Handler.Operations.Plan
 {
     public class ApplyPlanOperationHandler : BaseHandler<int>
     {

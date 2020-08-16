@@ -1,12 +1,12 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations.Budget;
+using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models.Dto.Operations;
 
@@ -51,7 +51,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPut, Route("{operationId}")]
+        [HttpPut, Route("Budget/{operationId}")]
         public async Task<IActionResult> UpdateBudget(int operationId, BudgetOperationDto request, CancellationToken token)
         {
             var command = new UpdateBidgetOperationCommand
@@ -68,7 +68,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
         
-        [HttpPatch, Route("{operationId}")]
+        [HttpPatch, Route("Budget/{operationId}")]
         public async Task<IActionResult> PartialUpdateBudget(int operationId, PartialBudgetOperationDto request, CancellationToken token)
         {
             var command = new UpdatePartialBidgetOperationCommand
@@ -160,7 +160,7 @@ namespace PiggyBank.WebApi.Controllers
                 Amount = request.Amount,
                 CategoryId = request.CategoryId,
                 Comment = request.Comment,
-                PlanDate = request.PlanDate.GetValueOrDefault(),
+                PlanDate = request.PlanDate ?? DateTime.UtcNow,
                 AccountId = request.AccountId,
                 CreatedBy = User.GetUserId(),
                 CreatedOn = DateTime.UtcNow
@@ -178,10 +178,27 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpDelete, Route("Plan/{operationId}/Delete")]
-        public async Task<IActionResult> DeltePlanOperation(int operationId, CancellationToken token)
+        [HttpDelete, Route("Plan/{operationId}")]
+        public async Task<IActionResult> DeletePlanOperation(int operationId, CancellationToken token)
         {
             await _service.DeletePlanOperation(operationId, token);
+            return Ok();
+        }
+
+        [HttpPut, Route("Plan/{operationId}")]
+        public async Task<IActionResult> UpdatePlanOperation(int operationId, PlanOperationDto request, CancellationToken token)
+        {
+            var command = new UpdatePlanOperationCommand
+            {
+                Id = operationId,
+                Amount = request.Amount,
+                Comment = request.Comment,
+                AccountId = request.AccountId,
+                CategoryId = request.CategoryId,
+                PlanDate = request.PlanDate ?? DateTime.UtcNow
+            };
+
+            await _service.UpdatePlaneOperation(command, token);
             return Ok();
         }
 

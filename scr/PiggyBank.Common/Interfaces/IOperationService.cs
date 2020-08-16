@@ -1,9 +1,8 @@
-﻿using PiggyBank.Common.Commands.Operations;
-using PiggyBank.Common.Models.Dto;
-using System;
+﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations.Budget;
+using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models.Dto.Operations;
 
@@ -63,5 +62,7 @@ namespace PiggyBank.Common.Interfaces
         Task UpdateTransferOperation(UpdateTransferOperationCommand command, CancellationToken token);
 
         Task UpdatePartialTransferOperation(UpdatePartialTransferOperationCommand command, CancellationToken token);
+
+        Task UpdatePlaneOperation(UpdatePlanOperationCommand command, CancellationToken token);
     }
 }
