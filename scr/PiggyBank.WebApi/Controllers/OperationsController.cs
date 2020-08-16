@@ -198,7 +198,24 @@ namespace PiggyBank.WebApi.Controllers
                 PlanDate = request.PlanDate ?? DateTime.UtcNow
             };
 
-            await _service.UpdatePlaneOperation(command, token);
+            await _service.UpdatePlanOperation(command, token);
+            return Ok();
+        }
+        
+        [HttpPatch, Route("Plan/{operationId}")]
+        public async Task<IActionResult> UpdatePartialPlanOperation(int operationId, PartialPlanOperationDto request, CancellationToken token)
+        {
+            var command = new UpdatePartialPlanOperationCommand
+            {
+                Id = operationId,
+                Amount = request.Amount,
+                Comment = request.Comment,
+                AccountId = request.AccountId,
+                CategoryId = request.CategoryId,
+                PlanDate = request.PlanDate ?? DateTime.UtcNow
+            };
+
+            await _service.UpdatePartialPlanOperation(command, token);
             return Ok();
         }
 
