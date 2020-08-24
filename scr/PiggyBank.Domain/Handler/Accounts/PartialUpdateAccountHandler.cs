@@ -22,7 +22,7 @@ namespace PiggyBank.Domain.Handler.Accounts
             account.Title = string.IsNullOrWhiteSpace(Command.Title) ? account.Title : Command.Title;
             account.Type = Command.Type ?? account.Type;
             account.Balance = Command.Balance ?? account.Balance;
-            account.Currency = string.IsNullOrWhiteSpace(Command.Currency) ? account.Currency : Command.Currency;
+            //account.Currency = string.IsNullOrWhiteSpace(Command.Currency) ? account.Currency : Command.Currency;
             account.IsArchived = Command.IsArchive ?? account.IsArchived;
 
             GetRepository<Account>().Update(account);

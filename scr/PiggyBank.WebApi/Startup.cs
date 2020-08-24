@@ -1,5 +1,7 @@
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
+using Microsoft.AspNetCore.Identity;
+using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
@@ -7,6 +9,7 @@ using Microsoft.OpenApi.Models;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Infrastructure;
 using PiggyBank.Domain.Services;
+using PiggyBank.IdentityServer.Models;
 
 namespace PiggyBank.WebApi
 {
@@ -22,11 +25,15 @@ namespace PiggyBank.WebApi
             services.AddControllers().AddNewtonsoftJson();
             services.AddTransient(x => new ServiceSettings
             {
-                ConnectionString = @"Data Source=SQL5050.site4now.net;Initial Catalog=DB_A63631_trest;User Id=DB_A63631_trest_admin;Password=sceby7imRCXK8hu;"
+                ConnectionString = @"workstation id=piggy-pumba.mssql.somee.com;packet size=4096;user id=trest333_SQLLogin_1;pwd=s7mntjv5tv;data source=piggy-pumba.mssql.somee.com;persist security info=False;initial catalog=piggy-pumba"
             });
-            services.AddTransient<IAccountService, PiggyService>();
-            services.AddTransient<ICategoryService, PiggyService>();
-            services.AddTransient<IOperationService, PiggyService>();
+            services.AddScoped<IAccountService, PiggyService>();
+            services.AddScoped<ICategoryService, PiggyService>();
+            services.AddScoped<IOperationService, PiggyService>();
+            
+            //TODO: Make up a sane interaction with UserManager
+            services.AddDbContext<IndeintityContext>(opt =>
+                opt.UseSqlServer(@"workstation id=piggy-pumba.mssql.somee.com;packet size=4096;user id=trest333_SQLLogin_1;pwd=s7mntjv5tv;data source=piggy-pumba.mssql.somee.com;persist security info=False;initial catalog=piggy-pumba"));
 
             services.AddSwaggerGen(c =>
             {
@@ -61,7 +68,7 @@ namespace PiggyBank.WebApi
             services.AddAuthentication("Bearer")
             .AddJwtBearer("Bearer", options =>
             {
-                options.Authority = "http://dtrest1-001-site1.itempurl.com/";
+                options.Authority = "http://piggy-identity.somee.com/";
                 options.RequireHttpsMetadata = false;
                 options.Audience = "api1";
             });
@@ -81,7 +88,6 @@ namespace PiggyBank.WebApi
             });
 
             app.UseRouting();
-            //app.UseHttpsRedirection();
 
             app.UseAuthentication();
             app.UseAuthorization();

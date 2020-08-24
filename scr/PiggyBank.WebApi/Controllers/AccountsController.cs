@@ -7,17 +7,23 @@ using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PiggyBank.IdentityServer.Models;
 
 namespace PiggyBank.WebApi.Controllers
 {
     [Authorize]
     [ApiController, Route("api/[controller]")]
-    public class AccountsController : ControllerBase
+    public class AccountsController : ControllerBase, IDisposable
     {
         private readonly IAccountService _service;
+        private readonly IndeintityContext _indentityContext;
 
-        public AccountsController(IAccountService service)
-            => _service = service;
+        public AccountsController(IAccountService service, IndeintityContext indentityContext)
+        {
+            _service = service;
+            _indentityContext = indentityContext;
+        }
 
         [HttpGet]
         public Task<AccountDto[]> Get(CancellationToken token)
@@ -26,10 +32,23 @@ namespace PiggyBank.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(AccountDto request, CancellationToken token)
         {
+            var user = await _indentityContext.Users.FirstOrDefaultAsync(u => u.Id == User.GetUserId().ToString(), cancellationToken: token);
+
+            if (user == null)
+            {
+                var errorResponse = new
+                {
+                    code = "UserNotFound",
+                    description = "Can't found user"
+                };
+
+                return BadRequest(errorResponse);
+            }
+
             var command = new AddAccountCommand
             {
                 Balance = request.Balance,
-                Currency = request.Currency,
+                Currency = user.CurrencyBase,
                 Title = request.Title,
                 Type = request.Type,
                 CreatedBy = User.GetUserId(),
@@ -47,7 +66,6 @@ namespace PiggyBank.WebApi.Controllers
             var command = new UpdateAccountCommand
             {
                 Balance = request.Balance,
-                Currency = request.Currency,
                 Id = accountId,
                 Title = request.Title,
                 Type = request.Type
@@ -65,7 +83,6 @@ namespace PiggyBank.WebApi.Controllers
             {
                 Id = request.Id ?? accountId,
                 Balance = request.Balance,
-                Currency = request.Currency,
                 IsArchive = request.IsArchived,
                 Title = request.Title,
                 Type = request.Type
@@ -92,6 +109,11 @@ namespace PiggyBank.WebApi.Controllers
         {
             await _service.ArchiveAccount(accountId, token);
             return Ok();
+        }
+
+        public void Dispose()
+        {
+            _indentityContext?.Dispose();
         }
     }
 }

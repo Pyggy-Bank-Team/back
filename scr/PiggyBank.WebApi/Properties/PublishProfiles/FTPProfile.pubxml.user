@@ -6,8 +6,8 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword />
-    <_PublishTargetUrl>ftp://ftp.site4now.net/webapi</_PublishTargetUrl>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAmuBwGmbnlUive/MEbLNxbgAAAAACAAAAAAAQZgAAAAEAACAAAABhBz9EidZJmVihXcX9Ga0jIojNsy8+ak3bTGAR7H3a9wAAAAAOgAAAAAIAACAAAAB9LrrCzeW/Mi8NeA/SJyqy+yRF5r8mzf6QxeY/5F+w8CAAAADHAWtunV7PDremagsO8LFoI9lKrhzL7BaNVdEakt2vakAAAACeKbklh768WBE6bYamXRQa9xLKy/sNyJe+je0sL+3sgPO9w3Bfm64eVn8NCLzflzahXoeihfz/aj6SIufAUBGH</EncryptedPassword>
+    <_PublishTargetUrl>ftp://piggy-api.somee.com/www.piggy-api.somee.com</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="appsettings.Development.json">
@@ -74,40 +74,40 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/09/2019 00:56:44</publishTime>
     </File>
     <File Include="PiggyBank.Common.dll">
-      <publishTime>06/25/2020 17:26:34</publishTime>
+      <publishTime>08/15/2020 11:11:14</publishTime>
     </File>
     <File Include="PiggyBank.Common.pdb">
-      <publishTime>06/25/2020 17:26:34</publishTime>
+      <publishTime>08/15/2020 11:11:14</publishTime>
     </File>
     <File Include="PiggyBank.Domain.dll">
-      <publishTime>06/25/2020 17:26:35</publishTime>
+      <publishTime>08/15/2020 11:11:15</publishTime>
     </File>
     <File Include="PiggyBank.Domain.pdb">
-      <publishTime>06/25/2020 17:26:35</publishTime>
+      <publishTime>08/15/2020 11:11:15</publishTime>
     </File>
     <File Include="PiggyBank.Model.dll">
-      <publishTime>06/25/2020 17:26:35</publishTime>
+      <publishTime>08/15/2020 11:11:15</publishTime>
     </File>
     <File Include="PiggyBank.Model.exe">
-      <publishTime>06/25/2020 17:26:35</publishTime>
+      <publishTime>08/15/2020 11:11:15</publishTime>
     </File>
     <File Include="PiggyBank.Model.pdb">
-      <publishTime>06/25/2020 17:26:35</publishTime>
+      <publishTime>08/15/2020 11:11:15</publishTime>
     </File>
     <File Include="PiggyBank.WebApi.deps.json">
-      <publishTime>06/26/2020 18:26:05</publishTime>
+      <publishTime>08/15/2020 11:18:45</publishTime>
     </File>
     <File Include="PiggyBank.WebApi.dll">
-      <publishTime>06/26/2020 18:26:05</publishTime>
+      <publishTime>08/15/2020 11:18:45</publishTime>
     </File>
     <File Include="PiggyBank.WebApi.exe">
-      <publishTime>06/26/2020 18:26:05</publishTime>
+      <publishTime>08/15/2020 11:18:45</publishTime>
     </File>
     <File Include="PiggyBank.WebApi.pdb">
-      <publishTime>06/26/2020 18:26:05</publishTime>
+      <publishTime>08/15/2020 11:18:45</publishTime>
     </File>
     <File Include="PiggyBank.WebApi.runtimeconfig.json">
-      <publishTime>06/26/2020 18:26:05</publishTime>
+      <publishTime>08/15/2020 11:11:16</publishTime>
     </File>
     <File Include="runtimes/unix/lib/netcoreapp2.0/System.Runtime.Caching.dll">
       <publishTime>05/15/2018 13:29:40</publishTime>
@@ -155,7 +155,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/15/2018 13:29:44</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>06/26/2020 18:30:07</publishTime>
+      <publishTime>08/15/2020 11:18:45</publishTime>
     </File>
   </ItemGroup>
 </Project>

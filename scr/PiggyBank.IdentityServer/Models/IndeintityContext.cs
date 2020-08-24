@@ -34,7 +34,7 @@ namespace PiggyBank.IdentityServer.Models
         public IndeintityContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<IndeintityContext>();
-            builder.UseSqlServer("Data Source=SQL5050.site4now.net;Initial Catalog=DB_A63631_trest;User Id=DB_A63631_trest_admin;Password=sceby7imRCXK8hu;");
+            builder.UseSqlServer("workstation id=piggy-pumba.mssql.somee.com;packet size=4096;user id=trest333_SQLLogin_1;pwd=s7mntjv5tv;data source=piggy-pumba.mssql.somee.com;persist security info=False;initial catalog=piggy-pumba");
             return new IndeintityContext(builder.Options);
         }
     }

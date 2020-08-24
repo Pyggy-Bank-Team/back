@@ -47,7 +47,7 @@ namespace PiggyBank.IdentityServer.Controllers
 
 
         [HttpPatch, Route("currency")]
-        public async Task<IActionResult> UpdateCurrency(CurrencyDto request, CancellationToken token)
+        public async Task<IActionResult> UpdateCurrency(ChangeCurrencyDto request, CancellationToken token)
         {
             var userId = Request.GetUserId();
 
@@ -71,5 +71,9 @@ namespace PiggyBank.IdentityServer.Controllers
 
             return Ok();
         }
+
+        [HttpGet, Route("AvailableCurrencies")]
+        public CurrencyDto[] GetAvailableCurrencies()
+            => CurrencyDto.GetAvailableCurrencies();
     }
 }

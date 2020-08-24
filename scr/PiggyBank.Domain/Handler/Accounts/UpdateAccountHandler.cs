@@ -14,8 +14,7 @@ namespace PiggyBank.Domain.Handler.Accounts
 
         public override async Task Invoke(CancellationToken token)
         {
-            var account = await GetRepository<Account>()
-                .FirstOrDefaultAsync(a => a.Id == Command.Id);
+            var account = await GetRepository<Account>().FirstOrDefaultAsync(a => a.Id == Command.Id, cancellationToken: token);
 
             if (account == null)
                 return;
@@ -23,7 +22,7 @@ namespace PiggyBank.Domain.Handler.Accounts
             account.Title = Command.Title;
             account.Type = Command.Type;
             account.Balance = Command.Balance;
-            account.Currency = Command.Currency;
+            // account.Currency = Command.Currency;
 
             GetRepository<Account>().Update(account);
         }

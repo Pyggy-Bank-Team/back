@@ -2,7 +2,7 @@
 
 namespace PiggyBank.IdentityServer.Dto
 {
-    public class CurrencyDto
+    public class ChangeCurrencyDto
     {
         [Required]
         public string PreviousCurrency { get; set; }

@@ -6,15 +6,15 @@ by editing this MSBuild file. In order to learn more about this please visit htt
 <Project ToolsVersion="4.0" xmlns="http://schemas.microsoft.com/developer/msbuild/2003">
   <PropertyGroup>
     <TimeStampOfAssociatedLegacyPublishXmlFile />
-    <EncryptedPassword />
-    <_PublishTargetUrl>ftp://ftp.site4now.net/IdentityServer</_PublishTargetUrl>
+    <EncryptedPassword>AQAAANCMnd8BFdERjHoAwE/Cl+sBAAAAmuBwGmbnlUive/MEbLNxbgAAAAACAAAAAAAQZgAAAAEAACAAAACaxWxEqINGzJIldHSJaFP+LGqx2xzp1uNdGuwmhOXc9QAAAAAOgAAAAAIAACAAAAC5XOnZRMjSBEXB/gKFL6Ae9UnK9lzuyedZSVY64MsWUCAAAACTakB0SDMS8H703fhYMxu8CqD3lTUeHvxmkNhVhLp0f0AAAAACit423Yz5LMw/NnnMjIdnbdrN/G7z4vkSRBR4l1ZUX45UWYZ+Alk/b53ar4OXKomTbdHncDqsDjhaUBb2V9dI</EncryptedPassword>
+    <_PublishTargetUrl>ftp://piggy-identity.somee.com/www.piggy-identity.somee.com</_PublishTargetUrl>
   </PropertyGroup>
   <ItemGroup>
     <File Include="appsettings.Development.json">
-      <publishTime>06/21/2020 17:01:39</publishTime>
+      <publishTime>08/15/2020 10:50:28</publishTime>
     </File>
     <File Include="appsettings.json">
-      <publishTime>06/21/2020 17:01:39</publishTime>
+      <publishTime>08/15/2020 11:01:14</publishTime>
     </File>
     <File Include="IdentityModel.dll">
       <publishTime>11/24/2019 10:23:34</publishTime>
@@ -77,19 +77,19 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>04/22/2019 01:06:16</publishTime>
     </File>
     <File Include="PiggyBank.IdentityServer.deps.json">
-      <publishTime>07/14/2020 21:12:33</publishTime>
+      <publishTime>08/15/2020 11:01:36</publishTime>
     </File>
     <File Include="PiggyBank.IdentityServer.dll">
-      <publishTime>07/14/2020 21:12:13</publishTime>
+      <publishTime>08/15/2020 11:01:35</publishTime>
     </File>
     <File Include="PiggyBank.IdentityServer.exe">
-      <publishTime>07/14/2020 21:12:13</publishTime>
+      <publishTime>08/15/2020 11:01:35</publishTime>
     </File>
     <File Include="PiggyBank.IdentityServer.pdb">
-      <publishTime>07/14/2020 21:12:13</publishTime>
+      <publishTime>08/15/2020 11:01:35</publishTime>
     </File>
     <File Include="PiggyBank.IdentityServer.runtimeconfig.json">
-      <publishTime>06/25/2020 17:26:35</publishTime>
+      <publishTime>08/15/2020 09:58:09</publishTime>
     </File>
     <File Include="runtimes/unix/lib/netcoreapp2.0/System.Runtime.Caching.dll">
       <publishTime>05/15/2018 13:29:40</publishTime>
@@ -128,7 +128,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/15/2018 13:29:44</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>07/14/2020 21:12:33</publishTime>
+      <publishTime>08/15/2020 11:01:36</publishTime>
     </File>
   </ItemGroup>
 </Project>
