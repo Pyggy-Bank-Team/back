@@ -8,15 +8,21 @@ namespace PiggyBank.IdentityServer.Extensions
     public static class HttpRequestExtensions
     {
         public static string GetUserId(this HttpRequest request)
+            => GetTokenFromRequest(request).Subject;
+
+        public static JwtSecurityToken GetToken(this HttpRequest request)
+            => GetTokenFromRequest(request);
+
+        private static JwtSecurityToken GetTokenFromRequest(HttpRequest request)
         {
             var bearerToken = request.Headers["Authorization"];
 
             if (StringValues.IsNullOrEmpty(bearerToken) || bearerToken.Count > 1 || !bearerToken.Any(s => s.Contains("Bearer")))
-                return string.Empty;
+                return null;
 
             var bearerTokenValue = bearerToken.First().Split(" ")[1];
             var handler = new JwtSecurityToken(bearerTokenValue);
-            return handler.Subject;
+            return handler;
         }
     }
 }

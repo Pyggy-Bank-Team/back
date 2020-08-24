@@ -40,7 +40,7 @@ namespace PiggyBank.IdentityServer
                     // scopes that client has access to
                     AllowedScopes = {"api1", IdentityServerConstants.StandardScopes.OfflineAccess},
                     IdentityTokenLifetime = TokenLifetime,
-                    AccessTokenLifetime = 3600 * 8,
+                    AccessTokenLifetime = TokenLifetime * 2,
                     AllowOfflineAccess = true,
                     RefreshTokenUsage = TokenUsage.ReUse,
                     RefreshTokenExpiration = TokenExpiration.Sliding
