@@ -8,6 +8,7 @@ using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
+using PiggyBank.Common.Models;
 using PiggyBank.Common.Models.Dto.Operations;
 
 namespace PiggyBank.WebApi.Controllers
@@ -21,8 +22,13 @@ namespace PiggyBank.WebApi.Controllers
             => _service = service;
 
         [HttpGet]
-        public Task<OperationDto[]> Get(CancellationToken token)
-            => _service.GetOperations(User.GetUserId(), token);
+        public Task<PageResult<OperationDto>> Get(int page, CancellationToken token)
+        {
+            if (page == default || page < 0)
+                page = 1;
+            
+            return _service.GetOperations(User.GetUserId(), page, token);
+        } 
 
         #region Budget
 

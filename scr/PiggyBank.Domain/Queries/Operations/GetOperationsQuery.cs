@@ -5,18 +5,21 @@ using PiggyBank.Model.Models.Entities;
 using System;
 using System.Linq;
 using System.Threading.Tasks;
+using PiggyBank.Common.Models;
 using PiggyBank.Common.Models.Dto.Operations;
 
 namespace PiggyBank.Domain.Queries.Operations
 {
-    public class GetOperationsQuery : BaseQuery<OperationDto[]>
+    public class GetOperationsQuery : BaseQuery<PageResult<OperationDto>>
     {
         private readonly Guid _userId;
-        public GetOperationsQuery(PiggyContext context, Guid userId)
-            : base(context)
-            => _userId = userId;
+        private readonly int _page;
 
-        public override Task<OperationDto[]> Invoke()
+        public GetOperationsQuery(PiggyContext context, Guid userId, int page)
+            : base(context)
+            => (_userId, _page) = (userId, page);
+
+        public override async Task<PageResult<OperationDto>> Invoke()
         {
             var budgetQuery = GetRepository<BudgetOperation>().Where(b => b.CreatedBy == _userId && !b.IsDeleted)
                 .Select(b => new OperationDto
@@ -69,7 +72,20 @@ namespace PiggyBank.Domain.Queries.Operations
                     ToTitle = null,
                 });
 
-            return budgetQuery.Union(transferQuery).Union(planQuery).OrderByDescending(o => o.CreatedOn).ToArrayAsync();
+            var operationsQuery = budgetQuery.Union(transferQuery).Union(planQuery).OrderByDescending(o => o.CreatedOn);
+
+            var result = new PageResult<OperationDto>
+            {
+                CurrentPage = _page
+            };
+
+            var totalCount = await operationsQuery.CountAsync();
+
+            result.TotalPages = totalCount / result.CountItemsOnPage + (totalCount % result.CountItemsOnPage > 0 ? 1 : 0);
+            result.Result = await operationsQuery.Skip(result.CountItemsOnPage * (result.CurrentPage - 1)).Take(result.CountItemsOnPage)
+                .ToArrayAsync();
+
+            return result;
         }
     }
 }

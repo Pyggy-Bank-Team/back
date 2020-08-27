@@ -11,6 +11,9 @@ namespace PiggyBank.Domain.Infrastructure
 
         public QueryDispatcher(PiggyContext context)
             => _context = context;
+        
+        public Task<TOutput> Invoke<TQuery, TOutput>(object param1, object param2) where TQuery : BaseQuery<TOutput>
+            => PrivateInvoke<TQuery, TOutput>(_context, param1, param2);
 
         public Task<TOutput> Invoke<TQuery, TOutput>(object param1) where TQuery : BaseQuery<TOutput>
             => PrivateInvoke<TQuery, TOutput>(_context, param1);

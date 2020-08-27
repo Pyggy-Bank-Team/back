@@ -4,6 +4,7 @@ using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
+using PiggyBank.Common.Models;
 using PiggyBank.Common.Models.Dto.Operations;
 
 namespace PiggyBank.Common.Interfaces
@@ -33,7 +34,7 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Get operations
         /// </summary>
-        Task<OperationDto[]> GetOperations(Guid userId, CancellationToken token);
+        Task<PageResult<OperationDto>> GetOperations(Guid userId, int page, CancellationToken token);
 
         /// <summary>
         /// Get operation by id

@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
+using PiggyBank.Common.Models;
 using PiggyBank.Common.Models.Dto.Operations;
 using PiggyBank.Domain.Handler.Operations.Budget;
 using PiggyBank.Domain.Handler.Operations.Plan;
@@ -39,8 +40,8 @@ namespace PiggyBank.Domain.Services
         public Task<OperationDto> GetOperation(int id, CancellationToken token)
             => _queryDispatcher.Invoke<GetOperationByIdQuery, OperationDto>(id);
 
-        public Task<OperationDto[]> GetOperations(Guid userId, CancellationToken token)
-            => _queryDispatcher.Invoke<GetOperationsQuery, OperationDto[]>(userId);
+        public Task<PageResult<OperationDto>> GetOperations(Guid userId, int page, CancellationToken token)
+            => _queryDispatcher.Invoke<GetOperationsQuery, PageResult<OperationDto>>(userId, page);
 
         public Task UpdateBidgetOperation(UpdateBidgetOperationCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdateBudgetOperationHandler, UpdateBidgetOperationCommand>(command, token);
