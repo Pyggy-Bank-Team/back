@@ -11,7 +11,7 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Add a new account
         /// </summary>
-        Task AddAccount(AddAccountCommand command, CancellationToken token);
+        Task<AccountDto> AddAccount(AddAccountCommand command, CancellationToken token);
 
         /// <summary>
         /// Get accounts

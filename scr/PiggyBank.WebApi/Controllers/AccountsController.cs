@@ -55,9 +55,9 @@ namespace PiggyBank.WebApi.Controllers
                 CreatedOn = DateTime.UtcNow
             };
 
-            await _service.AddAccount(command, token);
+            var result = await _service.AddAccount(command, token);
 
-            return Ok();
+            return Ok(result);
         }
 
         [HttpPut, Route("{accountId}")]

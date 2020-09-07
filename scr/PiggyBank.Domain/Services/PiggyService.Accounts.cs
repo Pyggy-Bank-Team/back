@@ -11,8 +11,8 @@ namespace PiggyBank.Domain.Services
 {
     public partial class PiggyService : IAccountService
     {
-        public Task AddAccount(AddAccountCommand command, CancellationToken token)
-             => _handlerDispatcher.Invoke<AddAccountHandler, AddAccountCommand>(command, token);
+        public Task<AccountDto> AddAccount(AddAccountCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<AddAccountHandler, AddAccountCommand, AccountDto>(command, token);
 
         public Task ArchiveAccount(int id, CancellationToken token)
             => _handlerDispatcher.Invoke<ArchiveAccountHandler, int>(id, token);

@@ -1,6 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Accounts;
+using PiggyBank.Common.Models.Dto;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 
@@ -13,7 +14,7 @@ namespace PiggyBank.Domain.Handler.Accounts
 
         public override async Task Invoke(CancellationToken token)
         {
-            await GetRepository<Account>().AddAsync(new Account
+            var result = await GetRepository<Account>().AddAsync(new Account
             {
                 Balance = Command.Balance,
                 Currency = Command.Currency,
@@ -24,6 +25,19 @@ namespace PiggyBank.Domain.Handler.Accounts
                 CreatedBy = Command.CreatedBy,
                 CreatedOn = Command.CreatedOn
             }, token);
+
+            await SaveAsync();
+            var account = result.Entity;
+            Result = new AccountDto
+            {
+                Id = account.Id,
+                Balance = account.Balance,
+                Currency = account.Currency,
+                Title = account.Title,
+                Type = account.Type,
+                IsArchived = account.IsArchived,
+                IsDeleted = account.IsDeleted
+            };
         }
     }
 }
