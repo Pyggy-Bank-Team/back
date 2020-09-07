@@ -16,7 +16,7 @@ namespace PiggyBank.IdentityServer.Controllers
             {
                 var errorResponse = new
                 {
-                    code = "NotFound",
+                    code = "TokenIsNullOrEmpty",
                     description = "Bearer token not found"
                 };
                 return BadRequest(errorResponse);

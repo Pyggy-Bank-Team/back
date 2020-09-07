@@ -11,18 +11,38 @@ namespace PiggyBank.Domain.Queries.Accounts
     public class GetAccountsQuery : BaseQuery<AccountDto[]>
     {
         private readonly Guid _userId;
-        public GetAccountsQuery(PiggyContext context, Guid userId) : base(context)
-            => _userId = userId;
+        private readonly bool _all;
+        public GetAccountsQuery(PiggyContext context, Guid userId, bool all) : base(context)
+            => (_userId, _all) = (userId, all);
 
         public override Task<AccountDto[]> Invoke()
-            => GetRepository<Account>().Where(a => a.CreatedBy == _userId && !a.IsDeleted).Select(a => new AccountDto
+        {
+            if (_all)
             {
-                Id = a.Id,
-                Type = a.Type,
-                Balance = a.Balance,
-                Currency = a.Currency,
-                Title = a.Title,
-                IsArchived = a.IsArchived
-            }).ToArrayAsync();
+                return GetRepository<Account>().Where(a => a.CreatedBy == _userId).Select(a => new AccountDto
+                {
+                    Id = a.Id,
+                    Type = a.Type,
+                    Balance = a.Balance,
+                    Currency = a.Currency,
+                    Title = a.Title,
+                    IsArchived = a.IsArchived,
+                    IsDeleted = a.IsDeleted
+                }).ToArrayAsync();
+            }
+            else
+            {
+                return GetRepository<Account>().Where(a => a.CreatedBy == _userId && !a.IsDeleted).Select(a => new AccountDto
+                {
+                    Id = a.Id,
+                    Type = a.Type,
+                    Balance = a.Balance,
+                    Currency = a.Currency,
+                    Title = a.Title,
+                    IsArchived = a.IsArchived,
+                    IsDeleted = a.IsDeleted
+                }).ToArrayAsync();
+            }
+        } 
     }
 }

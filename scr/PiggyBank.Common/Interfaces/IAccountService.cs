@@ -16,7 +16,7 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Get accounts
         /// </summary>
-        Task<AccountDto[]> GetAccounts(Guid userId, CancellationToken token);
+        Task<AccountDto[]> GetAccounts(bool all, Guid userId, CancellationToken token);
 
         /// <summary>
         /// Get account by id

@@ -16,8 +16,26 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     <File Include="appsettings.json">
       <publishTime>06/21/2020 17:09:14</publishTime>
     </File>
+    <File Include="IdentityModel.dll">
+      <publishTime>11/24/2019 10:23:34</publishTime>
+    </File>
+    <File Include="IdentityServer4.AspNetIdentity.dll">
+      <publishTime>02/20/2020 08:24:40</publishTime>
+    </File>
+    <File Include="IdentityServer4.dll">
+      <publishTime>02/20/2020 08:23:20</publishTime>
+    </File>
+    <File Include="IdentityServer4.Storage.dll">
+      <publishTime>02/20/2020 08:22:02</publishTime>
+    </File>
     <File Include="Microsoft.AspNetCore.Authentication.JwtBearer.dll">
       <publishTime>03/14/2020 05:21:28</publishTime>
+    </File>
+    <File Include="Microsoft.AspNetCore.Authentication.OpenIdConnect.dll">
+      <publishTime>11/16/2019 11:24:22</publishTime>
+    </File>
+    <File Include="Microsoft.AspNetCore.Identity.EntityFrameworkCore.dll">
+      <publishTime>11/16/2019 11:19:48</publishTime>
     </File>
     <File Include="Microsoft.AspNetCore.JsonPatch.dll">
       <publishTime>03/14/2020 05:19:40</publishTime>
@@ -45,6 +63,12 @@ by editing this MSBuild file. In order to learn more about this please visit htt
     </File>
     <File Include="Microsoft.EntityFrameworkCore.SqlServer.dll">
       <publishTime>01/01/1980 00:00:00</publishTime>
+    </File>
+    <File Include="Microsoft.Extensions.DependencyInjection.Abstractions.dll">
+      <publishTime>07/15/2020 06:42:58</publishTime>
+    </File>
+    <File Include="Microsoft.Extensions.DependencyInjection.dll">
+      <publishTime>07/15/2020 06:43:06</publishTime>
     </File>
     <File Include="Microsoft.Identity.Client.dll">
       <publishTime>04/29/2019 22:04:14</publishTime>
@@ -74,40 +98,49 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>11/09/2019 00:56:44</publishTime>
     </File>
     <File Include="PiggyBank.Common.dll">
-      <publishTime>08/15/2020 11:11:14</publishTime>
+      <publishTime>08/29/2020 10:21:30</publishTime>
     </File>
     <File Include="PiggyBank.Common.pdb">
-      <publishTime>08/15/2020 11:11:14</publishTime>
+      <publishTime>08/29/2020 10:21:30</publishTime>
     </File>
     <File Include="PiggyBank.Domain.dll">
-      <publishTime>08/15/2020 11:11:15</publishTime>
+      <publishTime>08/29/2020 10:21:32</publishTime>
     </File>
     <File Include="PiggyBank.Domain.pdb">
-      <publishTime>08/15/2020 11:11:15</publishTime>
+      <publishTime>08/29/2020 10:21:32</publishTime>
+    </File>
+    <File Include="PiggyBank.IdentityServer.dll">
+      <publishTime>08/29/2020 10:21:31</publishTime>
+    </File>
+    <File Include="PiggyBank.IdentityServer.exe">
+      <publishTime>08/29/2020 10:21:31</publishTime>
+    </File>
+    <File Include="PiggyBank.IdentityServer.pdb">
+      <publishTime>08/29/2020 10:21:31</publishTime>
     </File>
     <File Include="PiggyBank.Model.dll">
-      <publishTime>08/15/2020 11:11:15</publishTime>
+      <publishTime>08/29/2020 10:21:31</publishTime>
     </File>
     <File Include="PiggyBank.Model.exe">
-      <publishTime>08/15/2020 11:11:15</publishTime>
+      <publishTime>08/29/2020 10:21:31</publishTime>
     </File>
     <File Include="PiggyBank.Model.pdb">
-      <publishTime>08/15/2020 11:11:15</publishTime>
+      <publishTime>08/29/2020 10:21:31</publishTime>
     </File>
     <File Include="PiggyBank.WebApi.deps.json">
-      <publishTime>08/15/2020 11:18:45</publishTime>
+      <publishTime>08/29/2020 10:21:33</publishTime>
     </File>
     <File Include="PiggyBank.WebApi.dll">
-      <publishTime>08/15/2020 11:18:45</publishTime>
+      <publishTime>08/29/2020 10:21:32</publishTime>
     </File>
     <File Include="PiggyBank.WebApi.exe">
-      <publishTime>08/15/2020 11:18:45</publishTime>
+      <publishTime>08/29/2020 10:21:32</publishTime>
     </File>
     <File Include="PiggyBank.WebApi.pdb">
-      <publishTime>08/15/2020 11:18:45</publishTime>
+      <publishTime>08/29/2020 10:21:32</publishTime>
     </File>
     <File Include="PiggyBank.WebApi.runtimeconfig.json">
-      <publishTime>08/15/2020 11:11:16</publishTime>
+      <publishTime>08/29/2020 10:21:33</publishTime>
     </File>
     <File Include="runtimes/unix/lib/netcoreapp2.0/System.Runtime.Caching.dll">
       <publishTime>05/15/2018 13:29:40</publishTime>
@@ -155,7 +188,7 @@ by editing this MSBuild file. In order to learn more about this please visit htt
       <publishTime>05/15/2018 13:29:44</publishTime>
     </File>
     <File Include="web.config">
-      <publishTime>08/15/2020 11:18:45</publishTime>
+      <publishTime>08/29/2020 10:21:37</publishTime>
     </File>
   </ItemGroup>
 </Project>
