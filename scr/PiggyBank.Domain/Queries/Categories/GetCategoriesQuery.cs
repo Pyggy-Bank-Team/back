@@ -22,7 +22,9 @@ namespace PiggyBank.Domain.Queries.Categories
                 Id = c.Id,
                 HexColor = c.HexColor,
                 Title = c.Title,
-                Type = c.Type
+                Type = c.Type,
+                IsArchived = c.IsArchived,
+                IsDeleted = c.IsDeleted
             }).ToArrayAsync();
     }
 }

@@ -14,5 +14,9 @@ namespace PiggyBank.Common.Models.Dto
         public string HexColor { get; set; }
 
         public CategoryType Type { get; set; }
+        
+        public bool IsDeleted { get; set; }
+
+        public bool IsArchived { get; set; }
     }
 }

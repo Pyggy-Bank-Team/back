@@ -36,7 +36,8 @@ namespace PiggyBank.WebApi.Controllers
                 HexColor = request.HexColor,
                 Type = request.Type,
                 CreatedBy = User.GetUserId(),
-                CreatedOn = DateTime.UtcNow
+                CreatedOn = DateTime.UtcNow,
+                IsArchived = request.IsArchived
             };
 
             await _service.AddCategory(command, token);
