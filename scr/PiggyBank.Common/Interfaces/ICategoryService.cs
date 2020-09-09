@@ -16,7 +16,7 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Get categories
         /// </summary>
-        Task<CategoryDto[]> GetCategories(Guid userId, CancellationToken token);
+        Task<CategoryDto[]> GetCategories(Guid userId, bool all, CancellationToken token);
 
         /// <summary>
         /// Get category by id

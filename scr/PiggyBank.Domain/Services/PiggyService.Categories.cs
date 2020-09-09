@@ -20,8 +20,8 @@ namespace PiggyBank.Domain.Services
         public Task DeleteCategory(int id, CancellationToken token)
             => _handlerDispatcher.Invoke<DeleteCategoryHandler, int>(id, token);
 
-        public Task<CategoryDto[]> GetCategories(Guid userId, CancellationToken token)
-            => _queryDispatcher.Invoke<GetCategoriesQuery, CategoryDto[]>(userId);
+        public Task<CategoryDto[]> GetCategories(Guid userId, bool all, CancellationToken token)
+            => _queryDispatcher.Invoke<GetCategoriesQuery, CategoryDto[]>(userId, all);
 
         public Task<CategoryDto> GetCategory(int id, CancellationToken token)
             => _queryDispatcher.Invoke<GetCategoryByIdQuery, CategoryDto>(id);

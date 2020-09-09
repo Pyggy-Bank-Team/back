@@ -11,20 +11,40 @@ namespace PiggyBank.Domain.Queries.Categories
     public class GetCategoriesQuery : BaseQuery<CategoryDto[]>
     {
         private readonly Guid _userId;
-        public GetCategoriesQuery(PiggyContext context, Guid userId)
+        private readonly bool _all;
+
+        public GetCategoriesQuery(PiggyContext context, Guid userId, bool all)
             : base(context)
-            => _userId = userId;
+            => (_userId, _all) = (userId, all);
 
         public override Task<CategoryDto[]> Invoke()
-            => GetRepository<Category>().Where(c => c.CreatedBy == _userId && !c.IsDeleted)
-            .Select(c => new CategoryDto
+        {
+            if (_all)
             {
-                Id = c.Id,
-                HexColor = c.HexColor,
-                Title = c.Title,
-                Type = c.Type,
-                IsArchived = c.IsArchived,
-                IsDeleted = c.IsDeleted
-            }).ToArrayAsync();
+                return GetRepository<Category>().Where(c => c.CreatedBy == _userId)
+                    .Select(c => new CategoryDto
+                    {
+                        Id = c.Id,
+                        HexColor = c.HexColor,
+                        Title = c.Title,
+                        Type = c.Type,
+                        IsArchived = c.IsArchived,
+                        IsDeleted = c.IsDeleted
+                    }).ToArrayAsync();
+            }
+            else
+            {
+                return GetRepository<Category>().Where(c => c.CreatedBy == _userId && !c.IsDeleted)
+                    .Select(c => new CategoryDto
+                    {
+                        Id = c.Id,
+                        HexColor = c.HexColor,
+                        Title = c.Title,
+                        Type = c.Type,
+                        IsArchived = c.IsArchived,
+                        IsDeleted = c.IsDeleted
+                    }).ToArrayAsync();
+            }
+        }
     }
 }
