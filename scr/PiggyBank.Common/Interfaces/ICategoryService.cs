@@ -11,7 +11,7 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Add a new category
         /// </summary>
-        Task AddCategory(AddCategoryCommand command, CancellationToken token);
+        Task<CategoryDto> AddCategory(AddCategoryCommand command, CancellationToken token);
 
         /// <summary>
         /// Get categories

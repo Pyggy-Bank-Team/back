@@ -40,8 +40,8 @@ namespace PiggyBank.WebApi.Controllers
                 IsArchived = request.IsArchived
             };
 
-            await _service.AddCategory(command, token);
-            return Ok();
+            var newCategory = await _service.AddCategory(command, token);
+            return Ok(newCategory);
         }
 
         [HttpPut, Route("{categoryId}")]

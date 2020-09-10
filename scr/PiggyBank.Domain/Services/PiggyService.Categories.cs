@@ -11,8 +11,8 @@ namespace PiggyBank.Domain.Services
 {
     public partial class PiggyService : ICategoryService
     {
-        public Task AddCategory(AddCategoryCommand command, CancellationToken token)
-            => _handlerDispatcher.Invoke<AddCategoryHandler, AddCategoryCommand>(command, token);
+        public Task<CategoryDto> AddCategory(AddCategoryCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<AddCategoryHandler, AddCategoryCommand, CategoryDto>(command, token);
 
         public Task ArchiveCategory(int id, CancellationToken token)
             => _handlerDispatcher.Invoke<ArchiveCategoryHandler, int>(id, token);
