@@ -20,7 +20,6 @@ namespace PiggyBank.Domain.Handler.Accounts
                 return;
 
             account.IsDeleted = true;
-
             repository.Update(account);
         }
     }

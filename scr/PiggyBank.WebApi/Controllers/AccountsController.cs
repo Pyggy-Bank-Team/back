@@ -66,10 +66,11 @@ namespace PiggyBank.WebApi.Controllers
         {
             var command = new UpdateAccountCommand
             {
-                Balance = request.Balance,
                 Id = accountId,
+                Balance = request.Balance,
                 Title = request.Title,
-                Type = request.Type
+                Type = request.Type,
+                IsArchived = request.IsArchived
             };
 
             await _service.UpdateAccount(command, token);

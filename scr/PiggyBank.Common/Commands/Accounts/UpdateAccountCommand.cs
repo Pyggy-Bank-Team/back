@@ -13,5 +13,7 @@ namespace PiggyBank.Common.Commands.Accounts
         public string Currency { get; set; }
 
         public decimal Balance { get; set; }
+        
+        public bool IsArchived { get; set; }
     }
 }

@@ -22,6 +22,8 @@ namespace PiggyBank.Domain.Handler.Accounts
             account.Title = Command.Title;
             account.Type = Command.Type;
             account.Balance = Command.Balance;
+            account.IsArchived = Command.IsArchived;
+            //TODO After mvp need add functionality for update currency
             // account.Currency = Command.Currency;
 
             GetRepository<Account>().Update(account);
