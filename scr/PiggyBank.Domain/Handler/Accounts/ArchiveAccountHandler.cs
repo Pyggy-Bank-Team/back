@@ -14,7 +14,7 @@ namespace PiggyBank.Domain.Handler.Accounts
         public override async Task Invoke(CancellationToken token)
         {
             var repository = GetRepository<Account>();
-            var account = await repository.FirstOrDefaultAsync(a => a.Id == Command && !a.IsDeleted);
+            var account = await repository.FirstOrDefaultAsync(a => a.Id == Command && !a.IsDeleted, cancellationToken: token);
 
             if (account == null || account.IsArchived)
                 return;
