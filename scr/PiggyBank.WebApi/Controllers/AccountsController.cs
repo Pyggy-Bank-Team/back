@@ -52,7 +52,8 @@ namespace PiggyBank.WebApi.Controllers
                 Title = request.Title,
                 Type = request.Type,
                 CreatedBy = User.GetUserId(),
-                CreatedOn = DateTime.UtcNow
+                CreatedOn = DateTime.UtcNow,
+                IsArchived = request.IsArchived
             };
 
             var result = await _service.AddAccount(command, token);

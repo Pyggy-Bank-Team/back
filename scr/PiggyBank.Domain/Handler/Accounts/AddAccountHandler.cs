@@ -19,7 +19,6 @@ namespace PiggyBank.Domain.Handler.Accounts
                 Balance = Command.Balance,
                 Currency = Command.Currency,
                 IsArchived = Command.IsArchived,
-                IsDeleted = Command.IsDeleted,
                 Title = Command.Title,
                 Type = Command.Type,
                 CreatedBy = Command.CreatedBy,
@@ -36,7 +35,8 @@ namespace PiggyBank.Domain.Handler.Accounts
                 Title = account.Title,
                 Type = account.Type,
                 IsArchived = account.IsArchived,
-                IsDeleted = account.IsDeleted
+                CreatedBy = account.CreatedBy,
+                CreatedOn = account.CreatedOn
             };
         }
     }
