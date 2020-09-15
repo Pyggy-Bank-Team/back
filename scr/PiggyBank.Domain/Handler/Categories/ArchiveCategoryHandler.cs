@@ -14,7 +14,7 @@ namespace PiggyBank.Domain.Handler.Categories
         public override async Task Invoke(CancellationToken token)
         {
             var repository = GetRepository<Category>();
-            var category = await repository.FirstOrDefaultAsync(a => a.Id == Command && !a.IsDeleted);
+            var category = await repository.FirstOrDefaultAsync(a => a.Id == Command && !a.IsDeleted, cancellationToken: token);
 
             if (category == null || category.IsArchived)
                 return;

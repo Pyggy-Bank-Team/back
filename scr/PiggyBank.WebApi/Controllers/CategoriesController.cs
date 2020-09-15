@@ -52,7 +52,8 @@ namespace PiggyBank.WebApi.Controllers
                 Id = categoryId,
                 Title = request.Title,
                 Type = request.Type,
-                HexColor = request.HexColor
+                HexColor = request.HexColor,
+                IsArchived = request.IsArchived
             };
 
             await _service.UpdateCategory(command, token);
@@ -68,7 +69,8 @@ namespace PiggyBank.WebApi.Controllers
                 Id = categoryId,
                 Title = request.Title,
                 Type = request.Type,
-                HexColor = request.HexColor
+                HexColor = request.HexColor,
+                IsArchived = request.IsArchived
             };
 
             await _service.PartialUpdateCategory(command, token);

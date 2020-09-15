@@ -14,14 +14,12 @@ namespace PiggyBank.Domain.Handler.Categories
         public override async Task Invoke(CancellationToken token)
         {
             var repository = GetRepository<Category>();
-            var category = await repository
-                .FirstOrDefaultAsync(c => c.Id == Command && !c.IsDeleted);
+            var category = await repository.FirstOrDefaultAsync(c => c.Id == Command && !c.IsDeleted, cancellationToken: token);
 
             if (category == null)
                 return;
 
             category.IsDeleted = true;
-
             repository.Update(category);
         }
     }

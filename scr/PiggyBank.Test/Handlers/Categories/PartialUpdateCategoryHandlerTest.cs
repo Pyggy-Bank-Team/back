@@ -19,7 +19,7 @@ namespace PiggyBank.Test.Handlers.Categories
                 .UseInMemoryDatabase(databaseName: "PartialUpdateCategory_InMemory").Options);
 
         [Fact]
-        public async Task Invoke_CommandHasTitle_OperationSuccessfull()
+        public async Task Invoke_CommandHasTitle_OperationSuccessful()
         {
             var command = new PartialUpdateCategoryCommand
             {
@@ -27,7 +27,7 @@ namespace PiggyBank.Test.Handlers.Categories
                 Title = "New title"
             };
 
-            _context.Categories.Add(new Category
+            await _context.Categories.AddAsync(new Category
             {
                 Id = 1,
                 Type = Common.Enums.CategoryType.Income,
@@ -35,7 +35,7 @@ namespace PiggyBank.Test.Handlers.Categories
                 HexColor = "#000000"
             });
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var handler = new PartialUpdateCategoryHandler(_context, command);
             await handler.Invoke(CancellationToken.None);
@@ -48,7 +48,7 @@ namespace PiggyBank.Test.Handlers.Categories
         }
 
         [Fact]
-        public async Task Invoke_CommandHasType_OperationSuccessfull()
+        public async Task Invoke_CommandHasType_OperationSuccessful()
         {
             var command = new PartialUpdateCategoryCommand
             {
@@ -56,7 +56,7 @@ namespace PiggyBank.Test.Handlers.Categories
                 Type = Common.Enums.CategoryType.Expense
             };
 
-            _context.Categories.Add(new Category
+            await _context.Categories.AddAsync(new Category
             {
                 Id = 1,
                 Type = Common.Enums.CategoryType.Income,
@@ -64,7 +64,7 @@ namespace PiggyBank.Test.Handlers.Categories
                 HexColor = "#000000"
             });
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var handler = new PartialUpdateCategoryHandler(_context, command);
             await handler.Invoke(CancellationToken.None);
@@ -77,7 +77,7 @@ namespace PiggyBank.Test.Handlers.Categories
         }
 
         [Fact]
-        public async Task Invoke_ToArchived_OperationSuccessfull()
+        public async Task Invoke_ToArchived_OperationSuccessful()
         {
             var command = new PartialUpdateCategoryCommand
             {
@@ -85,7 +85,7 @@ namespace PiggyBank.Test.Handlers.Categories
                 IsArchived = true
             };
 
-            _context.Categories.Add(new Category
+            await _context.Categories.AddAsync(new Category
             {
                 Id = 1,
                 Type = Common.Enums.CategoryType.Income,
@@ -94,7 +94,7 @@ namespace PiggyBank.Test.Handlers.Categories
                 IsArchived = false
             });
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var handler = new PartialUpdateCategoryHandler(_context, command);
             await handler.Invoke(CancellationToken.None);
@@ -115,7 +115,7 @@ namespace PiggyBank.Test.Handlers.Categories
                 IsArchived = true
             };
 
-            _context.Categories.Add(new Category
+            await _context.Categories.AddAsync(new Category
             {
                 Id = 2,
                 Type = Common.Enums.CategoryType.Income,
@@ -124,7 +124,7 @@ namespace PiggyBank.Test.Handlers.Categories
                 IsArchived = false
             });
 
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
             var handler = new PartialUpdateCategoryHandler(_context, command);
             await handler.Invoke(CancellationToken.None);
