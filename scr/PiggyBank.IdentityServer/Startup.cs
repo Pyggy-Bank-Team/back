@@ -38,7 +38,7 @@ namespace PiggyBank.IdentityServer
                 opt.Password.RequireUppercase = false;
             }).AddEntityFrameworkStores<IndeintityContext>();
 
-            services.AddControllers();
+            services.AddControllers().AddNewtonsoftJson();
             services.AddHttpClient();
             services.AddSingleton(_configuration);
             services.AddScoped<ITokenService, TokenService>();
