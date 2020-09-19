@@ -1,4 +1,5 @@
-﻿using PiggyBank.Common.Enums;
+﻿using System;
+using PiggyBank.Common.Enums;
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
@@ -25,7 +26,9 @@ namespace PiggyBank.Model.Models.Entities
 
             BalanceHistories.Add(new BalanceHistory
             {
-                Value = Balance
+                Value = Balance,
+                CreatedBy = CreatedBy,
+                CreatedOn = DateTime.UtcNow
             });
         }
     }

@@ -23,7 +23,9 @@ namespace PiggyBank.Domain.Queries.Accounts
                 IsArchived = a.IsArchived,
                 IsDeleted = a.IsDeleted,
                 Title = a.Title,
-                Type = a.Type
+                Type = a.Type,
+                CreatedOn = a.CreatedOn,
+                CreatedBy = a.CreatedBy
             }).FirstOrDefaultAsync();
     }
 }

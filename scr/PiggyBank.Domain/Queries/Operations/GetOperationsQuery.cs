@@ -36,6 +36,7 @@ namespace PiggyBank.Domain.Queries.Operations
                     PlanDate = null,
                     FromTitle = null,
                     ToTitle = null,
+                    IsDeleted = b.IsDeleted
                 });
 
             var transferQuery = GetRepository<TransferOperation>().Where(t => t.CreatedBy == _userId && !t.IsDeleted)
@@ -52,7 +53,8 @@ namespace PiggyBank.Domain.Queries.Operations
                     CreatedOn = t.CreatedOn,
                     PlanDate = null,
                     FromTitle = GetRepository<Account>().First(a => a.Id == t.From).Title,
-                    ToTitle = GetRepository<Account>().First(a => a.Id == t.To).Title
+                    ToTitle = GetRepository<Account>().First(a => a.Id == t.To).Title,
+                    IsDeleted = t.IsDeleted
                 });
 
             var planQuery = GetRepository<PlanOperation>().Where(p => p.CreatedBy == _userId && !p.IsDeleted)
@@ -70,6 +72,7 @@ namespace PiggyBank.Domain.Queries.Operations
                     PlanDate = p.PlanDate,
                     FromTitle = null,
                     ToTitle = null,
+                    IsDeleted = p.IsDeleted
                 });
 
             var operationsQuery = budgetQuery.Union(transferQuery).Union(planQuery).OrderByDescending(o => o.CreatedOn);

@@ -28,5 +28,7 @@ namespace PiggyBank.Common.Models.Dto.Operations
         public string FromTitle { get; set; }
 
         public string ToTitle { get; set; }
+        
+        public bool IsDeleted { get; set; }
     }
 }

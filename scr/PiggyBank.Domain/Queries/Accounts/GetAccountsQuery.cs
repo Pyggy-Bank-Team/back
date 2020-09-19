@@ -27,7 +27,9 @@ namespace PiggyBank.Domain.Queries.Accounts
                     Currency = a.Currency,
                     Title = a.Title,
                     IsArchived = a.IsArchived,
-                    IsDeleted = a.IsDeleted
+                    IsDeleted = a.IsDeleted,
+                    CreatedOn = a.CreatedOn,
+                    CreatedBy = a.CreatedBy
                 }).ToArrayAsync();
             }
             else
@@ -40,7 +42,9 @@ namespace PiggyBank.Domain.Queries.Accounts
                     Currency = a.Currency,
                     Title = a.Title,
                     IsArchived = a.IsArchived,
-                    IsDeleted = a.IsDeleted
+                    IsDeleted = a.IsDeleted,
+                    CreatedOn = a.CreatedOn,
+                    CreatedBy = a.CreatedBy
                 }).ToArrayAsync();
             }
         } 

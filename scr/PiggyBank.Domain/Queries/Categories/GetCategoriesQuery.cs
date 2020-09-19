@@ -29,7 +29,9 @@ namespace PiggyBank.Domain.Queries.Categories
                         Title = c.Title,
                         Type = c.Type,
                         IsArchived = c.IsArchived,
-                        IsDeleted = c.IsDeleted
+                        IsDeleted = c.IsDeleted,
+                        CreatedOn = c.CreatedOn,
+                        CreatedBy = c.CreatedBy
                     }).ToArrayAsync();
             }
             else
@@ -42,7 +44,9 @@ namespace PiggyBank.Domain.Queries.Categories
                         Title = c.Title,
                         Type = c.Type,
                         IsArchived = c.IsArchived,
-                        IsDeleted = c.IsDeleted
+                        IsDeleted = c.IsDeleted,
+                        CreatedOn = c.CreatedOn,
+                        CreatedBy = c.CreatedBy
                     }).ToArrayAsync();
             }
         }

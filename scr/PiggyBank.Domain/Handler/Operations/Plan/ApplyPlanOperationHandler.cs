@@ -40,7 +40,7 @@ namespace PiggyBank.Domain.Handler.Operations.Plan
                 CreatedBy = operation.CreatedBy,
                 CreatedOn = operation.CreatedOn,
                 Type = OperationType.Budget,
-                Shapshot = operation.Shapshot
+                Snapshot = operation.Snapshot
             }, token);
 
             account.ChangeBalance(category.Type == CategoryType.Income ? operation.Amount : -operation.Amount);

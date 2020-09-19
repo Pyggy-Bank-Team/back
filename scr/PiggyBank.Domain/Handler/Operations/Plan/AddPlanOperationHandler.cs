@@ -40,7 +40,7 @@ namespace PiggyBank.Domain.Handler.Operations.Plan
                 CategoryId = Command.CategoryId,
                 PlanDate = Command.PlanDate,
                 CreatedOn = Command.CreatedOn,
-                Shapshot = JsonConvert.SerializeObject(snapshot),
+                Snapshot = JsonConvert.SerializeObject(snapshot),
                 CreatedBy = Command.CreatedBy
             };
 

@@ -93,8 +93,15 @@ namespace PiggyBank.IdentityServer.Controllers
             }
 
             var user = await _userManager.FindByIdAsync(userId);
+            var currency = CurrencyDto.GetAvailableCurrencies().FirstOrDefault(c => c.Code == user.CurrencyBase);
 
-            return Ok(CurrencyDto.GetAvailableCurrencies().FirstOrDefault(c => c.Code == user.CurrencyBase));
+            var userIfo = new UserInfoDto
+            {
+                UserName = user.UserName,
+                Currency = currency
+            };
+
+            return Ok(userIfo);
         }
     }
 }

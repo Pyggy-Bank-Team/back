@@ -3,7 +3,7 @@ using System.ComponentModel.DataAnnotations;
 
 namespace PiggyBank.Common.Models.Dto
 {
-    public class CategoryDto
+    public class CategoryDto : BaseDto
     {
         public int Id { get; set; }
 
