@@ -1,4 +1,5 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using System.Linq;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using PiggyBank.IdentityServer.Dto;
 using System.Threading;
@@ -75,5 +76,25 @@ namespace PiggyBank.IdentityServer.Controllers
         [HttpGet, Route("AvailableCurrencies")]
         public CurrencyDto[] GetAvailableCurrencies()
             => CurrencyDto.GetAvailableCurrencies();
+
+        [HttpGet, Route("CurrencyBase")]
+        public async Task<IActionResult> GetCurrencyBase()
+        {
+            var userId = Request.GetUserId();
+
+            if (string.IsNullOrEmpty(userId))
+            {
+                var errorResponse = new
+                {
+                    code = "TokenIsNullOrEmpty",
+                    description = "Bearer token not found"
+                };
+                return BadRequest(errorResponse);
+            }
+
+            var user = await _userManager.FindByIdAsync(userId);
+
+            return Ok(CurrencyDto.GetAvailableCurrencies().FirstOrDefault(c => c.Code == user.CurrencyBase));
+        }
     }
 }

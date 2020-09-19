@@ -21,8 +21,8 @@ namespace PiggyBank.IdentityServer.Extensions
                 return null;
 
             var bearerTokenValue = bearerToken.First().Split(" ")[1];
-            var handler = new JwtSecurityToken(bearerTokenValue);
-            return handler;
+            var  jwtToken = new JwtSecurityToken(bearerTokenValue);
+            return jwtToken;
         }
     }
 }
