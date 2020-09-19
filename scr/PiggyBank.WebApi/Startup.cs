@@ -31,7 +31,7 @@ namespace PiggyBank.WebApi
             services.AddScoped<IOperationService, PiggyService>();
             
             //TODO: Make up a sane interaction with UserManager
-            services.AddDbContext<IndeintityContext>(opt =>
+            services.AddDbContext<IdentityContext>(opt =>
                 opt.UseSqlServer(@"workstation id=piggy-pumba.mssql.somee.com;packet size=4096;user id=trest333_SQLLogin_1;pwd=s7mntjv5tv;data source=piggy-pumba.mssql.somee.com;persist security info=False;initial catalog=piggy-pumba"));
 
             services.AddSwaggerGen(c =>

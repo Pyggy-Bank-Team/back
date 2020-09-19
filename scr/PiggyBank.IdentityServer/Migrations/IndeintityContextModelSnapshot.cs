@@ -8,7 +8,7 @@ using PiggyBank.IdentityServer.Models;
 
 namespace PiggyBank.IdentityServer.Migrations
 {
-    [DbContext(typeof(IndeintityContext))]
+    [DbContext(typeof(IdentityContext))]
     partial class IndeintityContextModelSnapshot : ModelSnapshot
     {
         protected override void BuildModel(ModelBuilder modelBuilder)

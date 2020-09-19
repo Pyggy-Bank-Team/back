@@ -24,6 +24,8 @@ namespace PiggyBank.Domain.Handler.Accounts
             account.Balance = Command.Balance ?? account.Balance;
             //account.Currency = string.IsNullOrWhiteSpace(Command.Currency) ? account.Currency : Command.Currency;
             account.IsArchived = Command.IsArchive ?? account.IsArchived;
+            account.ModifiedBy = Command.ModifiedBy;
+            account.ModifiedOn = Command.ModifiedOn;
 
             GetRepository<Account>().Update(account);
         }

@@ -31,12 +31,12 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Delete exists entity
         /// </summary>
-        Task DeleteAccount(int id, CancellationToken token);
+        Task DeleteAccount(DeleteAccountCommand command, CancellationToken token);
 
         /// <summary>
         /// Archive exists entity
         /// </summary>
-        Task ArchiveAccount(int id, CancellationToken token);
+        Task ArchiveAccount(ArchiveAccountCommand command, CancellationToken token);
 
         Task PartialUpdateAccount(PartialUpdateAccountCommand command, CancellationToken token);
     }

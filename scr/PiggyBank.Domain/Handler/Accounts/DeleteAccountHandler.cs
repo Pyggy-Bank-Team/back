@@ -3,23 +3,26 @@ using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Accounts;
 
 namespace PiggyBank.Domain.Handler.Accounts
 {
-    public class DeleteAccountHandler : BaseHandler<int>
+    public class DeleteAccountHandler : BaseHandler<DeleteAccountCommand>
     {
-        public DeleteAccountHandler(PiggyContext context, int command)
+        public DeleteAccountHandler(PiggyContext context, DeleteAccountCommand command)
             : base(context, command) { }
 
         public override async Task Invoke(CancellationToken token)
         {
             var repository = GetRepository<Account>();
-            var account = await repository.FirstOrDefaultAsync(a => a.Id == Command && !a.IsDeleted, cancellationToken: token);
+            var account = await repository.FirstOrDefaultAsync(a => a.Id == Command.Id && !a.IsDeleted, cancellationToken: token);
 
             if (account == null)
                 return;
 
             account.IsDeleted = true;
+            account.ModifiedBy = Command.ModifiedBy;
+            account.ModifiedOn = Command.ModifiedOn;
             repository.Update(account);
         }
     }

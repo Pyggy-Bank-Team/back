@@ -23,6 +23,8 @@ namespace PiggyBank.Domain.Handler.Accounts
             account.Type = Command.Type;
             account.Balance = Command.Balance;
             account.IsArchived = Command.IsArchived;
+            account.ModifiedBy = Command.ModifiedBy;
+            account.ModifiedOn = Command.ModifiedOn;
             //TODO After mvp need add functionality for update currency
             // account.Currency = Command.Currency;
 

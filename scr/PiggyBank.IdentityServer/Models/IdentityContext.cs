@@ -5,9 +5,9 @@ using Microsoft.EntityFrameworkCore.Design;
 
 namespace PiggyBank.IdentityServer.Models
 {
-    public class IndeintityContext : IdentityDbContext<ApplicationUser>
+    public class IdentityContext : IdentityDbContext<ApplicationUser>
     {
-        public IndeintityContext(DbContextOptions options)
+        public IdentityContext(DbContextOptions options)
             : base(options) { }
 
         protected override void OnModelCreating(ModelBuilder builder)
@@ -29,13 +29,13 @@ namespace PiggyBank.IdentityServer.Models
         public string CurrencyBase { get; set; }
     }
 
-    public class IndeintityContextFactory : IDesignTimeDbContextFactory<IndeintityContext>
+    public class IdentityContextFactory : IDesignTimeDbContextFactory<IdentityContext>
     {
-        public IndeintityContext CreateDbContext(string[] args)
+        public IdentityContext CreateDbContext(string[] args)
         {
-            var builder = new DbContextOptionsBuilder<IndeintityContext>();
+            var builder = new DbContextOptionsBuilder<IdentityContext>();
             builder.UseSqlServer("workstation id=piggy-pumba.mssql.somee.com;packet size=4096;user id=trest333_SQLLogin_1;pwd=s7mntjv5tv;data source=piggy-pumba.mssql.somee.com;persist security info=False;initial catalog=piggy-pumba");
-            return new IndeintityContext(builder.Options);
+            return new IdentityContext(builder.Options);
         }
     }
 }

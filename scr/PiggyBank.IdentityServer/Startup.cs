@@ -27,7 +27,7 @@ namespace PiggyBank.IdentityServer
                 .AddResourceOwnerValidator<ResourceOwnerPasswordValidator<ApplicationUser>>();
 
             //UserManager
-            services.AddDbContext<IndeintityContext>(opt =>
+            services.AddDbContext<IdentityContext>(opt =>
                 opt.UseSqlServer(_configuration.GetConnectionString("DbConnection")));
 
             services.AddIdentity<ApplicationUser, IdentityRole>(opt =>
@@ -36,7 +36,7 @@ namespace PiggyBank.IdentityServer
                 opt.Password.RequireLowercase = false;
                 opt.Password.RequireNonAlphanumeric = false;
                 opt.Password.RequireUppercase = false;
-            }).AddEntityFrameworkStores<IndeintityContext>();
+            }).AddEntityFrameworkStores<IdentityContext>();
 
             services.AddControllers().AddNewtonsoftJson();
             services.AddHttpClient();

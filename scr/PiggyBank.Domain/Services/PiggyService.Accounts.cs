@@ -14,11 +14,11 @@ namespace PiggyBank.Domain.Services
         public Task<AccountDto> AddAccount(AddAccountCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<AddAccountHandler, AddAccountCommand, AccountDto>(command, token);
 
-        public Task ArchiveAccount(int id, CancellationToken token)
-            => _handlerDispatcher.Invoke<ArchiveAccountHandler, int>(id, token);
+        public Task ArchiveAccount(ArchiveAccountCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<ArchiveAccountHandler, ArchiveAccountCommand>(command, token);
 
-        public Task DeleteAccount(int id, CancellationToken token)
-            => _handlerDispatcher.Invoke<DeleteAccountHandler, int>(id, token);
+        public Task DeleteAccount(DeleteAccountCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<DeleteAccountHandler, DeleteAccountCommand>(command, token);
 
         public Task<AccountDto> GetAccount(int accountId, CancellationToken token)
             => _queryDispatcher.Invoke<GetAccountByIdQuery, AccountDto>(accountId);

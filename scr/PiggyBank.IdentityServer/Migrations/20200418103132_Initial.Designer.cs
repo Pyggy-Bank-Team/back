@@ -9,7 +9,7 @@ using PiggyBank.IdentityServer.Models;
 
 namespace PiggyBank.IdentityServer.Migrations
 {
-    [DbContext(typeof(IndeintityContext))]
+    [DbContext(typeof(IdentityContext))]
     [Migration("20200418103132_Initial")]
     partial class Initial
     {

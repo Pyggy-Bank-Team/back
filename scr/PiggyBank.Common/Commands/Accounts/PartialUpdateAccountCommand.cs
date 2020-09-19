@@ -2,7 +2,7 @@
 
 namespace PiggyBank.Common.Commands.Accounts
 {
-    public class PartialUpdateAccountCommand
+    public class PartialUpdateAccountCommand : BaseModifiedCommand
     {
         public int Id { get; set; }
 

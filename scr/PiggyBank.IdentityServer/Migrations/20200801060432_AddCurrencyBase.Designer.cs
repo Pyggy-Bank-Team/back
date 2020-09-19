@@ -9,7 +9,7 @@ using PiggyBank.IdentityServer.Models;
 
 namespace PiggyBank.IdentityServer.Migrations
 {
-    [DbContext(typeof(IndeintityContext))]
+    [DbContext(typeof(IdentityContext))]
     [Migration("20200801060432_AddCurrencyBase")]
     partial class AddCurrencyBase
     {

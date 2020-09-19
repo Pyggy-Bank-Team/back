@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Commands.Accounts;
 using PiggyBank.Domain.Handler.Accounts;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
@@ -29,13 +30,23 @@ namespace PiggyBank.Test.Handlers.Accounts
 
             await _context.Accounts.AddAsync(account);
             await _context.SaveChangesAsync();
+
+            var command = new ArchiveAccountCommand
+            {
+                Id = 1,
+                ModifiedBy = Guid.NewGuid(),
+                ModifiedOn = DateTime.Now,
+                UserId = Guid.Empty
+            };
             
-            var handler = new ArchiveAccountHandler(_context, 1);
+            var handler = new ArchiveAccountHandler(_context, command);
             await handler.Invoke(CancellationToken.None);
             await _context.SaveChangesAsync();
 
             var archivedAccount = _context.Accounts.First();
             Assert.True(archivedAccount.IsArchived);
+            Assert.Equal(command.ModifiedBy, account.ModifiedBy);
+            Assert.Equal(command.ModifiedOn, command.ModifiedOn);
         }
         
         [Fact]
@@ -50,7 +61,15 @@ namespace PiggyBank.Test.Handlers.Accounts
             await _context.Accounts.AddAsync(account);
             await _context.SaveChangesAsync();
             
-            var handler = new ArchiveAccountHandler(_context, 1);
+            var command = new ArchiveAccountCommand
+            {
+                Id = 1,
+                ModifiedBy = Guid.NewGuid(),
+                ModifiedOn = DateTime.Now,
+                UserId = Guid.Empty
+            };
+            
+            var handler = new ArchiveAccountHandler(_context, command);
             await handler.Invoke(CancellationToken.None);
             await _context.SaveChangesAsync();
 

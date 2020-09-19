@@ -8,6 +8,7 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PiggyBank.IdentityServer.Extensions;
 using PiggyBank.IdentityServer.Models;
 
 namespace PiggyBank.WebApi.Controllers
@@ -17,12 +18,12 @@ namespace PiggyBank.WebApi.Controllers
     public class AccountsController : ControllerBase, IDisposable
     {
         private readonly IAccountService _service;
-        private readonly IndeintityContext _indentityContext;
+        private readonly IdentityContext _identityContext;
 
-        public AccountsController(IAccountService service, IndeintityContext indentityContext)
+        public AccountsController(IAccountService service, IdentityContext identityContext)
         {
             _service = service;
-            _indentityContext = indentityContext;
+            _identityContext = identityContext;
         }
 
         [HttpGet]
@@ -32,7 +33,7 @@ namespace PiggyBank.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(AccountDto request, CancellationToken token)
         {
-            var user = await _indentityContext.Users.FirstOrDefaultAsync(u => u.Id == User.GetUserId().ToString(), cancellationToken: token);
+            var user = await _identityContext.Users.FirstOrDefaultAsync(u => u.Id == User.GetUserId().ToString(), cancellationToken: token);
 
             if (user == null)
             {
@@ -102,20 +103,38 @@ namespace PiggyBank.WebApi.Controllers
         [HttpDelete, Route("{accountId}")]
         public async Task<IActionResult> Delete(int accountId, CancellationToken token)
         {
-            await _service.DeleteAccount(accountId, token);
+            var userId = User.GetUserId();
+            var command = new DeleteAccountCommand
+            {
+                Id = accountId,
+                UserId = userId,
+                ModifiedBy = userId,
+                ModifiedOn = DateTime.UtcNow
+            };
+            
+            await _service.DeleteAccount(command, token);
             return Ok();
         }
 
         [HttpPatch, Route("{accountId}/Archive")]
         public async Task<IActionResult> Archive(int accountId, CancellationToken token)
         {
-            await _service.ArchiveAccount(accountId, token);
+            var userId = User.GetUserId();
+            var command = new ArchiveAccountCommand
+            {
+                Id = accountId,
+                ModifiedBy = userId,
+                ModifiedOn = DateTime.UtcNow,
+                UserId = userId
+            };
+            
+            await _service.ArchiveAccount(command, token);
             return Ok();
         }
 
         public void Dispose()
         {
-            _indentityContext?.Dispose();
+            _identityContext?.Dispose();
         }
     }
 }
