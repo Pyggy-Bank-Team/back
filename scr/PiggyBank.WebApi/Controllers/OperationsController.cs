@@ -140,7 +140,9 @@ namespace PiggyBank.WebApi.Controllers
                 Amount = request.Amount,
                 To = request.To,
                 From = request.From,
-                Comment = request.Comment
+                Comment = request.Comment,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
             };
 
             await _service.UpdateTransferOperation(command, token);
@@ -157,7 +159,9 @@ namespace PiggyBank.WebApi.Controllers
                 Amount = request.Amount,
                 Comment = request.Comment,
                 From = request.From,
-                To = request.To
+                To = request.To,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
             };
 
             await _service.UpdatePartialTransferOperation(command, token);

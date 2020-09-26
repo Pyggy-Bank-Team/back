@@ -24,6 +24,8 @@ namespace PiggyBank.Domain.Handler.Operations.Transfer
             operation.Comment = Command.Comment;
             operation.From = Command.From;
             operation.To = Command.To;
+            operation.ModifiedBy = Command.ModifiedBy;
+            operation.ModifiedOn = Command.ModifiedOn;
 
             repository.Update(operation);
         }

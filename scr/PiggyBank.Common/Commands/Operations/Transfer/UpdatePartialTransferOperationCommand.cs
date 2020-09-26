@@ -1,6 +1,6 @@
 ﻿namespace PiggyBank.Common.Commands.Operations.Transfer
 {
-    public class UpdatePartialTransferOperationCommand
+    public class UpdatePartialTransferOperationCommand : BaseModifiedCommand
     {
         public int Id { get; set; }
 
