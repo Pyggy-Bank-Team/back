@@ -26,6 +26,8 @@ namespace PiggyBank.Domain.Handler.Operations.Budget
             operation.Comment =  string.IsNullOrWhiteSpace(Command.Comment) ? operation.Comment : Command.Comment;
             operation.CategoryId = Command.CategoryId ?? operation.CategoryId;
             operation.AccountId = Command.AccountId ?? operation.AccountId;
+            operation.ModifiedBy = Command.ModifiedBy;
+            operation.ModifiedOn = Command.ModifiedOn;
 
             repository.Update(operation);
         }

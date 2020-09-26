@@ -44,7 +44,7 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Delete budget operation
         /// </summary>
-        Task DeleteBudgetOperation(int id, CancellationToken token);
+        Task DeleteBudgetOperation(DeleteBudgetOperationCommand command, CancellationToken token);
 
         /// <summary>
         /// Delete plan operation

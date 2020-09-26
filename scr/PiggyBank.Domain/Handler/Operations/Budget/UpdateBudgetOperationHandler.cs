@@ -25,6 +25,8 @@ namespace PiggyBank.Domain.Handler.Operations.Budget
             operation.Comment = Command.Comment;
             operation.CategoryId = Command.CategoryId;
             operation.AccountId = Command.AccountId;
+            operation.ModifiedBy = Command.ModifiedBy;
+            operation.ModifiedOn = Command.ModifiedOn;
 
             repository.Update(operation);
         }

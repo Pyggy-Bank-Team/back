@@ -2,7 +2,7 @@
 
 namespace PiggyBank.Common.Commands.Operations.Budget
 {
-    public class UpdateBidgetOperationCommand
+    public class UpdateBidgetOperationCommand : BaseModifiedCommand
     {
         public int Id { get; set; }
 

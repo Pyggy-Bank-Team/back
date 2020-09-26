@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Enums;
 using PiggyBank.Domain.Handler.Operations.Budget;
 using PiggyBank.Domain.Models.Operations;
@@ -12,10 +13,10 @@ using Xunit;
 
 namespace PiggyBank.Test.Handlers.Operations.Budget
 {
-    public class DeleteBudgetOperationHanlderTest : IDisposable
+    public class DeleteBudgetOperationHandlerTest : IDisposable
     {
         private readonly PiggyContext _context;
-        public DeleteBudgetOperationHanlderTest()
+        public DeleteBudgetOperationHandlerTest()
             => _context = new PiggyContext(new DbContextOptionsBuilder<PiggyContext>()
                 .UseInMemoryDatabase(databaseName: "DeleteBudgetOperation_InMemory").Options);
 
@@ -24,8 +25,8 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
         [InlineData(200, 200, CategoryType.Expense)]
         public async Task Invoke_ByDefault(decimal amount, decimal resultBalance, CategoryType categoryType)
         {
-            _context.Accounts.Add(new Account { Id = 1 });
-            _context.BudgetOperations.Add(new BudgetOperation
+            await _context.Accounts.AddAsync(new Account { Id = 1 });
+            await _context.BudgetOperations.AddAsync(new BudgetOperation
             {
                 Id = 1,
                 AccountId = 1,
@@ -34,23 +35,31 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
                 IsDeleted = false,
                 Snapshot = JsonConvert.SerializeObject(new OperationSnapshot { CategoryType = categoryType })
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            await new DeleteBudgetOperationHandler(_context, 1).Invoke(CancellationToken.None);
-            _context.SaveChanges();
+            var command = new DeleteBudgetOperationCommand
+            {
+                Id = 1,
+                ModifiedBy = Guid.NewGuid(),
+                ModifiedOn = DateTime.UtcNow
+            };
+            await new DeleteBudgetOperationHandler(_context, command).Invoke(CancellationToken.None);
+            await _context.SaveChangesAsync();
 
             var operation = await _context.BudgetOperations.FirstAsync();
             var account = await _context.Accounts.FirstAsync();
 
             Assert.True(operation.IsDeleted);
+            Assert.Equal(command.ModifiedBy, operation.ModifiedBy);
+            Assert.Equal(command.ModifiedOn, operation.ModifiedOn);
             Assert.Equal(resultBalance, account.Balance);
         }
 
         [Fact]
         public async Task Invoke_AccountIsDeleted_BalanceNotChanged()
         {
-            _context.Accounts.Add(new Account { Id = 1, IsDeleted = true, Balance = 100 });
-            _context.BudgetOperations.Add(new BudgetOperation
+            await _context.Accounts.AddAsync(new Account { Id = 1, IsDeleted = true, Balance = 100 });
+            await _context.BudgetOperations.AddAsync(new BudgetOperation
             {
                 Id = 1,
                 AccountId = 1,
@@ -59,10 +68,16 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
                 IsDeleted = false,
                 Snapshot = JsonConvert.SerializeObject(new OperationSnapshot { CategoryType = CategoryType.Income })
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            await new DeleteBudgetOperationHandler(_context, 1).Invoke(CancellationToken.None);
-            _context.SaveChanges();
+            var command = new DeleteBudgetOperationCommand
+            {
+                Id = 1,
+                ModifiedBy = Guid.NewGuid(),
+                ModifiedOn = DateTime.UtcNow
+            };
+            await new DeleteBudgetOperationHandler(_context, command).Invoke(CancellationToken.None);
+            await _context.SaveChangesAsync();
 
             var operation = await _context.BudgetOperations.FirstAsync();
             var account = await _context.Accounts.FirstAsync();
@@ -74,8 +89,8 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
         [Fact]
         public async Task Invoke_AccountIsArchived_BalanceNotChanged()
         {
-            _context.Accounts.Add(new Account { Id = 1, IsArchived = true, Balance = 100 });
-            _context.BudgetOperations.Add(new BudgetOperation
+            await _context.Accounts.AddAsync(new Account { Id = 1, IsArchived = true, Balance = 100 });
+            await _context.BudgetOperations.AddAsync(new BudgetOperation
             {
                 Id = 1,
                 AccountId = 1,
@@ -84,10 +99,16 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
                 IsDeleted = false,
                 Snapshot = JsonConvert.SerializeObject(new OperationSnapshot { CategoryType = CategoryType.Income })
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            await new DeleteBudgetOperationHandler(_context, 1).Invoke(CancellationToken.None);
-            _context.SaveChanges();
+            var command = new DeleteBudgetOperationCommand
+            {
+                Id = 1,
+                ModifiedBy = Guid.NewGuid(),
+                ModifiedOn = DateTime.UtcNow
+            };
+            await new DeleteBudgetOperationHandler(_context, command).Invoke(CancellationToken.None);
+            await _context.SaveChangesAsync();
 
             var operation = await _context.BudgetOperations.FirstAsync();
             var account = await _context.Accounts.FirstAsync();

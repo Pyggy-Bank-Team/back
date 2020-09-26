@@ -28,8 +28,8 @@ namespace PiggyBank.Domain.Services
         public Task ApplyPlanOperation(int planOperationId, CancellationToken token)
             => _handlerDispatcher.Invoke<ApplyPlanOperationHandler, int>(planOperationId, token);
 
-        public Task DeleteBudgetOperation(int id, CancellationToken token)
-            => _handlerDispatcher.Invoke<DeleteBudgetOperationHandler, int>(id, token);
+        public Task DeleteBudgetOperation(DeleteBudgetOperationCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<DeleteBudgetOperationHandler, DeleteBudgetOperationCommand>(command, token);
 
         public Task DeletePlanOperation(int operationId, CancellationToken token)
             => _handlerDispatcher.Invoke<DeletePlanOperationHandler, int>(operationId, token);
