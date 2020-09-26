@@ -2,7 +2,7 @@
 
 namespace PiggyBank.Common.Commands
 {
-    public class BaseCreateCommand : BaseCommand
+    public class BaseCreateCommand
     {
         public Guid CreatedBy { get; set; }
 

@@ -14,11 +14,11 @@ namespace PiggyBank.Domain.Services
         public Task<CategoryDto> AddCategory(AddCategoryCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<AddCategoryHandler, AddCategoryCommand, CategoryDto>(command, token);
 
-        public Task ArchiveCategory(int id, CancellationToken token)
-            => _handlerDispatcher.Invoke<ArchiveCategoryHandler, int>(id, token);
+        public Task ArchiveCategory(ArchiveCategoryCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<ArchiveCategoryHandler, ArchiveCategoryCommand>(command, token);
 
-        public Task DeleteCategory(int id, CancellationToken token)
-            => _handlerDispatcher.Invoke<DeleteCategoryHandler, int>(id, token);
+        public Task DeleteCategory(DeleteCategoryCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<DeleteCategoryHandler, DeleteCategoryCommand>(command, token);
 
         public Task<CategoryDto[]> GetCategories(Guid userId, bool all, CancellationToken token)
             => _queryDispatcher.Invoke<GetCategoriesQuery, CategoryDto[]>(userId, all);

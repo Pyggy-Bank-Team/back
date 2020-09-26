@@ -8,7 +8,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.IdentityServer.Extensions;
 using PiggyBank.IdentityServer.Models;
 
 namespace PiggyBank.WebApi.Controllers
@@ -107,11 +106,10 @@ namespace PiggyBank.WebApi.Controllers
             var command = new DeleteAccountCommand
             {
                 Id = accountId,
-                UserId = userId,
                 ModifiedBy = userId,
                 ModifiedOn = DateTime.UtcNow
             };
-            
+
             await _service.DeleteAccount(command, token);
             return Ok();
         }
@@ -124,17 +122,14 @@ namespace PiggyBank.WebApi.Controllers
             {
                 Id = accountId,
                 ModifiedBy = userId,
-                ModifiedOn = DateTime.UtcNow,
-                UserId = userId
+                ModifiedOn = DateTime.UtcNow
             };
-            
+
             await _service.ArchiveAccount(command, token);
             return Ok();
         }
 
         public void Dispose()
-        {
-            _identityContext?.Dispose();
-        }
+            => _identityContext?.Dispose();
     }
 }

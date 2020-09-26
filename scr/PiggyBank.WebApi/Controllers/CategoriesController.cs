@@ -53,7 +53,9 @@ namespace PiggyBank.WebApi.Controllers
                 Title = request.Title,
                 Type = request.Type,
                 HexColor = request.HexColor,
-                IsArchived = request.IsArchived
+                IsArchived = request.IsArchived,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
             };
 
             await _service.UpdateCategory(command, token);
@@ -70,7 +72,9 @@ namespace PiggyBank.WebApi.Controllers
                 Title = request.Title,
                 Type = request.Type,
                 HexColor = request.HexColor,
-                IsArchived = request.IsArchived
+                IsArchived = request.IsArchived,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
             };
 
             await _service.PartialUpdateCategory(command, token);
@@ -81,14 +85,29 @@ namespace PiggyBank.WebApi.Controllers
         [HttpDelete, Route("{categoryId}")]
         public async Task<IActionResult> Delete(int categoryId, CancellationToken token)
         {
-            await _service.DeleteCategory(categoryId, token);
+            var command = new DeleteCategoryCommand
+            {
+                Id = categoryId,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
+            };
+            
+            await _service.DeleteCategory(command, token);
             return Ok();
         }
 
         [HttpPatch, Route("{categoryId}/Archive")]
         public async Task<IActionResult> Archive(int categoryId, CancellationToken token)
         {
-            await _service.ArchiveCategory(categoryId, token);
+            var userId = User.GetUserId();
+            var command = new ArchiveCategoryCommand
+            {
+                Id = categoryId,
+                ModifiedBy = userId,
+                ModifiedOn = DateTime.UtcNow
+            };
+            
+            await _service.ArchiveCategory(command, token);
             return Ok();
         }
     }

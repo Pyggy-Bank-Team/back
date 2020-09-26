@@ -15,7 +15,7 @@ namespace PiggyBank.Domain.Handler.Categories
         public override async Task Invoke(CancellationToken token)
         {
             var repository = GetRepository<Category>();
-            var category = await repository.FirstOrDefaultAsync(a => a.Id == Command.Id);
+            var category = await repository.FirstOrDefaultAsync(a => a.Id == Command.Id, token);
 
             if (category == null)
                 return;
@@ -24,6 +24,8 @@ namespace PiggyBank.Domain.Handler.Categories
             category.Type = Command.Type ?? category.Type;
             category.HexColor = GetOldValueOrNewValue(category.HexColor, Command.HexColor);
             category.IsArchived = Command.IsArchived ?? category.IsArchived;
+            category.ModifiedBy = Command.ModifiedBy;
+            category.ModifiedOn = Command.ModifiedOn;
 
             repository.Update(category);
         }

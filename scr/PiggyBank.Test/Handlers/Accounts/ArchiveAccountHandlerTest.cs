@@ -35,8 +35,7 @@ namespace PiggyBank.Test.Handlers.Accounts
             {
                 Id = 1,
                 ModifiedBy = Guid.NewGuid(),
-                ModifiedOn = DateTime.Now,
-                UserId = Guid.Empty
+                ModifiedOn = DateTime.Now
             };
             
             var handler = new ArchiveAccountHandler(_context, command);
@@ -65,8 +64,7 @@ namespace PiggyBank.Test.Handlers.Accounts
             {
                 Id = 1,
                 ModifiedBy = Guid.NewGuid(),
-                ModifiedOn = DateTime.Now,
-                UserId = Guid.Empty
+                ModifiedOn = DateTime.Now
             };
             
             var handler = new ArchiveAccountHandler(_context, command);

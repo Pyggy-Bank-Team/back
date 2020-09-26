@@ -2,7 +2,7 @@
 
 namespace PiggyBank.Common.Commands
 {
-    public class BaseModifiedCommand : BaseCommand
+    public class BaseModifiedCommand 
     {
         public DateTime ModifiedOn { get; set; }
         

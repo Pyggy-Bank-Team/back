@@ -33,11 +33,11 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Delete exists entity
         /// </summary>
-        Task DeleteCategory(int id, CancellationToken token);
+        Task DeleteCategory(DeleteCategoryCommand command, CancellationToken token);
 
         /// <summary>
         /// Archive exists entity
         /// </summary>
-        Task ArchiveCategory(int id, CancellationToken token);
+        Task ArchiveCategory(ArchiveCategoryCommand command, CancellationToken token);
     }
 }

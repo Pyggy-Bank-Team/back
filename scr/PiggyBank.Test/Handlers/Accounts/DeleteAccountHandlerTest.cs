@@ -36,8 +36,7 @@ namespace PiggyBank.Test.Handlers.Accounts
             {
                 Id = 1,
                 ModifiedBy = Guid.NewGuid(),
-                ModifiedOn = DateTime.Now,
-                UserId = Guid.Empty
+                ModifiedOn = DateTime.Now
             };
 
             var handler = new DeleteAccountHandler(_context, command);

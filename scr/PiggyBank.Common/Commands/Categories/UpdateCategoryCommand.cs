@@ -2,7 +2,7 @@
 
 namespace PiggyBank.Common.Commands.Categories
 {
-    public class UpdateCategoryCommand
+    public class UpdateCategoryCommand : BaseModifiedCommand
     {
         public int Id { get; set; }
 

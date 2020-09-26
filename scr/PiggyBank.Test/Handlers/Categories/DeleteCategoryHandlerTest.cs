@@ -3,6 +3,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Commands.Categories;
 using PiggyBank.Domain.Handler.Categories;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
@@ -23,8 +24,15 @@ namespace PiggyBank.Test.Handlers.Categories
         {
             await _context.Categories.AddAsync(new Category {Id = 1});
             await _context.SaveChangesAsync();
+
+            var command = new DeleteCategoryCommand
+            {
+                Id = 1,
+                ModifiedBy = Guid.NewGuid(),
+                ModifiedOn = DateTime.UtcNow
+            };
             
-            var handler = new DeleteCategoryHandler(_context, 1);
+            var handler = new DeleteCategoryHandler(_context, command);
             await handler.Invoke(CancellationToken.None);
             await _context.SaveChangesAsync();
 
