@@ -2,19 +2,20 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 
 namespace PiggyBank.Domain.Handler.Operations.Transfer
 {
-    public class DeleteTransferOperationHandler : BaseHandler<int>
+    public class DeleteTransferOperationHandler : BaseHandler<DeleteTransferOperationCommand>
     {
-        public DeleteTransferOperationHandler(PiggyContext context, int command)
+        public DeleteTransferOperationHandler(PiggyContext context, DeleteTransferOperationCommand command)
             : base(context, command) { }
 
         public override async Task Invoke(CancellationToken token)
         {
-            var operation = await GetRepository<TransferOperation>().FirstOrDefaultAsync(t => t.Id == Command, token);
+            var operation = await GetRepository<TransferOperation>().FirstOrDefaultAsync(t => t.Id == Command.Id, token);
 
             if (operation != null)
             {
@@ -31,6 +32,8 @@ namespace PiggyBank.Domain.Handler.Operations.Transfer
                 accountRepository.UpdateRange(new[] { fromAccount, toAccount });
 
                 operation.IsDeleted = true;
+                operation.ModifiedBy = Command.ModifiedBy;
+                operation.ModifiedOn = Command.ModifiedOn;
                 GetRepository<TransferOperation>().Update(operation);
             }
         }

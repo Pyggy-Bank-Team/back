@@ -127,7 +127,14 @@ namespace PiggyBank.WebApi.Controllers
         [HttpDelete, Route("Transfer/{operationId}")]
         public async Task<IActionResult> DeleteTransferOperation(int operationId, CancellationToken token)
         {
-            await _service.DeleteTransferOperation(operationId, token);
+            var command = new DeleteTransferOperationCommand
+            {
+                Id = operationId,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
+            };
+            
+            await _service.DeleteTransferOperation(command, token);
             return Ok();
         }
 
@@ -195,14 +202,28 @@ namespace PiggyBank.WebApi.Controllers
         [HttpPost, Route("Plan/{operationId}/Apply")]
         public async Task<IActionResult> ApplyPlanOperation(int operationId, CancellationToken token)
         {
-            await _service.ApplyPlanOperation(operationId, token);
+            var command = new ApplyPlanOperationCommand
+            {
+                Id = operationId,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
+            };
+            
+            await _service.ApplyPlanOperation(command, token);
             return Ok();
         }
 
         [HttpDelete, Route("Plan/{operationId}")]
         public async Task<IActionResult> DeletePlanOperation(int operationId, CancellationToken token)
         {
-            await _service.DeletePlanOperation(operationId, token);
+            var command = new DeletePlanOperationCommand
+            {
+                Id = operationId,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
+            };
+            
+            await _service.DeletePlanOperation(command, token);
             return Ok();
         }
 
@@ -216,7 +237,9 @@ namespace PiggyBank.WebApi.Controllers
                 Comment = request.Comment,
                 AccountId = request.AccountId,
                 CategoryId = request.CategoryId,
-                PlanDate = request.PlanDate ?? DateTime.UtcNow
+                PlanDate = request.PlanDate ?? DateTime.UtcNow,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
             };
 
             await _service.UpdatePlanOperation(command, token);
@@ -233,7 +256,9 @@ namespace PiggyBank.WebApi.Controllers
                 Comment = request.Comment,
                 AccountId = request.AccountId,
                 CategoryId = request.CategoryId,
-                PlanDate = request.PlanDate ?? DateTime.UtcNow
+                PlanDate = request.PlanDate ?? DateTime.UtcNow,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
             };
 
             await _service.UpdatePartialPlanOperation(command, token);

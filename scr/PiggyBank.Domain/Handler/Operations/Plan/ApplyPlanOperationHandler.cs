@@ -2,15 +2,16 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Enums;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 
 namespace PiggyBank.Domain.Handler.Operations.Plan
 {
-    public class ApplyPlanOperationHandler : BaseHandler<int>
+    public class ApplyPlanOperationHandler : BaseHandler<ApplyPlanOperationCommand>
     {
-        public ApplyPlanOperationHandler(PiggyContext context, int command)
+        public ApplyPlanOperationHandler(PiggyContext context, ApplyPlanOperationCommand command)
             : base(context, command) { }
 
         public override async Task Invoke(CancellationToken token)
@@ -19,10 +20,12 @@ namespace PiggyBank.Domain.Handler.Operations.Plan
             var plan = GetRepository<PlanOperation>();
             var accounts = GetRepository<Account>();
 
-            var operation = await plan.FirstOrDefaultAsync(p => p.Id == Command)
+            var operation = await plan.FirstOrDefaultAsync(p => p.Id == Command.Id, token)
             ?? throw new ArgumentException("Can't found plan operaton");
 
             operation.IsDeleted = true;
+            operation.ModifiedBy = Command.ModifiedBy;
+            operation.ModifiedOn = Command.ModifiedOn;
             plan.Update(operation);
 
             var account = await accounts.FirstOrDefaultAsync(a => a.Id == operation.AccountId && !a.IsDeleted, token)

@@ -25,17 +25,17 @@ namespace PiggyBank.Domain.Services
         public Task AddTransferOperation(AddTransferOperationCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<AddTransferOperationHandler, AddTransferOperationCommand>(command, token);
 
-        public Task ApplyPlanOperation(int planOperationId, CancellationToken token)
-            => _handlerDispatcher.Invoke<ApplyPlanOperationHandler, int>(planOperationId, token);
+        public Task ApplyPlanOperation(ApplyPlanOperationCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<ApplyPlanOperationHandler, ApplyPlanOperationCommand>(command, token);
 
         public Task DeleteBudgetOperation(DeleteBudgetOperationCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<DeleteBudgetOperationHandler, DeleteBudgetOperationCommand>(command, token);
 
-        public Task DeletePlanOperation(int operationId, CancellationToken token)
-            => _handlerDispatcher.Invoke<DeletePlanOperationHandler, int>(operationId, token);
+        public Task DeletePlanOperation(DeletePlanOperationCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<DeletePlanOperationHandler, DeletePlanOperationCommand>(command, token);
 
-        public Task DeleteTransferOperation(int operationId, CancellationToken token)
-            => _handlerDispatcher.Invoke<DeleteTransferOperationHandler, int>(operationId, token);
+        public Task DeleteTransferOperation(DeleteTransferOperationCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<DeleteTransferOperationHandler, DeleteTransferOperationCommand>(command, token);
 
         public Task<OperationDto> GetOperation(int id, CancellationToken token)
             => _queryDispatcher.Invoke<GetOperationByIdQuery, OperationDto>(id);

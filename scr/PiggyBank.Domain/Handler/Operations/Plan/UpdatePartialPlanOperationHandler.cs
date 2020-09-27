@@ -25,6 +25,8 @@ namespace PiggyBank.Domain.Handler.Operations.Plan
             operation.CategoryId = Command.CategoryId ?? operation.CategoryId;
             operation.AccountId = Command.AccountId ?? operation.AccountId;
             operation.PlanDate = Command.PlanDate ?? operation.PlanDate;
+            operation.ModifiedBy = Command.ModifiedBy;
+            operation.ModifiedOn = Command.ModifiedOn;
 
             repository.Update(operation);
         }

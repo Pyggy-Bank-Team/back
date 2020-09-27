@@ -7,6 +7,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Domain.Handler.Operations.Plan;
 using Xunit;
 
@@ -19,15 +20,28 @@ namespace PiggyBank.Test.Handlers.Operations
         public ApplyPlanOperationHandlerTest()
         {
             var options = new DbContextOptionsBuilder<PiggyContext>().EnableSensitiveDataLogging()
-               .UseInMemoryDatabase(databaseName: "ApplyPlanOperation_InMemory").Options;
+                .UseInMemoryDatabase(databaseName: "ApplyPlanOperation_InMemory").Options;
             _context = new PiggyContext(options);
         }
 
-        public async Task Invoke_ByDefault()
+        [Fact]
+        public async Task Invoke_Default_AppliedPlanOperation()
         {
-            _context.PlanOperations.Add(new PlanOperation
+            await _context.Accounts.AddAsync(new Account
             {
                 Id = 1,
+                Balance = 100
+            });
+
+            await _context.Categories.AddAsync(new Category
+            {
+                Id = 1,
+                Type = CategoryType.Income
+            });
+            
+            await _context.PlanOperations.AddAsync(new PlanOperation
+            {
+                Id = 2,
                 IsDeleted = false,
                 Amount = 100,
                 CategoryId = 1,
@@ -38,12 +52,19 @@ namespace PiggyBank.Test.Handlers.Operations
                 PlanDate = DateTime.Now.AddDays(2),
                 Type = OperationType.Plan
             });
-            _context.SaveChanges();
+            await _context.SaveChangesAsync();
 
-            await new ApplyPlanOperationHandler(_context, 1).Invoke(CancellationToken.None);
-            _context.SaveChanges();
+            var command = new ApplyPlanOperationCommand
+            {
+                Id = 2,
+                ModifiedBy = Guid.NewGuid(),
+                ModifiedOn = DateTime.UtcNow
+            };
 
-            var planOperation = _context.PlanOperations.First(p => p.Id == 1);
+            await new ApplyPlanOperationHandler(_context, command).Invoke(CancellationToken.None);
+            await _context.SaveChangesAsync();
+
+            var planOperation = _context.PlanOperations.First(p => p.Id == 2);
             var budgetOperation = _context.BudgetOperations.First();
 
             Assert.True(planOperation.IsDeleted);
@@ -56,7 +77,8 @@ namespace PiggyBank.Test.Handlers.Operations
         [Fact]
         public async Task Invoke_PlanOperationIdIsInvalid_ThrowsException()
         {
-            var handler = new ApplyPlanOperationHandler(_context, 1);
+            var command = new ApplyPlanOperationCommand {Id = 1};
+            var handler = new ApplyPlanOperationHandler(_context, command);
             await Assert.ThrowsAsync<ArgumentException>(() => handler.Invoke(CancellationToken.None));
         }
 

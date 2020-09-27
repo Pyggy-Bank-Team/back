@@ -29,7 +29,7 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Apply exists plan operation
         /// </summary>
-        Task ApplyPlanOperation(int planOperationId, CancellationToken token);
+        Task ApplyPlanOperation(ApplyPlanOperationCommand command, CancellationToken token);
 
         /// <summary>
         /// Get operations
@@ -49,12 +49,12 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Delete plan operation
         /// </summary>
-        Task DeletePlanOperation(int operationId, CancellationToken token);
+        Task DeletePlanOperation(DeletePlanOperationCommand command, CancellationToken token);
 
         /// <summary>
         /// Delete transfer operation
         /// </summary>
-        Task DeleteTransferOperation(int operationId, CancellationToken token);
+        Task DeleteTransferOperation(DeleteTransferOperationCommand command, CancellationToken token);
 
         Task UpdateBidgetOperation(UpdateBidgetOperationCommand command, CancellationToken token);
 
