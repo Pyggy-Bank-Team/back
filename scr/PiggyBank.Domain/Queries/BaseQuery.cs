@@ -1,4 +1,5 @@
-﻿using System.Threading.Tasks;
+﻿using System.Threading;
+using System.Threading.Tasks;
 using PiggyBank.Domain.Infrastructure;
 using PiggyBank.Model;
 
@@ -8,6 +9,6 @@ namespace PiggyBank.Domain.Queries
     {
         protected BaseQuery(PiggyContext context) : base(context) {}
 
-        public abstract Task<TOutput> Invoke();
+        public abstract Task<TOutput> Invoke(CancellationToken token);
     }
 }

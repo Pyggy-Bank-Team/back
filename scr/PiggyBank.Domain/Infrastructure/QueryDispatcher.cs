@@ -1,4 +1,5 @@
 ﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Domain.Queries;
 using PiggyBank.Model;
@@ -12,22 +13,22 @@ namespace PiggyBank.Domain.Infrastructure
         public QueryDispatcher(PiggyContext context)
             => _context = context;
         
-        public Task<TOutput> Invoke<TQuery, TOutput>(object param1, object param2) where TQuery : BaseQuery<TOutput>
-            => PrivateInvoke<TQuery, TOutput>(_context, param1, param2);
+        public Task<TOutput> Invoke<TQuery, TOutput>(CancellationToken token, object param1, object param2) where TQuery : BaseQuery<TOutput>
+            => PrivateInvoke<TQuery, TOutput>(token, _context, param1, param2);
 
-        public Task<TOutput> Invoke<TQuery, TOutput>(object param1) where TQuery : BaseQuery<TOutput>
-            => PrivateInvoke<TQuery, TOutput>(_context, param1);
+        public Task<TOutput> Invoke<TQuery, TOutput>(CancellationToken token, object param1) where TQuery : BaseQuery<TOutput>
+            => PrivateInvoke<TQuery, TOutput>(token, _context, param1);
 
-        public Task<TOutput> Invoke<TQuery, TOutput>() where TQuery : BaseQuery<TOutput>
-            => PrivateInvoke<TQuery, TOutput>(_context);
+        public Task<TOutput> Invoke<TQuery, TOutput>(CancellationToken token) where TQuery : BaseQuery<TOutput>
+            => PrivateInvoke<TQuery, TOutput>(token, _context);
 
-        private async Task<TOutput> PrivateInvoke<TQuery, TOutput>(params object[] obj) where TQuery : BaseQuery<TOutput>
+        private async Task<TOutput> PrivateInvoke<TQuery, TOutput>(CancellationToken token, params object[] obj) where TQuery : BaseQuery<TOutput>
         {
             TOutput result;
             using var query = (TQuery)Activator.CreateInstance(typeof(TQuery), obj);
             try
             {
-                result = await query.Invoke();
+                result = await query.Invoke(token);
             }
             catch (Exception e)
             {

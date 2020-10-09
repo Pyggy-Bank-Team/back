@@ -4,6 +4,7 @@ using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PiggyBank.Domain.Queries.Categories
@@ -17,7 +18,7 @@ namespace PiggyBank.Domain.Queries.Categories
             : base(context)
             => (_userId, _all) = (userId, all);
 
-        public override Task<CategoryDto[]> Invoke()
+        public override Task<CategoryDto[]> Invoke(CancellationToken token)
         {
             if (_all)
             {
@@ -32,7 +33,7 @@ namespace PiggyBank.Domain.Queries.Categories
                         IsDeleted = c.IsDeleted,
                         CreatedOn = c.CreatedOn,
                         CreatedBy = c.CreatedBy
-                    }).ToArrayAsync();
+                    }).ToArrayAsync(token);
             }
             else
             {
@@ -47,7 +48,7 @@ namespace PiggyBank.Domain.Queries.Categories
                         IsDeleted = c.IsDeleted,
                         CreatedOn = c.CreatedOn,
                         CreatedBy = c.CreatedBy
-                    }).ToArrayAsync();
+                    }).ToArrayAsync(token);
             }
         }
     }

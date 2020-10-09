@@ -4,6 +4,7 @@ using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Models;
 using PiggyBank.Common.Models.Dto.Operations;
@@ -19,7 +20,7 @@ namespace PiggyBank.Domain.Queries.Operations
             : base(context)
             => (_userId, _page) = (userId, page);
 
-        public override async Task<PageResult<OperationDto>> Invoke()
+        public override async Task<PageResult<OperationDto>> Invoke(CancellationToken token)
         {
             var budgetQuery = GetRepository<BudgetOperation>().Where(b => b.CreatedBy == _userId && !b.IsDeleted)
                 .Select(b => new OperationDto
@@ -86,7 +87,7 @@ namespace PiggyBank.Domain.Queries.Operations
 
             result.TotalPages = totalCount / result.CountItemsOnPage + (totalCount % result.CountItemsOnPage > 0 ? 1 : 0);
             result.Result = await operationsQuery.Skip(result.CountItemsOnPage * (result.CurrentPage - 1)).Take(result.CountItemsOnPage)
-                .ToArrayAsync();
+                .ToArrayAsync(token);
 
             return result;
         }

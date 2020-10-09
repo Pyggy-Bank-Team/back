@@ -3,6 +3,7 @@ using PiggyBank.Common.Models.Dto;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PiggyBank.Domain.Queries.Categories
@@ -14,7 +15,7 @@ namespace PiggyBank.Domain.Queries.Categories
             : base(context)
             => _categoryId = categoryId;
 
-        public override Task<CategoryDto> Invoke()
+        public override Task<CategoryDto> Invoke(CancellationToken token)
             => GetRepository<Category>().Where(c => c.Id == _categoryId && !c.IsDeleted)
             .Select(c => new CategoryDto
             {
@@ -22,6 +23,6 @@ namespace PiggyBank.Domain.Queries.Categories
                 HexColor = c.HexColor,
                 Title = c.Title,
                 Type = c.Type
-            }).FirstOrDefaultAsync();
+            }).FirstOrDefaultAsync(token);
     }
 }

@@ -1,5 +1,6 @@
 ﻿using System;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Models.Dto;
@@ -15,7 +16,7 @@ namespace PiggyBank.Domain.Queries.Accounts
         public GetAccountsQuery(PiggyContext context, Guid userId, bool all) : base(context)
             => (_userId, _all) = (userId, all);
 
-        public override Task<AccountDto[]> Invoke()
+        public override Task<AccountDto[]> Invoke(CancellationToken token)
         {
             if (_all)
             {
@@ -30,7 +31,7 @@ namespace PiggyBank.Domain.Queries.Accounts
                     IsDeleted = a.IsDeleted,
                     CreatedOn = a.CreatedOn,
                     CreatedBy = a.CreatedBy
-                }).ToArrayAsync();
+                }).ToArrayAsync(token);
             }
             else
             {
@@ -45,7 +46,7 @@ namespace PiggyBank.Domain.Queries.Accounts
                     IsDeleted = a.IsDeleted,
                     CreatedOn = a.CreatedOn,
                     CreatedBy = a.CreatedBy
-                }).ToArrayAsync();
+                }).ToArrayAsync(token);
             }
         } 
     }

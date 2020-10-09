@@ -3,6 +3,7 @@ using PiggyBank.Common.Models.Dto;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
 
 namespace PiggyBank.Domain.Queries.Accounts
@@ -13,7 +14,7 @@ namespace PiggyBank.Domain.Queries.Accounts
         public GetAccountByIdQuery(PiggyContext context, int accountId) : base(context)
             => _accountId = accountId;
 
-        public override Task<AccountDto> Invoke()
+        public override Task<AccountDto> Invoke(CancellationToken token)
             => GetRepository<Account>().Where(a => a.Id == _accountId && !a.IsDeleted)
             .Select(a => new AccountDto
             {
@@ -26,6 +27,6 @@ namespace PiggyBank.Domain.Queries.Accounts
                 Type = a.Type,
                 CreatedOn = a.CreatedOn,
                 CreatedBy = a.CreatedBy
-            }).FirstOrDefaultAsync();
+            }).FirstOrDefaultAsync(token);
     }
 }
