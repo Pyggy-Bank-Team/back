@@ -22,7 +22,7 @@ namespace PiggyBank.Domain.Infrastructure
         public Task<TOutput> Invoke<TQuery, TOutput>(CancellationToken token) where TQuery : BaseQuery<TOutput>
             => PrivateInvoke<TQuery, TOutput>(token, _context);
 
-        private async Task<TOutput> PrivateInvoke<TQuery, TOutput>(CancellationToken token, params object[] obj) where TQuery : BaseQuery<TOutput>
+        private static async Task<TOutput> PrivateInvoke<TQuery, TOutput>(CancellationToken token, params object[] obj) where TQuery : BaseQuery<TOutput>
         {
             TOutput result;
             using var query = (TQuery)Activator.CreateInstance(typeof(TQuery), obj);
