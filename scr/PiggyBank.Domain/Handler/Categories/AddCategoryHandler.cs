@@ -33,7 +33,9 @@ namespace PiggyBank.Domain.Handler.Categories
                 Type = entity.Type,
                 HexColor = entity.HexColor,
                 IsArchived = entity.IsArchived,
-                IsDeleted = entity.IsDeleted
+                IsDeleted = entity.IsDeleted,
+                CreatedBy = entity.CreatedBy,
+                CreatedOn = entity.CreatedOn
             };
         }
     }

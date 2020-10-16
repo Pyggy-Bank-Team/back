@@ -11,5 +11,8 @@ namespace PiggyBank.Domain.Services
     {
         public Task<ChartByCategoryDto[]> GetChartByCategories(GetChartCommand command, CancellationToken token)
             => _queryDispatcher.Invoke<GetChartByCategoriesQuery, ChartByCategoryDto[]>(token, command);
+
+        public Task<ChartByExpensePerDayDto[]> ChartByExpensePerDays(GetChartCommand command, CancellationToken token)
+            => _queryDispatcher.Invoke<GetChartByExpensePerDays, ChartByExpensePerDayDto[]>(token, command);
     }
 }

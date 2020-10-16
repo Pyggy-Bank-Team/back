@@ -8,5 +8,6 @@ namespace PiggyBank.Common.Interfaces
     public interface IDashboardService
     {
         Task<ChartByCategoryDto[]> GetChartByCategories(GetChartCommand command, CancellationToken token);
+        Task<ChartByExpensePerDayDto[]> ChartByExpensePerDays(GetChartCommand command, CancellationToken token);
     }
 }
