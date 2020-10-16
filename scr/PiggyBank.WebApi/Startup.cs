@@ -29,6 +29,7 @@ namespace PiggyBank.WebApi
             services.AddScoped<IAccountService, PiggyService>();
             services.AddScoped<ICategoryService, PiggyService>();
             services.AddScoped<IOperationService, PiggyService>();
+            services.AddScoped<IDashboardService, PiggyService>();
             
             //TODO: Make up a sane interaction with UserManager
             services.AddDbContext<IdentityContext>(opt =>

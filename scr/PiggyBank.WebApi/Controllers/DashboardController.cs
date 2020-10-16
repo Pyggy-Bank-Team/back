@@ -20,8 +20,8 @@ namespace PiggyBank.WebApi.Controllers
         public DashboardController(IDashboardService service)
             => _service = service;
 
-        [HttpGet, Route("Chart/byCategories")]
-        public Task<ChartByCategoryDto[]> GetChartByCategory([FromQuery] GetChartByCategoriesRequest request, CancellationToken token)
+        [HttpPost, Route("Chart/byCategories")]
+        public Task<ChartByCategoryDto[]> GetChartByCategory(GetChartByCategoriesRequest request, CancellationToken token)
         {
             var command = new GetChartCommand
             {
