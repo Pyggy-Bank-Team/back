@@ -11,7 +11,6 @@ using PiggyBank.WebApi.Responses.Tokens;
 
 namespace PiggyBank.WebApi.Controllers
 {
-    [AllowAnonymous]
     [ApiController, Route("api/[controller]")]
     public class TokensController : ControllerBase
     {
@@ -21,6 +20,7 @@ namespace PiggyBank.WebApi.Controllers
         public TokensController(ITokenService service, IOptions<TokenOptions> options)
             => (_token, _options) = (service, options.Value);
 
+        [AllowAnonymous]
         [HttpPost, Route("Connect")]
         public async Task<IActionResult> Connect(GetTokenRequest request, CancellationToken token)
         {
