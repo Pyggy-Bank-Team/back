@@ -8,18 +8,18 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.Extensions.Options;
 using Microsoft.IdentityModel.Tokens;
 using PiggyBank.IdentityServer.Models;
-using PiggyBank.WebApi.Configs;
 using PiggyBank.WebApi.Interfaces;
+using TokenOptions = PiggyBank.WebApi.Options.TokenOptions;
 using TokenResponse = PiggyBank.WebApi.Responses.Tokens.TokenResponse;
 
 namespace PiggyBank.WebApi.Services
 {
     public class TokenResponseService : ITokenResponseService
     {
-        private readonly IOptions<TokenConfigs> _configs;
+        private readonly IOptions<TokenOptions> _configs;
         private readonly UserManager<ApplicationUser> _userManager;
         
-        public TokenResponseService(IOptions<TokenConfigs> configs, UserManager<ApplicationUser> userManager)
+        public TokenResponseService(IOptions<TokenOptions> configs, UserManager<ApplicationUser> userManager)
             => (_configs, _userManager) = (configs, userManager);
         
         public async Task<TokenResponse> GetBearerToken(string userName, string password)

@@ -38,6 +38,17 @@ namespace PiggyBank.WebApi.Extensions
             }
             services.TryAddScoped(typeof(IUserStore<>).MakeGenericType(userType), userStoreType);
         }
+
+        public static void AddIdentityServices<TUser>(this IServiceCollection services) where TUser : class
+        {
+            services.TryAddScoped<IUserValidator<TUser>, UserValidator<TUser>>();
+            services.TryAddScoped<IPasswordValidator<TUser>, PasswordValidator<TUser>>();
+            services.TryAddScoped<IPasswordHasher<TUser>, PasswordHasher<TUser>>();
+            services.TryAddScoped<ILookupNormalizer, UpperInvariantLookupNormalizer>();
+            // No interface for the error describer so we can add errors without rev'ing the interface
+            services.TryAddScoped<IdentityErrorDescriber>();
+            services.TryAddScoped<UserManager<TUser>>();
+        }
         
         private static TypeInfo FindGenericBaseType(Type currentType, Type genericBaseType)
         {

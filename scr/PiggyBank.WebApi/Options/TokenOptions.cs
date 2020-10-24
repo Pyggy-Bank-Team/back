@@ -1,8 +1,8 @@
-﻿namespace PiggyBank.WebApi.Configs
+﻿namespace PiggyBank.WebApi.Options
 {
-    public class TokenConfigs
+    public class TokenOptions
     {
-        public const string SectionName = "TokenConfigs";
+        public const string SectionName = "TokenOptions";
         
         public string ClientSecret { get; set; }
         public string Audience { get; set; }
