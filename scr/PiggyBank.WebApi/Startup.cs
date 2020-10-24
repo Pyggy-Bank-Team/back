@@ -33,7 +33,7 @@ namespace PiggyBank.WebApi
             services.AddScoped<ICategoryService, PiggyService>();
             services.AddScoped<IOperationService, PiggyService>();
             services.AddScoped<IDashboardService, PiggyService>();
-            services.AddScoped<ITokenResponseService, TokenResponseService>();
+            services.AddScoped<ITokenService, TokenService>();
 
             services.AddIdentityServices<ApplicationUser>();
             services.AddStore<IdentityContext>(typeof(ApplicationUser));
@@ -91,9 +91,9 @@ namespace PiggyBank.WebApi
                         ValidateAudience = true,
                         ValidAudience = tokenOptions["Audience"],
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenOptions["ClientSecret"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenOptions["ClientSecret"])),
+                        ValidateLifetime = true
                     };
-                    ;
                 });
 
             services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.SectionName));

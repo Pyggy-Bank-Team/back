@@ -7,5 +7,6 @@
         public string ClientSecret { get; set; }
         public string Audience { get; set; }
         public string Issuer { get; set; }
+        public long TokenLifetime { get; set; }
     }
 }
