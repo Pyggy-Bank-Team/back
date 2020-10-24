@@ -18,14 +18,14 @@ namespace PiggyBank.WebApi.Services
     {
         private readonly IOptions<TokenConfigs> _configs;
         private readonly UserManager<ApplicationUser> _userManager;
-
+        
         public TokenResponseService(IOptions<TokenConfigs> configs, UserManager<ApplicationUser> userManager)
             => (_configs, _userManager) = (configs, userManager);
         
         public async Task<TokenResponse> GetBearerToken(string userName, string password)
         {
             var user = await _userManager.FindByNameAsync(userName);
-
+        
             if (user != null)
             {
                 var isValidPassword = await _userManager.CheckPasswordAsync(user, password);
@@ -40,9 +40,9 @@ namespace PiggyBank.WebApi.Services
                         expires:now.AddDays(30),
                         signingCredentials:new SigningCredentials(new SymmetricSecurityKey(Encoding.ASCII.GetBytes(_configs.Value.ClientSecret)), SecurityAlgorithms.HmacSha256)
                         );
-
+        
                     var encodedJwt = new JwtSecurityTokenHandler().WriteToken(jwt);
-
+        
                     return new TokenResponse
                     {
                         AccessToken = encodedJwt,
@@ -51,10 +51,10 @@ namespace PiggyBank.WebApi.Services
                     };
                 }
             }
-
+        
             return null;
         }
-
+        
         private ClaimsIdentity GetClaimsIdentity(ApplicationUser user)
         {
             var claims = new List<Claim>
