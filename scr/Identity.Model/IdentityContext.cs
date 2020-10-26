@@ -1,9 +1,9 @@
-﻿using Microsoft.AspNetCore.Identity;
+﻿using Identity.Model.Models;
+using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Identity.EntityFrameworkCore;
 using Microsoft.EntityFrameworkCore;
-using Microsoft.EntityFrameworkCore.Design;
 
-namespace PiggyBank.IdentityServer.Models
+namespace Identity.Model
 {
     public class IdentityContext : IdentityDbContext<ApplicationUser>
     {
@@ -21,21 +21,6 @@ namespace PiggyBank.IdentityServer.Models
             builder.Entity<IdentityUserLogin<string>>().ToTable("UserLogins", "Idt");
             builder.Entity<IdentityUserToken<string>>().ToTable("UserTokens", "Idt");
             builder.Entity<IdentityRoleClaim<string>>().ToTable("RoleClaims", "Idt");
-        }
-    }
-
-    public class ApplicationUser : IdentityUser
-    {
-        public string CurrencyBase { get; set; }
-    }
-
-    public class IdentityContextFactory : IDesignTimeDbContextFactory<IdentityContext>
-    {
-        public IdentityContext CreateDbContext(string[] args)
-        {
-            var builder = new DbContextOptionsBuilder<IdentityContext>();
-            builder.UseSqlServer("");
-            return new IdentityContext(builder.Options);
         }
     }
 }

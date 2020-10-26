@@ -7,8 +7,8 @@ using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Identity.Model;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.IdentityServer.Models;
 
 namespace PiggyBank.WebApi.Controllers
 {

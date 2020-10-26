@@ -1,4 +1,6 @@
 using System.Text;
+using Identity.Model;
+using Identity.Model.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -9,7 +11,6 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Services;
-using PiggyBank.IdentityServer.Models;
 using PiggyBank.Model;
 using PiggyBank.WebApi.Extensions;
 using PiggyBank.WebApi.Interfaces;

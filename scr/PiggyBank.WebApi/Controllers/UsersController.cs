@@ -1,11 +1,11 @@
 ﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Identity.Model.Models;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using PiggyBank.IdentityServer.Models;
 using PiggyBank.WebApi.Extensions;
 using PiggyBank.WebApi.Interfaces;
 using PiggyBank.WebApi.Requests.Users;
