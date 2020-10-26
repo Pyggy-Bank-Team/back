@@ -7,23 +7,17 @@ using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Identity.Model;
-using Microsoft.EntityFrameworkCore;
 
 namespace PiggyBank.WebApi.Controllers
 {
     [Authorize]
     [ApiController, Route("api/[controller]")]
-    public class AccountsController : ControllerBase, IDisposable
+    public class AccountsController : ControllerBase
     {
         private readonly IAccountService _service;
-        private readonly IdentityContext _identityContext;
 
-        public AccountsController(IAccountService service, IdentityContext identityContext)
-        {
-            _service = service;
-            _identityContext = identityContext;
-        }
+        public AccountsController(IAccountService service)
+            =>  _service = service;
 
         [HttpGet]
         public Task<AccountDto[]> Get(bool all = false, CancellationToken token = default)
@@ -32,23 +26,10 @@ namespace PiggyBank.WebApi.Controllers
         [HttpPost]
         public async Task<IActionResult> Post(AccountDto request, CancellationToken token)
         {
-            var user = await _identityContext.Users.FirstOrDefaultAsync(u => u.Id == User.GetUserId().ToString(), cancellationToken: token);
-
-            if (user == null)
-            {
-                var errorResponse = new
-                {
-                    code = "UserNotFound",
-                    description = "Can't found user"
-                };
-
-                return BadRequest(errorResponse);
-            }
-
             var command = new AddAccountCommand
             {
                 Balance = request.Balance,
-                Currency = user.CurrencyBase,
+                Currency = User.GetCurrency(),
                 Title = request.Title,
                 Type = request.Type,
                 CreatedBy = User.GetUserId(),
@@ -128,8 +109,5 @@ namespace PiggyBank.WebApi.Controllers
             await _service.ArchiveAccount(command, token);
             return Ok();
         }
-
-        public void Dispose()
-            => _identityContext?.Dispose();
     }
 }
