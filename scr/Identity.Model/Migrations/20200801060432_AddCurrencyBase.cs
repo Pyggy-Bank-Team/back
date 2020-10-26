@@ -1,6 +1,6 @@
 ﻿using Microsoft.EntityFrameworkCore.Migrations;
 
-namespace PiggyBank.IdentityServer.Migrations
+namespace Identity.Model.Migrations
 {
     public partial class AddCurrencyBase : Migration
     {
