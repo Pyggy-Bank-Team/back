@@ -7,6 +7,7 @@ using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.WebApi.Requests.Accounts;
 
 namespace PiggyBank.WebApi.Controllers
 {
@@ -24,7 +25,7 @@ namespace PiggyBank.WebApi.Controllers
             => _service.GetAccounts(all, User.GetUserId(), token);
 
         [HttpPost]
-        public async Task<IActionResult> Post(AccountDto request, CancellationToken token)
+        public async Task<IActionResult> Post(CreateAccountRequest request, CancellationToken token)
         {
             var command = new AddAccountCommand
             {
@@ -43,7 +44,7 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [HttpPut, Route("{accountId}")]
-        public async Task<IActionResult> Update(int accountId, AccountDto request, CancellationToken token)
+        public async Task<IActionResult> Update(int accountId, UpdateAccountRequest request, CancellationToken token)
         {
             var command = new UpdateAccountCommand
             {
@@ -60,11 +61,11 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [HttpPatch, Route("{accountId}")]
-        public async Task<IActionResult> PartialUpdate(int accountId, PartialAccountDto request, CancellationToken token)
+        public async Task<IActionResult> PartialUpdate(int accountId, PartialUpdateAccountRequest request, CancellationToken token)
         {
             var command = new PartialUpdateAccountCommand
             {
-                Id = request.Id ?? accountId,
+                Id = accountId,
                 Balance = request.Balance,
                 IsArchive = request.IsArchived,
                 Title = request.Title,

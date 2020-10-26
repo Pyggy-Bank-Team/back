@@ -2,9 +2,7 @@
 {
     public class Token
     {
-        public Token()
-        {
-        }
+        public Token() { }
 
         public Token(string value)
             => Value = value;
