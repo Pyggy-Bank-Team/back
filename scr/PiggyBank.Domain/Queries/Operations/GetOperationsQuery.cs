@@ -8,7 +8,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Enums;
 using PiggyBank.Common.Models;
-using PiggyBank.Common.Models.Dto.Operations;
 
 namespace PiggyBank.Domain.Queries.Operations
 {

@@ -7,7 +7,7 @@ using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models;
-using PiggyBank.Common.Models.Dto.Operations;
+using PiggyBank.Common.Models.Dto;
 using PiggyBank.Domain.Handler.Operations.Budget;
 using PiggyBank.Domain.Handler.Operations.Plan;
 using PiggyBank.Domain.Handler.Operations.Transfer;
