@@ -6,10 +6,12 @@ using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
 using PiggyBank.IdentityServer.Models;
+using PiggyBank.WebApi.Extensions;
 using PiggyBank.WebApi.Interfaces;
 using PiggyBank.WebApi.Requests.Users;
 using PiggyBank.WebApi.Responses;
 using PiggyBank.WebApi.Responses.Tokens;
+using PiggyBank.WebApi.Responses.Users;
 using TokenOptions = PiggyBank.WebApi.Options.TokenOptions;
 
 namespace PiggyBank.WebApi.Controllers
@@ -23,11 +25,11 @@ namespace PiggyBank.WebApi.Controllers
 
         public UsersController(UserManager<ApplicationUser> userManager, ITokenService tokenService, IOptions<TokenOptions> options)
             => (_userManager, _tokenService, _options) = (userManager, tokenService, options.Value);
-        
+
         [AllowAnonymous, HttpPost]
         public async Task<IActionResult> Post(CreateUserRequest request, CancellationToken token)
         {
-            var user = new ApplicationUser {UserName = request.UserName, CurrencyBase = request.CurrencyBase};
+            var user = new ApplicationUser {UserName = request.UserName, CurrencyBase = request.CurrencyBase, Email = request.Email};
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded)
@@ -46,6 +48,44 @@ namespace PiggyBank.WebApi.Controllers
             }
 
             return BadRequest(new ErrorResponse(bearerToken.ErrorType, "Can't create access token"));
+        }
+
+        [HttpPatch]
+        public async Task<IActionResult> Update(UpdateUserRequest request, CancellationToken token)
+        {
+            var userId = User.GetUserId();
+
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+                return BadRequest(new ErrorResponse("UserNotFound", "User with this user id not found"));
+
+            if (user.CurrencyBase != request.NewCurrency)
+                user.CurrencyBase = request.NewCurrency;
+
+            if (!string.IsNullOrEmpty(request.Email) && user.Email != request.Email)
+                user.Email = request.Email;
+            
+            await _userManager.UpdateAsync(user);
+            return Ok();
+        }
+
+        [HttpGet, Route("UserInfo")]
+        public async Task<IActionResult> GetUserInfo()
+        {
+            var userId = User.GetUserId();
+
+            var user = await _userManager.FindByIdAsync(userId.ToString());
+
+            if (user == null)
+                return BadRequest(new ErrorResponse("UserNotFound", "User with this user id not found"));
+
+            return Ok(new UserResponse
+            {
+                UserName = user.UserName,
+                Email = user.Email,
+                CurrencyBase = user.CurrencyBase
+            });
         }
     }
 }

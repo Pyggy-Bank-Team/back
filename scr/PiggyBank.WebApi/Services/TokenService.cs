@@ -27,12 +27,12 @@ namespace PiggyBank.WebApi.Services
             var user = await _userManager.FindByNameAsync(userName);
 
             if (user == null)
-                return new Token {ErrorType = "user_not_found"};
+                return new Token {ErrorType = "UserNotFound"};
 
             var isValidPassword = await _userManager.CheckPasswordAsync(user, password);
 
             if (!isValidPassword)
-                return new Token {ErrorType = "invalid_password"};
+                return new Token {ErrorType = "InvalidPassword"};
 
             var now = DateTime.UtcNow;
             var jwt = new JwtSecurityToken(
