@@ -12,6 +12,6 @@ namespace PiggyBank.WebApi.Requests.Operations.Budget
 
         public decimal? Amount { get; set; }
 
-        public string? Comment { get; set; }
+        public string Comment { get; set; }
     }
 }
