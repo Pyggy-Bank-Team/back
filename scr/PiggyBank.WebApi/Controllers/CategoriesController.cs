@@ -7,6 +7,7 @@ using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.WebApi.Requests.Categories;
 
 namespace PiggyBank.WebApi.Controllers
 {
@@ -28,7 +29,7 @@ namespace PiggyBank.WebApi.Controllers
             => _service.GetCategory(categoryId, token);
 
         [HttpPost]
-        public async Task<IActionResult> Post(CategoryDto request, CancellationToken token)
+        public async Task<IActionResult> Post(CreateCategoryRequest request, CancellationToken token)
         {
             var command = new AddCategoryCommand
             {
@@ -45,7 +46,7 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [HttpPut, Route("{categoryId}")]
-        public async Task<IActionResult> Update(int categoryId, CategoryDto request, CancellationToken token)
+        public async Task<IActionResult> Update(int categoryId, UpdateCategoryRequest request, CancellationToken token)
         {
             var command = new UpdateCategoryCommand
             {
@@ -64,7 +65,7 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [HttpPatch, Route("{categoryId}")]
-        public async Task<IActionResult> PartialUpdate(int categoryId, PartialCategoryDto request, CancellationToken token)
+        public async Task<IActionResult> PartialUpdate(int categoryId, PartialUpdateCategoryRequest request, CancellationToken token)
         {
             var command = new PartialUpdateCategoryCommand
             {

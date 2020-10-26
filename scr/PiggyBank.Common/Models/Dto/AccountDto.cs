@@ -1,5 +1,4 @@
 ﻿using PiggyBank.Common.Enums;
-using System.ComponentModel.DataAnnotations;
 
 namespace PiggyBank.Common.Models.Dto
 {
@@ -7,8 +6,6 @@ namespace PiggyBank.Common.Models.Dto
     {
         public int Id { get; set; }
 
-        [Required(ErrorMessage = "Title can't be empty")]
-        [StringLength(200, MinimumLength = 2)]
         public string Title { get; set; }
 
         public AccountType Type { get; set; }
