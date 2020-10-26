@@ -1,14 +1,21 @@
+using System.Text;
+using Identity.Model;
+using Identity.Model.Models;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
 using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
+using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PiggyBank.Common.Interfaces;
-using PiggyBank.Domain.Infrastructure;
 using PiggyBank.Domain.Services;
-using PiggyBank.IdentityServer.Models;
+using PiggyBank.Model;
+using PiggyBank.WebApi.Extensions;
+using PiggyBank.WebApi.Interfaces;
+using PiggyBank.WebApi.Options;
+using PiggyBank.WebApi.Services;
 
 namespace PiggyBank.WebApi
 {
@@ -17,27 +24,30 @@ namespace PiggyBank.WebApi
         public Startup(IConfiguration configuration)
             => Configuration = configuration;
 
-        public IConfiguration Configuration { get; }
+        private IConfiguration Configuration { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers().AddNewtonsoftJson();
-            services.AddTransient(x => new ServiceSettings
-            {
-                ConnectionString = @"workstation id=piggy-pumba.mssql.somee.com;packet size=4096;user id=trest333_SQLLogin_1;pwd=s7mntjv5tv;data source=piggy-pumba.mssql.somee.com;persist security info=False;initial catalog=piggy-pumba"
-            });
+
             services.AddScoped<IAccountService, PiggyService>();
             services.AddScoped<ICategoryService, PiggyService>();
             services.AddScoped<IOperationService, PiggyService>();
             services.AddScoped<IDashboardService, PiggyService>();
-            
-            //TODO: Make up a sane interaction with UserManager
-            services.AddDbContext<IdentityContext>(opt =>
-                opt.UseSqlServer(@"workstation id=piggy-pumba.mssql.somee.com;packet size=4096;user id=trest333_SQLLogin_1;pwd=s7mntjv5tv;data source=piggy-pumba.mssql.somee.com;persist security info=False;initial catalog=piggy-pumba"));
+            services.AddScoped<ITokenService, TokenService>();
 
+            services.AddIdentityServices<ApplicationUser>();
+            services.AddStore<IdentityContext>(typeof(ApplicationUser));
+
+            var connectionString = Configuration.GetConnectionString("PumbaDb");
+
+            services.AddDbContext<IdentityContext>(opt => opt.UseSqlServer(connectionString));
+            services.AddDbContext<PiggyContext>(options => options.UseSqlServer(connectionString));
+
+            #region Swagger
             services.AddSwaggerGen(c =>
             {
-                c.SwaggerDoc("v1", new OpenApiInfo { Title = "PiggyBank API", Version = "v1" });
+                c.SwaggerDoc("v1", new OpenApiInfo {Title = "PiggyBank API", Version = "v1"});
 
                 var scheme = new OpenApiSecurityScheme
                 {
@@ -52,26 +62,41 @@ namespace PiggyBank.WebApi
                 c.AddSecurityRequirement(new OpenApiSecurityRequirement
                 {
                     {
-                          new OpenApiSecurityScheme
-                          {
-                                Reference = new OpenApiReference
-                                {
-                                    Type = ReferenceType.SecurityScheme,
-                                    Id = "Bearer"
-                                }
-                          },
-                            new string[] {}
+                        new OpenApiSecurityScheme
+                        {
+                            Reference = new OpenApiReference
+                            {
+                                Type = ReferenceType.SecurityScheme,
+                                Id = "Bearer"
+                            }
+                        },
+                        new string[] { }
                     }
                 });
             });
+            #endregion
+
+            var tokenOptions = Configuration.GetSection(TokenOptions.SectionName);
 
             services.AddAuthentication("Bearer")
-            .AddJwtBearer("Bearer", options =>
-            {
-                options.Authority = "http://piggy-identity.somee.com/";
-                options.RequireHttpsMetadata = false;
-                options.Audience = "api1";
-            });
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.ClaimsIssuer = tokenOptions["Issuer"];
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = tokenOptions["Audience"];
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = tokenOptions["Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = tokenOptions["Audience"],
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenOptions["ClientSecret"]))
+                    };
+                });
+
+            services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.SectionName));
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -82,20 +107,14 @@ namespace PiggyBank.WebApi
             }
 
             app.UseSwagger();
-            app.UseSwaggerUI(c =>
-            {
-                c.SwaggerEndpoint("/swagger/v1/swagger.json", "PiggyBank V1");
-            });
+            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "PiggyBank V1"); });
 
             app.UseRouting();
 
             app.UseAuthentication();
             app.UseAuthorization();
 
-            app.UseEndpoints(endpoints =>
-            {
-                endpoints.MapControllers();
-            });
+            app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
     }
 }

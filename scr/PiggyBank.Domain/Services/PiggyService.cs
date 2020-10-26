@@ -9,20 +9,12 @@ namespace PiggyBank.Domain.Services
         private readonly HandlerDispatcher _handlerDispatcher;
         private readonly QueryDispatcher _queryDispatcher;
 
-        public PiggyService(ServiceSettings settings)
+        public PiggyService(PiggyContext context)
         {
-            var context = InitializationContext(settings.ConnectionString);
             context.Database.Migrate();
 
             _handlerDispatcher = new HandlerDispatcher(context);
             _queryDispatcher = new QueryDispatcher(context);
-        }
-
-        private PiggyContext InitializationContext(string connectionString)
-        {
-            var builder = new DbContextOptionsBuilder<PiggyContext>();
-            builder.UseSqlServer(connectionString);
-            return new PiggyContext(builder.Options);
         }
     }
 }

@@ -9,7 +9,10 @@ using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models;
-using PiggyBank.Common.Models.Dto.Operations;
+using PiggyBank.Common.Models.Dto;
+using PiggyBank.WebApi.Requests.Operations.Budget;
+using PiggyBank.WebApi.Requests.Operations.Plan;
+using PiggyBank.WebApi.Requests.Operations.Transfer;
 
 namespace PiggyBank.WebApi.Controllers
 {
@@ -33,7 +36,7 @@ namespace PiggyBank.WebApi.Controllers
         #region Budget
 
         [HttpPost, Route("Budget")]
-        public async Task<IActionResult> PostBudget(BudgetOperationDto request, CancellationToken token)
+        public async Task<IActionResult> PostBudget(CreateBudgetOperationRequest request, CancellationToken token)
         {
             var command = new AddBudgetOperationCommand
             {
@@ -65,7 +68,7 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [HttpPut, Route("Budget/{operationId}")]
-        public async Task<IActionResult> UpdateBudget(int operationId, BudgetOperationDto request, CancellationToken token)
+        public async Task<IActionResult> UpdateBudget(int operationId, UpdateBudgetOperationRequest request, CancellationToken token)
         {
             var command = new UpdateBidgetOperationCommand
             {
@@ -84,7 +87,7 @@ namespace PiggyBank.WebApi.Controllers
         }
         
         [HttpPatch, Route("Budget/{operationId}")]
-        public async Task<IActionResult> PartialUpdateBudget(int operationId, PartialBudgetOperationDto request, CancellationToken token)
+        public async Task<IActionResult> PartialUpdateBudget(int operationId, PartialUpdateBudgetOperationRequest request, CancellationToken token)
         {
             var command = new UpdatePartialBidgetOperationCommand
             {
@@ -107,7 +110,7 @@ namespace PiggyBank.WebApi.Controllers
         #region Transfer
 
         [HttpPost, Route("Transfer")]
-        public async Task<IActionResult> PostTransfer(TransferOperationDto request, CancellationToken token)
+        public async Task<IActionResult> PostTransfer(CreateTransferOperationRequest request, CancellationToken token)
         {
             var command = new AddTransferOperationCommand
             {
@@ -139,7 +142,7 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [HttpPut, Route("Transfer/{operationId}")]
-        public async Task<IActionResult> UpdateTransferOperation(int operationId, TransferOperationDto request, CancellationToken token)
+        public async Task<IActionResult> UpdateTransferOperation(int operationId, UpdateTransferOperationRequest request, CancellationToken token)
         {
             var command = new UpdateTransferOperationCommand
             {
@@ -158,7 +161,7 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [HttpPatch, Route("Transfer/{operationId}")]
-        public async Task<IActionResult> UpdatePartialTransferOperation(int operationId, PartialTransferOperationDto request, CancellationToken token)
+        public async Task<IActionResult> UpdatePartialTransferOperation(int operationId, PartialUpdateTransferOperationRequest request, CancellationToken token)
         {
             var command = new UpdatePartialTransferOperationCommand
             {
@@ -181,14 +184,14 @@ namespace PiggyBank.WebApi.Controllers
         #region Plan
 
         [HttpPost, Route("Plan")]
-        public async Task<IActionResult> PostPlan(PlanOperationDto request, CancellationToken token)
+        public async Task<IActionResult> PostPlan(CreatePlanOperationRequest request, CancellationToken token)
         {
             var command = new AddPlanOperationCommand
             {
                 Amount = request.Amount,
                 CategoryId = request.CategoryId,
                 Comment = request.Comment,
-                PlanDate = request.PlanDate ?? DateTime.UtcNow,
+                PlanDate = request.PlanDate,
                 AccountId = request.AccountId,
                 CreatedBy = User.GetUserId(),
                 CreatedOn = DateTime.UtcNow
@@ -228,7 +231,7 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [HttpPut, Route("Plan/{operationId}")]
-        public async Task<IActionResult> UpdatePlanOperation(int operationId, PlanOperationDto request, CancellationToken token)
+        public async Task<IActionResult> UpdatePlanOperation(int operationId, UpdatePlanOperationRequest request, CancellationToken token)
         {
             var command = new UpdatePlanOperationCommand
             {
@@ -237,7 +240,7 @@ namespace PiggyBank.WebApi.Controllers
                 Comment = request.Comment,
                 AccountId = request.AccountId,
                 CategoryId = request.CategoryId,
-                PlanDate = request.PlanDate ?? DateTime.UtcNow,
+                PlanDate = request.PlanDate,
                 ModifiedBy = User.GetUserId(),
                 ModifiedOn = DateTime.UtcNow
             };
@@ -247,7 +250,7 @@ namespace PiggyBank.WebApi.Controllers
         }
         
         [HttpPatch, Route("Plan/{operationId}")]
-        public async Task<IActionResult> UpdatePartialPlanOperation(int operationId, PartialPlanOperationDto request, CancellationToken token)
+        public async Task<IActionResult> UpdatePartialPlanOperation(int operationId, PartialUpdatePlanOperationRequest request, CancellationToken token)
         {
             var command = new UpdatePartialPlanOperationCommand
             {
@@ -256,7 +259,7 @@ namespace PiggyBank.WebApi.Controllers
                 Comment = request.Comment,
                 AccountId = request.AccountId,
                 CategoryId = request.CategoryId,
-                PlanDate = request.PlanDate ?? DateTime.UtcNow,
+                PlanDate = request.PlanDate,
                 ModifiedBy = User.GetUserId(),
                 ModifiedOn = DateTime.UtcNow
             };
