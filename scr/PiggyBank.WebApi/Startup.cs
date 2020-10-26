@@ -14,6 +14,7 @@ using PiggyBank.Domain.Services;
 using PiggyBank.Model;
 using PiggyBank.WebApi.Extensions;
 using PiggyBank.WebApi.Interfaces;
+using PiggyBank.WebApi.Middlewares;
 using PiggyBank.WebApi.Options;
 using PiggyBank.WebApi.Services;
 
@@ -113,6 +114,8 @@ namespace PiggyBank.WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseMiddleware<ExceptionHandlerMiddleware>();
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
