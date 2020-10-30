@@ -27,6 +27,7 @@ namespace PiggyBank.Domain.Queries.Operations
                 {
                     Id = b.Id,
                     CategoryId = b.CategoryId,
+                    CategoryType = b.Category.Type,
                     CategoryHexColor = b.Category.HexColor,
                     Amount = b.Amount,
                     AccountId = b.AccountId,
@@ -45,6 +46,7 @@ namespace PiggyBank.Domain.Queries.Operations
                 {
                     Id = t.Id,
                     CategoryId = 0,
+                    CategoryType = null,
                     CategoryHexColor = null,
                     Amount = t.Amount,
                     AccountId = 0,
@@ -63,6 +65,7 @@ namespace PiggyBank.Domain.Queries.Operations
                 {
                     Id = p.Id,
                     CategoryId = 0,
+                    CategoryType = p.Category.Type,
                     CategoryHexColor = p.Category.HexColor,
                     Amount = p.Amount,
                     AccountId = 0,

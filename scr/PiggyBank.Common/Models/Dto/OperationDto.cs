@@ -8,6 +8,8 @@ namespace PiggyBank.Common.Models.Dto
         public int Id { get; set; }
 
         public int CategoryId { get; set; }
+        
+        public CategoryType? CategoryType { get; set; }
 
         public string CategoryHexColor { get; set; }
 
