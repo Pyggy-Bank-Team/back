@@ -111,5 +111,19 @@ namespace PiggyBank.WebApi.Controllers
             await _service.ArchiveCategory(command, token);
             return Ok();
         }
+        
+        [HttpDelete]
+        public async Task<IActionResult> DeleteCategories([FromQuery]int[] id, CancellationToken token)
+        {
+            var command = new DeleteCategoriesCommand
+            {
+                Ids = id,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
+            };
+
+            await _service.DeleteCategories(command, token);
+            return Ok();
+        }
     }
 }

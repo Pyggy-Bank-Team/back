@@ -17,6 +17,9 @@ namespace PiggyBank.Domain.Services
         public Task ArchiveCategory(ArchiveCategoryCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<ArchiveCategoryHandler, ArchiveCategoryCommand>(command, token);
 
+        public Task DeleteCategories(DeleteCategoriesCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<DeleteCategoriesHandler, DeleteCategoriesCommand>(command, token);
+
         public Task DeleteCategory(DeleteCategoryCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<DeleteCategoryHandler, DeleteCategoryCommand>(command, token);
 

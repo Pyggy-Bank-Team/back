@@ -39,5 +39,7 @@ namespace PiggyBank.Common.Interfaces
         /// Archive exists entity
         /// </summary>
         Task ArchiveCategory(ArchiveCategoryCommand command, CancellationToken token);
+
+        Task DeleteCategories(DeleteCategoriesCommand command, CancellationToken token);
     }
 }

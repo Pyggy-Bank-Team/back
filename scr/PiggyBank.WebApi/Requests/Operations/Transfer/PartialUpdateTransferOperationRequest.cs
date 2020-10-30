@@ -4,10 +4,10 @@ namespace PiggyBank.WebApi.Requests.Operations.Transfer
 {
     public class PartialUpdateTransferOperationRequest
     {
-        [Range(1, 2)]
+        [Range(1, int.MaxValue)]
         public int? From { get; set; }
 
-        [Range(1, 2)]
+        [Range(1, int.MaxValue)]
         public int? To { get; set; }
 
         [Required]
