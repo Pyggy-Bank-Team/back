@@ -29,6 +29,9 @@ namespace PiggyBank.Domain.Services
         public Task PartialUpdateAccount(PartialUpdateAccountCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<PartialUpdateAccountHandler, PartialUpdateAccountCommand>(command, token);
 
+        public Task DeleteAccounts(DeleteAccountsCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<DeleteAccountsHandler, DeleteAccountsCommand>(command, token);
+
         public Task UpdateAccount(UpdateAccountCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdateAccountHandler, UpdateAccountCommand>(command, token);
     }

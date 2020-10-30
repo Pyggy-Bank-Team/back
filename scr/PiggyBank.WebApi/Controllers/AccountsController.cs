@@ -110,5 +110,19 @@ namespace PiggyBank.WebApi.Controllers
             await _service.ArchiveAccount(command, token);
             return Ok();
         }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteAccounts([FromQuery]int[] id, CancellationToken token)
+        {
+            var command = new DeleteAccountsCommand
+            {
+                Ids = id,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
+            };
+
+            await _service.DeleteAccounts(command, token);
+            return Ok();
+        }
     }
 }

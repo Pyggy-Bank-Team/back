@@ -12,7 +12,7 @@ namespace PiggyBank.Domain.Infrastructure
 
         public QueryDispatcher(PiggyContext context)
             => _context = context;
-        
+
         public Task<TOutput> Invoke<TQuery, TOutput>(CancellationToken token, object param1, object param2) where TQuery : BaseQuery<TOutput>
             => PrivateInvoke<TQuery, TOutput>(token, _context, param1, param2);
 
@@ -22,10 +22,11 @@ namespace PiggyBank.Domain.Infrastructure
         public Task<TOutput> Invoke<TQuery, TOutput>(CancellationToken token) where TQuery : BaseQuery<TOutput>
             => PrivateInvoke<TQuery, TOutput>(token, _context);
 
-        private static async Task<TOutput> PrivateInvoke<TQuery, TOutput>(CancellationToken token, params object[] obj) where TQuery : BaseQuery<TOutput>
+        private static async Task<TOutput> PrivateInvoke<TQuery, TOutput>(CancellationToken token, params object[] obj)
+            where TQuery : BaseQuery<TOutput>
         {
             TOutput result;
-            using var query = (TQuery)Activator.CreateInstance(typeof(TQuery), obj);
+            using var query = (TQuery) Activator.CreateInstance(typeof(TQuery), obj);
             try
             {
                 result = await query.Invoke(token);
@@ -35,6 +36,7 @@ namespace PiggyBank.Domain.Infrastructure
                 Console.WriteLine(e);
                 throw;
             }
+
             return result;
         }
     }
