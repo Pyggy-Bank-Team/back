@@ -14,18 +14,19 @@ namespace PiggyBank.Domain.Handler.Categories
         {
         }
 
-        public override async Task Invoke(CancellationToken token)
-        {
-            var repository = GetRepository<Category>();
-
-            var ids = Command.Ids;
-            foreach (var category in repository.Where(c => !c.IsDeleted && ids.Contains(c.Id)))
+        public override Task Invoke(CancellationToken token)
+            => Task.Run(() =>
             {
-                category.IsDeleted = true;
-                category.ModifiedBy = Command.ModifiedBy;
-                category.ModifiedOn = Command.ModifiedOn;
-                GetRepository<Category>().Update(category);
-            }
-        }
+                var repository = GetRepository<Category>();
+
+                var ids = Command.Ids;
+                foreach (var category in repository.Where(c => !c.IsDeleted && ids.Contains(c.Id)))
+                {
+                    category.IsDeleted = true;
+                    category.ModifiedBy = Command.ModifiedBy;
+                    category.ModifiedOn = Command.ModifiedOn;
+                    GetRepository<Category>().Update(category);
+                }
+            }, token);
     }
 }

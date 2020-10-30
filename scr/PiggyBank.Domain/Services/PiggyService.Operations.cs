@@ -3,11 +3,13 @@ using PiggyBank.Domain.Queries.Operations;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models;
 using PiggyBank.Common.Models.Dto;
+using PiggyBank.Domain.Handler.Operations;
 using PiggyBank.Domain.Handler.Operations.Budget;
 using PiggyBank.Domain.Handler.Operations.Plan;
 using PiggyBank.Domain.Handler.Operations.Transfer;
@@ -60,5 +62,8 @@ namespace PiggyBank.Domain.Services
 
         public Task UpdatePartialPlanOperation(UpdatePartialPlanOperationCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdatePartialPlanOperationHandler, UpdatePartialPlanOperationCommand>(command, token);
+
+        public Task DeleteOperations(DeleteOperationsCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<DeleteOperationsHandler, DeleteOperationsCommand>(command, token);
     }
 }

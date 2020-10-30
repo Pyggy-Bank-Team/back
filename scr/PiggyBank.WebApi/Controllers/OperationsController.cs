@@ -5,6 +5,7 @@ using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
@@ -31,7 +32,21 @@ namespace PiggyBank.WebApi.Controllers
                 page = 1;
             
             return _service.GetOperations(User.GetUserId(), page, token);
-        } 
+        }
+
+        [HttpDelete]
+        public async Task<IActionResult> DeleteOperations([FromQuery]int[] id, CancellationToken token)
+        {
+            var command = new DeleteOperationsCommand
+            {
+                Ids = id,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
+            };
+
+            await _service.DeleteOperations(command, token);
+            return Ok();
+        }
 
         #region Budget
 

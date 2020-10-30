@@ -14,18 +14,19 @@ namespace PiggyBank.Domain.Handler.Accounts
         {
         }
 
-        public override async Task Invoke(CancellationToken token)
-        {
-            var repository = GetRepository<Account>();
-
-            var ids = Command.Ids;
-            foreach (var account in repository.Where(a => ids.Contains(a.Id)))
+        public override Task Invoke(CancellationToken token)
+            => Task.Run(() =>
             {
-                account.IsDeleted = true;
-                account.ModifiedBy = Command.ModifiedBy;
-                account.ModifiedOn = Command.ModifiedOn;
-                repository.Update(account);
-            }
-        }
+                var repository = GetRepository<Account>();
+
+                var ids = Command.Ids;
+                foreach (var account in repository.Where(a => ids.Contains(a.Id)))
+                {
+                    account.IsDeleted = true;
+                    account.ModifiedBy = Command.ModifiedBy;
+                    account.ModifiedOn = Command.ModifiedOn;
+                    repository.Update(account);
+                }
+            }, token);
     }
 }

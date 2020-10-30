@@ -1,6 +1,7 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
@@ -67,5 +68,7 @@ namespace PiggyBank.Common.Interfaces
         Task UpdatePlanOperation(UpdatePlanOperationCommand command, CancellationToken token);
 
         Task UpdatePartialPlanOperation(UpdatePartialPlanOperationCommand command, CancellationToken token);
+
+        Task DeleteOperations(DeleteOperationsCommand command, CancellationToken token);
     }
 }
