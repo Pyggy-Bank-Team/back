@@ -13,6 +13,7 @@ using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Services;
 using PiggyBank.Model;
 using PiggyBank.WebApi.Extensions;
+using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Interfaces;
 using PiggyBank.WebApi.Middlewares;
 using PiggyBank.WebApi.Options;
@@ -29,13 +30,16 @@ namespace PiggyBank.WebApi
 
         public void ConfigureServices(IServiceCollection services)
         {
-            services.AddControllers().AddNewtonsoftJson();
+            services.AddControllers()
+                .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true)
+                .AddNewtonsoftJson();
 
             services.AddScoped<IAccountService, PiggyService>();
             services.AddScoped<ICategoryService, PiggyService>();
             services.AddScoped<IOperationService, PiggyService>();
             services.AddScoped<IDashboardService, PiggyService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<InvalidStateFilter>();
 
             services.AddIdentityServices<ApplicationUser>();
             services.AddStore<IdentityContext>(typeof(ApplicationUser));

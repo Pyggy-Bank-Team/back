@@ -10,7 +10,6 @@ namespace PiggyBank.WebApi.Requests.Operations.Transfer
         [Range(1, int.MaxValue)]
         public int? To { get; set; }
 
-        [Required]
         public decimal? Amount { get; set; }
 
         public string Comment { get; set; }

@@ -5,7 +5,7 @@ namespace PiggyBank.WebApi.Requests.Accounts
 {
     public class CreateAccountRequest
     {
-        [Required(ErrorMessage = "Title can't be empty")]
+        [Required]
         [StringLength(200, MinimumLength = 2)]
         public string Title { get; set; }
 

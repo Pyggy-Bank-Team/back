@@ -5,10 +5,10 @@ namespace PiggyBank.WebApi.Requests.Categories
 {
     public class UpdateCategoryRequest
     {
-        [Required(ErrorMessage ="Title can't be a null or empty")]
+        [Required]
         public string Title { get; set; }
 
-        [Required(ErrorMessage = "HexColor can't be a null or empty")]
+        [Required]
         public string HexColor { get; set; }
 
         [Required]

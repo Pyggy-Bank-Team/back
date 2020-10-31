@@ -7,6 +7,7 @@ using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Requests.Accounts;
 
 namespace PiggyBank.WebApi.Controllers
@@ -25,6 +26,7 @@ namespace PiggyBank.WebApi.Controllers
             => _service.GetAccounts(all, User.GetUserId(), token);
 
         [HttpPost]
+        [InvalidStateFilter]
         public async Task<IActionResult> Post(CreateAccountRequest request, CancellationToken token)
         {
             var command = new AddAccountCommand
@@ -43,6 +45,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok(result);
         }
 
+        [InvalidStateFilter]
         [HttpPut, Route("{accountId}")]
         public async Task<IActionResult> Update(int accountId, UpdateAccountRequest request, CancellationToken token)
         {

@@ -3,6 +3,7 @@ using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Interfaces;
 using PiggyBank.WebApi.Options;
 using PiggyBank.WebApi.Requests.Tokens;
@@ -20,7 +21,7 @@ namespace PiggyBank.WebApi.Controllers
         public TokensController(ITokenService service, IOptions<TokenOptions> options)
             => (_token, _options) = (service, options.Value);
 
-        [AllowAnonymous]
+        [AllowAnonymous, InvalidStateFilter]
         [HttpPost, Route("Connect")]
         public async Task<IActionResult> Connect(GetTokenRequest request, CancellationToken token)
         {

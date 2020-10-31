@@ -33,7 +33,10 @@ namespace PiggyBank.WebApi.Controllers
             var result = await _userManager.CreateAsync(user, request.Password);
 
             if (!result.Succeeded)
-                return BadRequest(result.Errors.Select(e => new ErrorResponse(e.Code, e.Description)));
+            {
+                var errors = result.Errors.Select(e => e.Description).ToArray();
+                return BadRequest(new ErrorResponse("UserNotCreated", errors));
+            }
 
             var bearerToken = await _tokenService.GetBearerToken(request.UserName, request.Password);
 
