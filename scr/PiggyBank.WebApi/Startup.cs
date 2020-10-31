@@ -23,10 +23,11 @@ namespace PiggyBank.WebApi
 {
     public class Startup
     {
-        public Startup(IConfiguration configuration)
-            => Configuration = configuration;
+        public Startup(IConfiguration configuration, IWebHostEnvironment environment)
+            => (Configuration, Environment) = (configuration, environment);
 
         private IConfiguration Configuration { get; }
+        private IWebHostEnvironment Environment { get; }
 
         public void ConfigureServices(IServiceCollection services)
         {
@@ -50,35 +51,40 @@ namespace PiggyBank.WebApi
             services.AddDbContext<PiggyContext>(options => options.UseSqlServer(connectionString));
 
             #region Swagger
-            services.AddSwaggerGen(c =>
+
+            if (Environment.IsDevelopment())
             {
-                c.SwaggerDoc("v1", new OpenApiInfo {Title = "PiggyBank API", Version = "v1"});
-
-                var scheme = new OpenApiSecurityScheme
+                services.AddSwaggerGen(c =>
                 {
-                    Description = "Standard Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
-                    In = ParameterLocation.Header,
-                    Name = "Authorization",
-                    Type = SecuritySchemeType.ApiKey
-                };
+                    c.SwaggerDoc("v1", new OpenApiInfo {Title = "PiggyBank API", Version = "v1"});
 
-                c.AddSecurityDefinition("Bearer", scheme);
-
-                c.AddSecurityRequirement(new OpenApiSecurityRequirement
-                {
+                    var scheme = new OpenApiSecurityScheme
                     {
-                        new OpenApiSecurityScheme
+                        Description = "Standard Authorization header using the Bearer scheme. Example: \"Bearer {token}\"",
+                        In = ParameterLocation.Header,
+                        Name = "Authorization",
+                        Type = SecuritySchemeType.ApiKey
+                    };
+
+                    c.AddSecurityDefinition("Bearer", scheme);
+
+                    c.AddSecurityRequirement(new OpenApiSecurityRequirement
+                    {
                         {
-                            Reference = new OpenApiReference
+                            new OpenApiSecurityScheme
                             {
-                                Type = ReferenceType.SecurityScheme,
-                                Id = "Bearer"
-                            }
-                        },
-                        new string[] { }
-                    }
+                                Reference = new OpenApiReference
+                                {
+                                    Type = ReferenceType.SecurityScheme,
+                                    Id = "Bearer"
+                                }
+                            },
+                            new string[] { }
+                        }
+                    });
                 });
-            });
+            }
+
             #endregion
 
             var tokenOptions = Configuration.GetSection(TokenOptions.SectionName);
@@ -108,11 +114,9 @@ namespace PiggyBank.WebApi
         {
             if (env.IsDevelopment())
             {
-                app.UseDeveloperExceptionPage();
+                app.UseSwagger();
+                app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "PiggyBank V1"); });
             }
-
-            app.UseSwagger();
-            app.UseSwaggerUI(c => { c.SwaggerEndpoint("/swagger/v1/swagger.json", "PiggyBank V1"); });
 
             app.UseRouting();
 
