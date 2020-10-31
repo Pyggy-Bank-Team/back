@@ -29,8 +29,7 @@ namespace PiggyBank.WebApi.Controllers
         public Task<CategoryDto> GetById(int categoryId, CancellationToken token)
             => _service.GetCategory(categoryId, token);
 
-        [HttpPost]
-        [InvalidStateFilter]
+        [HttpPost, InvalidStateFilter]
         public async Task<IActionResult> Post(CreateCategoryRequest request, CancellationToken token)
         {
             var command = new AddCategoryCommand
@@ -95,7 +94,7 @@ namespace PiggyBank.WebApi.Controllers
                 ModifiedBy = User.GetUserId(),
                 ModifiedOn = DateTime.UtcNow
             };
-            
+
             await _service.DeleteCategory(command, token);
             return Ok();
         }
@@ -110,13 +109,13 @@ namespace PiggyBank.WebApi.Controllers
                 ModifiedBy = userId,
                 ModifiedOn = DateTime.UtcNow
             };
-            
+
             await _service.ArchiveCategory(command, token);
             return Ok();
         }
-        
+
         [HttpDelete]
-        public async Task<IActionResult> DeleteCategories([FromQuery]int[] id, CancellationToken token)
+        public async Task<IActionResult> DeleteCategories([FromQuery] int[] id, CancellationToken token)
         {
             var command = new DeleteCategoriesCommand
             {

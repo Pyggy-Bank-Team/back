@@ -19,14 +19,13 @@ namespace PiggyBank.WebApi.Controllers
         private readonly IAccountService _service;
 
         public AccountsController(IAccountService service)
-            =>  _service = service;
+            => _service = service;
 
         [HttpGet]
         public Task<AccountDto[]> Get(bool all = false, CancellationToken token = default)
             => _service.GetAccounts(all, User.GetUserId(), token);
 
-        [HttpPost]
-        [InvalidStateFilter]
+        [HttpPost, InvalidStateFilter]
         public async Task<IActionResult> Post(CreateAccountRequest request, CancellationToken token)
         {
             var command = new AddAccountCommand
@@ -115,7 +114,7 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteAccounts([FromQuery]int[] id, CancellationToken token)
+        public async Task<IActionResult> DeleteAccounts([FromQuery] int[] id, CancellationToken token)
         {
             var command = new DeleteAccountsCommand
             {
