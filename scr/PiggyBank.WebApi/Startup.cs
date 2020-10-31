@@ -18,6 +18,9 @@ using PiggyBank.WebApi.Interfaces;
 using PiggyBank.WebApi.Middlewares;
 using PiggyBank.WebApi.Options;
 using PiggyBank.WebApi.Services;
+using Serilog;
+using Serilog.Events;
+using Serilog.Sinks.MSSqlServer.Sinks.MSSqlServer.Options;
 
 namespace PiggyBank.WebApi
 {
@@ -108,6 +111,21 @@ namespace PiggyBank.WebApi
                 });
 
             services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.SectionName));
+
+            var ninjaDb = Configuration.GetConnectionString("NinjaDb");
+
+            var options = new SinkOptions
+            {
+                TableName = "Store",
+                SchemaName = "Pb",
+                AutoCreateSqlTable = true
+            };
+            
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .WriteTo.MSSqlServer(ninjaDb, options).CreateLogger();
+
+            services.AddSingleton(Log.Logger);
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

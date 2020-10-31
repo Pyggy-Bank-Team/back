@@ -3,15 +3,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Domain.Handler;
 using PiggyBank.Model;
+using Serilog;
 
 namespace PiggyBank.Domain.Infrastructure
 {
     public class HandlerDispatcher
     {
         private readonly PiggyContext _context;
+        private readonly ILogger _logger;
 
-        public HandlerDispatcher(PiggyContext context)
-            => _context = context;
+        public HandlerDispatcher(PiggyContext context, ILogger logger)
+            => (_context, _logger) = (context, logger);
 
         public async Task Invoke<THandler, TCommand>(TCommand command, CancellationToken token) where THandler : BaseHandler<TCommand>
         {
@@ -22,7 +24,7 @@ namespace PiggyBank.Domain.Infrastructure
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.Error(e, "Error during handler invoke");
                 throw;
             }
             finally
@@ -45,11 +47,10 @@ namespace PiggyBank.Domain.Infrastructure
                     if (handler.Result is TResult handlerResult)
                         result = handlerResult;
                 }
-                //TODO Added log
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.Error(e, "Error during handler invoke");
                 throw;
             }
             finally

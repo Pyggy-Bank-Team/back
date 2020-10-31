@@ -3,15 +3,17 @@ using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Domain.Queries;
 using PiggyBank.Model;
+using Serilog;
 
 namespace PiggyBank.Domain.Infrastructure
 {
     public class QueryDispatcher
     {
         private readonly PiggyContext _context;
+        private readonly ILogger _logger;
 
-        public QueryDispatcher(PiggyContext context)
-            => _context = context;
+        public QueryDispatcher(PiggyContext context, ILogger logger)
+            => (_context, _logger) = (context, logger);
 
         public Task<TOutput> Invoke<TQuery, TOutput>(CancellationToken token, object param1, object param2) where TQuery : BaseQuery<TOutput>
             => PrivateInvoke<TQuery, TOutput>(token, _context, param1, param2);
@@ -22,7 +24,7 @@ namespace PiggyBank.Domain.Infrastructure
         public Task<TOutput> Invoke<TQuery, TOutput>(CancellationToken token) where TQuery : BaseQuery<TOutput>
             => PrivateInvoke<TQuery, TOutput>(token, _context);
 
-        private static async Task<TOutput> PrivateInvoke<TQuery, TOutput>(CancellationToken token, params object[] obj)
+        private async Task<TOutput> PrivateInvoke<TQuery, TOutput>(CancellationToken token, params object[] obj)
             where TQuery : BaseQuery<TOutput>
         {
             TOutput result;
@@ -33,7 +35,7 @@ namespace PiggyBank.Domain.Infrastructure
             }
             catch (Exception e)
             {
-                Console.WriteLine(e);
+                _logger.Error(e, "Error during query invoke");
                 throw;
             }
 

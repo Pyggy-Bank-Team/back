@@ -1,6 +1,7 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PiggyBank.Domain.Infrastructure;
 using PiggyBank.Model;
+using Serilog;
 
 namespace PiggyBank.Domain.Services
 {
@@ -9,12 +10,12 @@ namespace PiggyBank.Domain.Services
         private readonly HandlerDispatcher _handlerDispatcher;
         private readonly QueryDispatcher _queryDispatcher;
 
-        public PiggyService(PiggyContext context)
+        public PiggyService(PiggyContext context, ILogger logger)
         {
             context.Database.Migrate();
 
-            _handlerDispatcher = new HandlerDispatcher(context);
-            _queryDispatcher = new QueryDispatcher(context);
+            _handlerDispatcher = new HandlerDispatcher(context, logger);
+            _queryDispatcher = new QueryDispatcher(context, logger);
         }
     }
 }
