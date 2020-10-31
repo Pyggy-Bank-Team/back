@@ -23,6 +23,8 @@ namespace PiggyBank.Domain.Handler.Categories
                 foreach (var category in repository.Where(c => !c.IsDeleted && ids.Contains(c.Id)))
                 {
                     category.IsDeleted = true;
+                    category.Title = "Deleted";
+                    category.HexColor = "#FFFFFF";
                     category.ModifiedBy = Command.ModifiedBy;
                     category.ModifiedOn = Command.ModifiedOn;
                     GetRepository<Category>().Update(category);

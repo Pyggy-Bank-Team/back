@@ -21,6 +21,8 @@ namespace PiggyBank.Domain.Handler.Categories
                 return;
 
             category.IsDeleted = true;
+            category.Title = "Deleted";
+            category.HexColor = "#FFFFFF";
             category.ModifiedBy = Command.ModifiedBy;
             category.ModifiedOn = Command.ModifiedOn;
             repository.Update(category);
