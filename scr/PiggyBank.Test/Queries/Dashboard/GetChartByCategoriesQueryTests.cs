@@ -2,8 +2,8 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Dashboard;
-using PiggyBank.Domain.Queries.Dashboard;
+using PiggyBank.Common.Commands.Reports;
+using PiggyBank.Domain.Queries.Reports;
 using PiggyBank.Model;
 using PiggyBank.Test.Subs;
 using Xunit;

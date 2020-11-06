@@ -1,8 +1,8 @@
-﻿using System;
+using System;
 
-namespace PiggyBank.WebApi.Requests.Dashboard
+namespace PiggyBank.WebApi.Requests.Reports
 {
-    public class GetChartRequest
+    public abstract class ChartRequestBase
     {
         public DateTime? From { get; set; }
         public DateTime? To { get; set; }

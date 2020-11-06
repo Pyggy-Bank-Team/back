@@ -2,13 +2,12 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Dashboard;
-using PiggyBank.Common.Enums;
+using PiggyBank.Common.Commands.Reports;
 using PiggyBank.Common.Models.Dto.Dashboard;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 
-namespace PiggyBank.Domain.Queries.Dashboard
+namespace PiggyBank.Domain.Queries.Reports
 {
     public class GetChartByCategoriesQuery : BaseQuery<ChartByCategoryDto[]>
     {
@@ -19,17 +18,21 @@ namespace PiggyBank.Domain.Queries.Dashboard
 
         public override Task<ChartByCategoryDto[]> Invoke(CancellationToken token)
         {
-            var operations = GetRepository<BudgetOperation>().Where(b => b.CreatedBy == _command.UserId
-                                                                         && b.Category.Type == CategoryType.Expense
+            var operations = GetRepository<BudgetOperation>().Where(b => !b.IsDeleted  
+                                                                         && b.CreatedBy == _command.UserId
+                                                                         && b.Category.Type == _command.Type
                                                                          && b.CreatedOn >= _command.From
                                                                          && b.CreatedOn <= _command.To);
+
             return operations.Select(o => new
                 {
                     o.CategoryId,
                     CategoryTitle = o.Category.Title,
                     CategoryHexColor = o.Category.HexColor,
+                    CategoryIsDelete = o.Category.IsDeleted,
                     o.Amount
-                }).GroupBy(o => new {o.CategoryId, o.CategoryTitle, o.CategoryHexColor})
+                }).Where(o => !o.CategoryIsDelete)
+                .GroupBy(o => new {o.CategoryId, o.CategoryTitle, o.CategoryHexColor})
                 .Select(g => new ChartByCategoryDto
                 {
                     CategoryId = g.Key.CategoryId,

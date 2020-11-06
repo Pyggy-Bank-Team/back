@@ -2,13 +2,13 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Dashboard;
+using PiggyBank.Common.Commands.Reports;
 using PiggyBank.Common.Enums;
 using PiggyBank.Common.Models.Dto.Dashboard;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 
-namespace PiggyBank.Domain.Queries.Dashboard
+namespace PiggyBank.Domain.Queries.Reports
 {
     public class GetChartByExpensePerDays : BaseQuery<ChartByExpensePerDayDto[]>
     {
@@ -19,7 +19,8 @@ namespace PiggyBank.Domain.Queries.Dashboard
 
         public override Task<ChartByExpensePerDayDto[]> Invoke(CancellationToken token)
         {
-            var operations = GetRepository<BudgetOperation>().Where(b => b.CreatedBy == _command.UserId
+            var operations = GetRepository<BudgetOperation>().Where(b => !b.IsDeleted
+                                                                         && b.CreatedBy == _command.UserId
                                                                          && b.Category.Type == CategoryType.Expense
                                                                          && b.CreatedOn >= _command.From
                                                                          && b.CreatedOn <= _command.To);

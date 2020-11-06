@@ -1,13 +1,13 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using PiggyBank.Common.Commands.Dashboard;
+using PiggyBank.Common.Commands.Reports;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Common.Models.Dto.Dashboard;
-using PiggyBank.Domain.Queries.Dashboard;
+using PiggyBank.Domain.Queries.Reports;
 
 namespace PiggyBank.Domain.Services
 {
-    public partial class PiggyService : IDashboardService
+    public partial class PiggyService : IReportsService
     {
         public Task<ChartByCategoryDto[]> GetChartByCategories(GetChartCommand command, CancellationToken token)
             => _queryDispatcher.Invoke<GetChartByCategoriesQuery, ChartByCategoryDto[]>(token, command);
