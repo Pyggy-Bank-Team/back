@@ -61,7 +61,7 @@ namespace PiggyBank.WebApi.Controllers
                 Amount = request.Amount,
                 CategoryId = request.CategoryId,
                 Comment = request.Comment,
-                CreatedOn = DateTime.UtcNow,
+                CreatedOn = request.CreatedOn ?? DateTime.UtcNow,
                 CreatedBy = User.GetUserId()
             };
 
@@ -138,7 +138,7 @@ namespace PiggyBank.WebApi.Controllers
                 From = request.From,
                 To = request.To,
                 Comment = request.Comment,
-                CreatedOn = DateTime.UtcNow,
+                CreatedOn = request.CreatedOn ?? DateTime.UtcNow,
                 CreatedBy = User.GetUserId()
             };
 
@@ -217,7 +217,7 @@ namespace PiggyBank.WebApi.Controllers
                 PlanDate = request.PlanDate,
                 AccountId = request.AccountId,
                 CreatedBy = User.GetUserId(),
-                CreatedOn = DateTime.UtcNow
+                CreatedOn = request.CreatedOn ?? DateTime.UtcNow
             };
 
             await _service.AddPlanOperation(command, token);
