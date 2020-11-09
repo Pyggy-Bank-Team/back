@@ -52,7 +52,6 @@ namespace PiggyBank.WebApi.Services
         {
             var claims = new List<Claim>
             {
-                new Claim(ClaimsIdentity.DefaultIssuer, _options.Issuer),
                 new Claim("id", user.Id),
                 new Claim("currency", user.CurrencyBase)
             };
