@@ -27,12 +27,19 @@ namespace PiggyBank.WebApi.Controllers
             => _service = service;
 
         [HttpGet]
-        public Task<PageResult<OperationDto>> Get(int page, CancellationToken token)
+        public Task<PageResult<OperationDto>> Get(int page, bool all = false, CancellationToken token = default)
         {
             if (page == default || page < 0)
                 page = 1;
+
+            var command = new GetOperationsCommand
+            {
+                Page = page,
+                WithDeleted = all,
+                UserId = User.GetUserId()
+            };
             
-            return _service.GetOperations(User.GetUserId(), page, token);
+            return _service.GetOperations(command, token);
         }
 
         [HttpDelete]

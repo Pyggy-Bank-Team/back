@@ -35,7 +35,7 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Get operations
         /// </summary>
-        Task<PageResult<OperationDto>> GetOperations(Guid userId, int page, CancellationToken token);
+        Task<PageResult<OperationDto>> GetOperations(GetOperationsCommand command, CancellationToken token);
 
         /// <summary>
         /// Get operation by id

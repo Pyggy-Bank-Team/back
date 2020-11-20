@@ -18,36 +18,18 @@ namespace PiggyBank.Domain.Queries.Accounts
 
         public override Task<AccountDto[]> Invoke(CancellationToken token)
         {
-            if (_all)
+            return GetRepository<Account>().Where(a => a.CreatedBy == _userId && a.IsDeleted == _all).Select(a => new AccountDto
             {
-                return GetRepository<Account>().Where(a => a.CreatedBy == _userId).Select(a => new AccountDto
-                {
-                    Id = a.Id,
-                    Type = a.Type,
-                    Balance = a.Balance,
-                    Currency = a.Currency,
-                    Title = a.Title,
-                    IsArchived = a.IsArchived,
-                    IsDeleted = a.IsDeleted,
-                    CreatedOn = a.CreatedOn,
-                    CreatedBy = a.CreatedBy
-                }).ToArrayAsync(token);
-            }
-            else
-            {
-                return GetRepository<Account>().Where(a => a.CreatedBy == _userId && !a.IsDeleted).Select(a => new AccountDto
-                {
-                    Id = a.Id,
-                    Type = a.Type,
-                    Balance = a.Balance,
-                    Currency = a.Currency,
-                    Title = a.Title,
-                    IsArchived = a.IsArchived,
-                    IsDeleted = a.IsDeleted,
-                    CreatedOn = a.CreatedOn,
-                    CreatedBy = a.CreatedBy
-                }).ToArrayAsync(token);
-            }
+                Id = a.Id,
+                Type = a.Type,
+                Balance = a.Balance,
+                Currency = a.Currency,
+                Title = a.Title,
+                IsArchived = a.IsArchived,
+                IsDeleted = a.IsDeleted,
+                CreatedOn = a.CreatedOn,
+                CreatedBy = a.CreatedBy
+            }).ToArrayAsync(token);
         } 
     }
 }

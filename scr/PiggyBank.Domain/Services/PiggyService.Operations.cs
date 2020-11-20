@@ -42,8 +42,8 @@ namespace PiggyBank.Domain.Services
         public Task<OperationDto> GetOperation(int id, CancellationToken token)
             => _queryDispatcher.Invoke<GetOperationByIdQuery, OperationDto>(token, id);
 
-        public Task<PageResult<OperationDto>> GetOperations(Guid userId, int page, CancellationToken token)
-            => _queryDispatcher.Invoke<GetOperationsQuery, PageResult<OperationDto>>(token, userId, page);
+        public Task<PageResult<OperationDto>> GetOperations(GetOperationsCommand command, CancellationToken token)
+            => _queryDispatcher.Invoke<GetOperationsQuery, PageResult<OperationDto>>(token, command);
 
         public Task UpdateBidgetOperation(UpdateBidgetOperationCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdateBudgetOperationHandler, UpdateBidgetOperationCommand>(command, token);

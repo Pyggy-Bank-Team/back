@@ -6,6 +6,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Enums;
 using PiggyBank.Common.Models;
 
@@ -13,16 +14,18 @@ namespace PiggyBank.Domain.Queries.Operations
 {
     public class GetOperationsQuery : BaseQuery<PageResult<OperationDto>>
     {
-        private readonly Guid _userId;
-        private readonly int _page;
+        private readonly GetOperationsCommand _command;
 
-        public GetOperationsQuery(PiggyContext context, Guid userId, int page)
+        public GetOperationsQuery(PiggyContext context, GetOperationsCommand command)
             : base(context)
-            => (_userId, _page) = (userId, page);
+            => _command = command;
 
         public override async Task<PageResult<OperationDto>> Invoke(CancellationToken token)
         {
-            var budgetQuery = GetRepository<BudgetOperation>().Where(b => b.CreatedBy == _userId && !b.IsDeleted && b.Type == OperationType.Budget)
+            var budgetQuery = GetRepository<BudgetOperation>()
+                .Where(b => b.CreatedBy == _command.UserId 
+                            && b.IsDeleted == _command.WithDeleted 
+                            && b.Type == OperationType.Budget)
                 .Select(b => new OperationDto
                 {
                     Id = b.Id,
@@ -41,7 +44,9 @@ namespace PiggyBank.Domain.Queries.Operations
                     IsDeleted = b.IsDeleted
                 });
 
-            var transferQuery = GetRepository<TransferOperation>().Where(t => t.CreatedBy == _userId && !t.IsDeleted)
+            var transferQuery = GetRepository<TransferOperation>()
+                .Where(t => t.CreatedBy == _command.UserId 
+                            && t.IsDeleted == _command.WithDeleted)
                 .Select(t => new OperationDto
                 {
                     Id = t.Id,
@@ -60,7 +65,8 @@ namespace PiggyBank.Domain.Queries.Operations
                     IsDeleted = t.IsDeleted
                 });
 
-            var planQuery = GetRepository<PlanOperation>().Where(p => p.CreatedBy == _userId && !p.IsDeleted)
+            var planQuery = GetRepository<PlanOperation>()
+                .Where(p => p.CreatedBy == _command.UserId && p.IsDeleted == _command.WithDeleted)
                 .Select(p => new OperationDto
                 {
                     Id = p.Id,
@@ -83,7 +89,7 @@ namespace PiggyBank.Domain.Queries.Operations
 
             var result = new PageResult<OperationDto>
             {
-                CurrentPage = _page
+                CurrentPage = _command.Page
             };
 
             var totalCount = await operationsQuery.CountAsync(token);
