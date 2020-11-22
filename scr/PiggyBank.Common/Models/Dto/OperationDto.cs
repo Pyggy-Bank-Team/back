@@ -12,12 +12,16 @@ namespace PiggyBank.Common.Models.Dto
         public CategoryType? CategoryType { get; set; }
 
         public string CategoryHexColor { get; set; }
+        
+        public string CategoryTitle { get; set; }
 
         public decimal Amount { get; set; }
 
         public int AccountId { get; set; }
 
         public string AccountTitle { get; set; }
+        
+        public string Currency { get; set; }
 
         public string Comment { get; set; }
 

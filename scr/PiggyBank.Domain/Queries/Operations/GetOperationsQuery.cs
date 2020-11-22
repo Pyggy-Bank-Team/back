@@ -2,7 +2,6 @@
 using PiggyBank.Common.Models.Dto;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
-using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
@@ -15,7 +14,7 @@ namespace PiggyBank.Domain.Queries.Operations
     public class GetOperationsQuery : BaseQuery<PageResult<OperationDto>>
     {
         private readonly GetOperationsCommand _command;
-
+        
         public GetOperationsQuery(PiggyContext context, GetOperationsCommand command)
             : base(context)
             => _command = command;
@@ -32,9 +31,11 @@ namespace PiggyBank.Domain.Queries.Operations
                     CategoryId = b.CategoryId,
                     CategoryType = b.Category.Type,
                     CategoryHexColor = b.Category.HexColor,
+                    CategoryTitle = b.Category.Title,
                     Amount = b.Amount,
                     AccountId = b.AccountId,
                     AccountTitle = b.Account.Title,
+                    Currency = b.Account.Currency,
                     Comment = b.Comment,
                     Type = b.Type,
                     CreatedOn = b.CreatedOn,
@@ -53,9 +54,11 @@ namespace PiggyBank.Domain.Queries.Operations
                     CategoryId = 0,
                     CategoryType = null,
                     CategoryHexColor = null,
+                    CategoryTitle = null,
                     Amount = t.Amount,
                     AccountId = 0,
                     AccountTitle = null,
+                    Currency = GetRepository<Account>().First(a => a.Id == t.To).Currency,
                     Comment = t.Comment,
                     Type = t.Type,
                     CreatedOn = t.CreatedOn,
@@ -73,9 +76,11 @@ namespace PiggyBank.Domain.Queries.Operations
                     CategoryId = 0,
                     CategoryType = p.Category.Type,
                     CategoryHexColor = p.Category.HexColor,
+                    CategoryTitle = p.Category.Title,
                     Amount = p.Amount,
                     AccountId = 0,
                     AccountTitle = p.Account.Title,
+                    Currency = p.Account.Currency,
                     Comment = p.Comment,
                     Type = p.Type,
                     CreatedOn = p.CreatedOn,

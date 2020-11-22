@@ -35,7 +35,8 @@ namespace PiggyBank.WebApi.Controllers
             if (!result.Succeeded)
             {
                 var errors = result.Errors.Select(e => e.Description).ToArray();
-                return BadRequest(new ErrorResponse("UserNotCreated", errors));
+                var passwordInvalid = result.Errors.Any(e => e.Code.ToLowerInvariant().Contains("password"));
+                return BadRequest(new ErrorResponse( passwordInvalid ? "PasswordInvalid" : "UserNotCreated", errors));
             }
 
             var bearerToken = await _tokenService.GetBearerToken(request.UserName, request.Password);
