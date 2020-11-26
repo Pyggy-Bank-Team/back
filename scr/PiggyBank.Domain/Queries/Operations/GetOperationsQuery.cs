@@ -14,18 +14,21 @@ namespace PiggyBank.Domain.Queries.Operations
     public class GetOperationsQuery : BaseQuery<PageResult<OperationDto>>
     {
         private readonly GetOperationsCommand _command;
-        
+
         public GetOperationsQuery(PiggyContext context, GetOperationsCommand command)
             : base(context)
             => _command = command;
 
         public override async Task<PageResult<OperationDto>> Invoke(CancellationToken token)
         {
-            var budgetQuery = GetRepository<BudgetOperation>()
-                .Where(b => b.CreatedBy == _command.UserId 
-                            && b.IsDeleted == _command.WithDeleted 
-                            && b.Type == OperationType.Budget)
-                .Select(b => new OperationDto
+            var budgetQuery = _command.WithDeleted
+                ? GetRepository<BudgetOperation>().Where(b => b.CreatedBy == _command.UserId && b.Type == OperationType.Budget)
+                : GetRepository<BudgetOperation>().Where(b => b.CreatedBy == _command.UserId
+                                                              && !b.IsDeleted
+                                                              && b.Type == OperationType.Budget);
+
+            var budgets = budgetQuery.Select(b =>
+                new OperationDto
                 {
                     Id = b.Id,
                     CategoryId = b.CategoryId,
@@ -45,10 +48,12 @@ namespace PiggyBank.Domain.Queries.Operations
                     IsDeleted = b.IsDeleted
                 });
 
-            var transferQuery = GetRepository<TransferOperation>()
-                .Where(t => t.CreatedBy == _command.UserId 
-                            && t.IsDeleted == _command.WithDeleted)
-                .Select(t => new OperationDto
+            var transferQuery = _command.WithDeleted
+                ? GetRepository<TransferOperation>().Where(t => t.CreatedBy == _command.UserId)
+                : GetRepository<TransferOperation>().Where(t => t.CreatedBy == _command.UserId && !t.IsDeleted);
+
+            var transfers = transferQuery.Select(t =>
+                new OperationDto
                 {
                     Id = t.Id,
                     CategoryId = 0,
@@ -68,9 +73,12 @@ namespace PiggyBank.Domain.Queries.Operations
                     IsDeleted = t.IsDeleted
                 });
 
-            var planQuery = GetRepository<PlanOperation>()
-                .Where(p => p.CreatedBy == _command.UserId && p.IsDeleted == _command.WithDeleted)
-                .Select(p => new OperationDto
+            var planQuery = _command.WithDeleted
+                ? GetRepository<PlanOperation>().Where(p => p.CreatedBy == _command.UserId)
+                : GetRepository<PlanOperation>().Where(p => p.CreatedBy == _command.UserId && !p.IsDeleted);
+
+            var plans = planQuery.Select(p =>
+                new OperationDto
                 {
                     Id = p.Id,
                     CategoryId = 0,
@@ -90,7 +98,7 @@ namespace PiggyBank.Domain.Queries.Operations
                     IsDeleted = p.IsDeleted
                 });
 
-            var operationsQuery = budgetQuery.Union(transferQuery).Union(planQuery).OrderByDescending(o => o.CreatedOn);
+            var operationsQuery = budgets.Union(transfers).Union(plans).OrderByDescending(o => o.CreatedOn);
 
             var result = new PageResult<OperationDto>
             {

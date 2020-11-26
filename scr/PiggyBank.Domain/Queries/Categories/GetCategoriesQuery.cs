@@ -20,18 +20,21 @@ namespace PiggyBank.Domain.Queries.Categories
 
         public override Task<CategoryDto[]> Invoke(CancellationToken token)
         {
-            return GetRepository<Category>().Where(c => c.CreatedBy == _userId && c.IsDeleted == _all)
-                .Select(c => new CategoryDto
-                {
-                    Id = c.Id,
-                    HexColor = c.HexColor,
-                    Title = c.Title,
-                    Type = c.Type,
-                    IsArchived = c.IsArchived,
-                    IsDeleted = c.IsDeleted,
-                    CreatedOn = c.CreatedOn,
-                    CreatedBy = c.CreatedBy
-                }).ToArrayAsync(token);
+            var query = _all
+                ? GetRepository<Category>().Where(c => c.CreatedBy == _userId)
+                : GetRepository<Category>().Where(c => c.CreatedBy == _userId && !c.IsDeleted);
+
+            return query.Select(c => new CategoryDto
+            {
+                Id = c.Id,
+                HexColor = c.HexColor,
+                Title = c.Title,
+                Type = c.Type,
+                IsArchived = c.IsArchived,
+                IsDeleted = c.IsDeleted,
+                CreatedOn = c.CreatedOn,
+                CreatedBy = c.CreatedBy
+            }).ToArrayAsync(token);
         }
     }
 }

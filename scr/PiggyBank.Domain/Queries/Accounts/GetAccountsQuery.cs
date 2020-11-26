@@ -13,12 +13,17 @@ namespace PiggyBank.Domain.Queries.Accounts
     {
         private readonly Guid _userId;
         private readonly bool _all;
+
         public GetAccountsQuery(PiggyContext context, Guid userId, bool all) : base(context)
             => (_userId, _all) = (userId, all);
 
         public override Task<AccountDto[]> Invoke(CancellationToken token)
         {
-            return GetRepository<Account>().Where(a => a.CreatedBy == _userId && a.IsDeleted == _all).Select(a => new AccountDto
+            var query = _all
+                ? GetRepository<Account>().Where(a => a.CreatedBy == _userId)
+                : GetRepository<Account>().Where(a => a.CreatedBy == _userId && !a.IsDeleted);
+
+            return query.Select(a => new AccountDto
             {
                 Id = a.Id,
                 Type = a.Type,
@@ -30,6 +35,6 @@ namespace PiggyBank.Domain.Queries.Accounts
                 CreatedOn = a.CreatedOn,
                 CreatedBy = a.CreatedBy
             }).ToArrayAsync(token);
-        } 
+        }
     }
 }
