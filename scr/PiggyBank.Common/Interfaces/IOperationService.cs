@@ -1,12 +1,12 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models;
-using PiggyBank.Common.Models.Dto;
+using PiggyBank.Common.Models.Dto.Operations;
+using PiggyBank.Common.Queries;
 
 namespace PiggyBank.Common.Interfaces
 {
@@ -38,11 +38,6 @@ namespace PiggyBank.Common.Interfaces
         Task<PageResult<OperationDto>> GetOperations(GetOperationsCommand command, CancellationToken token);
 
         /// <summary>
-        /// Get operation by id
-        /// </summary>
-        Task<OperationDto> GetOperation(int id, CancellationToken token);
-
-        /// <summary>
         /// Delete budget operation
         /// </summary>
         Task DeleteBudgetOperation(DeleteBudgetOperationCommand command, CancellationToken token);
@@ -70,5 +65,9 @@ namespace PiggyBank.Common.Interfaces
         Task UpdatePartialPlanOperation(UpdatePartialPlanOperationCommand command, CancellationToken token);
 
         Task DeleteOperations(DeleteOperationsCommand command, CancellationToken token);
+
+        Task<BudgetDto> GetBudgetOperation(GetOperationQuery query, CancellationToken token);
+        
+        Task<TransferDto> GetTransferOperation(GetOperationQuery query, CancellationToken token);
     }
 }

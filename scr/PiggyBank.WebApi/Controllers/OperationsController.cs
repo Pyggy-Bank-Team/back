@@ -10,7 +10,8 @@ using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models;
-using PiggyBank.Common.Models.Dto;
+using PiggyBank.Common.Models.Dto.Operations;
+using PiggyBank.Common.Queries;
 using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Requests.Operations.Budget;
 using PiggyBank.WebApi.Requests.Operations.Plan;
@@ -23,6 +24,7 @@ namespace PiggyBank.WebApi.Controllers
     public class OperationsController : ControllerBase
     {
         private readonly IOperationService _service;
+
         public OperationsController(IOperationService service)
             => _service = service;
 
@@ -38,12 +40,12 @@ namespace PiggyBank.WebApi.Controllers
                 WithDeleted = all,
                 UserId = User.GetUserId()
             };
-            
+
             return _service.GetOperations(command, token);
         }
 
         [HttpDelete]
-        public async Task<IActionResult> DeleteOperations([FromQuery]int[] id, CancellationToken token)
+        public async Task<IActionResult> DeleteOperations([FromQuery] int[] id, CancellationToken token)
         {
             var command = new DeleteOperationsCommand
             {
@@ -86,7 +88,7 @@ namespace PiggyBank.WebApi.Controllers
                 ModifiedBy = User.GetUserId(),
                 ModifiedOn = DateTime.UtcNow
             };
-            
+
             await _service.DeleteBudgetOperation(command, token);
             return Ok();
         }
@@ -110,7 +112,7 @@ namespace PiggyBank.WebApi.Controllers
 
             return Ok();
         }
-        
+
         [HttpPatch, Route("Budget/{operationId}")]
         [InvalidStateFilter]
         public async Task<IActionResult> PartialUpdateBudget(int operationId, PartialUpdateBudgetOperationRequest request, CancellationToken token)
@@ -129,6 +131,18 @@ namespace PiggyBank.WebApi.Controllers
             await _service.UpdatePartialBidgetOperation(command, token);
 
             return Ok();
+        }
+
+        [HttpGet, Route("Budget/{operationId}")]
+        public Task<BudgetDto> GetBudgetOperation(int operationId, CancellationToken token)
+        {
+            var query = new GetOperationQuery
+            {
+                OperationId = operationId,
+                UserId = User.GetUserId()
+            };
+
+            return _service.GetBudgetOperation(query, token);
         }
 
         #endregion
@@ -163,7 +177,7 @@ namespace PiggyBank.WebApi.Controllers
                 ModifiedBy = User.GetUserId(),
                 ModifiedOn = DateTime.UtcNow
             };
-            
+
             await _service.DeleteTransferOperation(command, token);
             return Ok();
         }
@@ -190,7 +204,8 @@ namespace PiggyBank.WebApi.Controllers
 
         [HttpPatch, Route("Transfer/{operationId}")]
         [InvalidStateFilter]
-        public async Task<IActionResult> UpdatePartialTransferOperation(int operationId, PartialUpdateTransferOperationRequest request, CancellationToken token)
+        public async Task<IActionResult> UpdatePartialTransferOperation(int operationId, PartialUpdateTransferOperationRequest request,
+            CancellationToken token)
         {
             var command = new UpdatePartialTransferOperationCommand
             {
@@ -206,6 +221,18 @@ namespace PiggyBank.WebApi.Controllers
             await _service.UpdatePartialTransferOperation(command, token);
 
             return Ok();
+        }
+
+        [HttpGet, Route("Transfer/{operationId}")]
+        public Task<TransferDto> GetTransferOperation(int operationId, CancellationToken token)
+        {
+            var query = new GetOperationQuery
+            {
+                OperationId = operationId,
+                UserId = User.GetUserId()
+            };
+
+            return _service.GetTransferOperation(query, token);
         }
 
         #endregion
@@ -241,7 +268,7 @@ namespace PiggyBank.WebApi.Controllers
                 ModifiedBy = User.GetUserId(),
                 ModifiedOn = DateTime.UtcNow
             };
-            
+
             await _service.ApplyPlanOperation(command, token);
             return Ok();
         }
@@ -255,7 +282,7 @@ namespace PiggyBank.WebApi.Controllers
                 ModifiedBy = User.GetUserId(),
                 ModifiedOn = DateTime.UtcNow
             };
-            
+
             await _service.DeletePlanOperation(command, token);
             return Ok();
         }
@@ -279,10 +306,11 @@ namespace PiggyBank.WebApi.Controllers
             await _service.UpdatePlanOperation(command, token);
             return Ok();
         }
-        
+
         [HttpPatch, Route("Plan/{operationId}")]
         [InvalidStateFilter]
-        public async Task<IActionResult> UpdatePartialPlanOperation(int operationId, PartialUpdatePlanOperationRequest request, CancellationToken token)
+        public async Task<IActionResult> UpdatePartialPlanOperation(int operationId, PartialUpdatePlanOperationRequest request,
+            CancellationToken token)
         {
             var command = new UpdatePartialPlanOperationCommand
             {

@@ -1,6 +1,5 @@
 ﻿using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Queries.Operations;
-using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations;
@@ -8,7 +7,8 @@ using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models;
-using PiggyBank.Common.Models.Dto;
+using PiggyBank.Common.Models.Dto.Operations;
+using PiggyBank.Common.Queries;
 using PiggyBank.Domain.Handler.Operations;
 using PiggyBank.Domain.Handler.Operations.Budget;
 using PiggyBank.Domain.Handler.Operations.Plan;
@@ -39,9 +39,6 @@ namespace PiggyBank.Domain.Services
         public Task DeleteTransferOperation(DeleteTransferOperationCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<DeleteTransferOperationHandler, DeleteTransferOperationCommand>(command, token);
 
-        public Task<OperationDto> GetOperation(int id, CancellationToken token)
-            => _queryDispatcher.Invoke<GetOperationByIdQuery, OperationDto>(token, id);
-
         public Task<PageResult<OperationDto>> GetOperations(GetOperationsCommand command, CancellationToken token)
             => _queryDispatcher.Invoke<GetOperationsQuery, PageResult<OperationDto>>(token, command);
 
@@ -65,5 +62,11 @@ namespace PiggyBank.Domain.Services
 
         public Task DeleteOperations(DeleteOperationsCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<DeleteOperationsHandler, DeleteOperationsCommand>(command, token);
+
+        public Task<BudgetDto> GetBudgetOperation(GetOperationQuery query, CancellationToken token)
+            => _queryDispatcher.Invoke<GetBudgetOperationQuery, BudgetDto>(token, query);
+
+        public Task<TransferDto> GetTransferOperation(GetOperationQuery query, CancellationToken token)
+            => _queryDispatcher.Invoke<GetTransferOperationQuery, TransferDto>(token, query);
     }
 }

@@ -1,18 +1,9 @@
-﻿using System;
-using PiggyBank.Common.Enums;
+﻿using PiggyBank.Common.Enums;
 
-namespace PiggyBank.Common.Models.Dto
+namespace PiggyBank.Common.Models.Dto.Operations
 {
-    public class OperationDto
+    public class OperationDto : OperationBase
     {
-        public int Id { get; set; }
-        
-        public decimal Amount { get; set; }
-        
-        public OperationType Type { get; set; }
-        
-        public DateTime Date { get; set; }
-        
         public bool IsDeleted { get; set; }
 
         public OperationAccountDto Account { get; set; }
