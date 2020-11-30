@@ -106,7 +106,8 @@ namespace PiggyBank.WebApi
                         ValidateAudience = true,
                         ValidAudience = tokenOptions["Audience"],
                         ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenOptions["ClientSecret"]))
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenOptions["ClientSecret"])),
+                        ValidateLifetime = false
                     };
                 });
 
