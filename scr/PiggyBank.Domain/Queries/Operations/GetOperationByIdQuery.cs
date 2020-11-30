@@ -21,7 +21,6 @@ namespace PiggyBank.Domain.Queries.Operations
                 .Select(o => new OperationDto
                 {
                     Id = o.Id,
-                    Comment = o.Comment,
                     Type = o.Type
                 })
                 .FirstOrDefaultAsync(token);

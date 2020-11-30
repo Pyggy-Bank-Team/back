@@ -28,24 +28,18 @@ namespace PiggyBank.Domain.Queries.Operations
                                                               && b.Type == OperationType.Budget);
 
             var budgets = budgetQuery.Select(b =>
-                new OperationDto
+                new
                 {
-                    Id = b.Id,
-                    CategoryId = b.CategoryId,
-                    CategoryType = b.Category.Type,
-                    CategoryHexColor = b.Category.HexColor,
-                    CategoryTitle = b.Category.Title,
-                    Amount = b.Amount,
-                    AccountId = b.AccountId,
+                    b.Id,
+                    b.Amount,
+                    b.Type,
+                    Date = b.CreatedOn,
+                    b.IsDeleted,
                     AccountTitle = b.Account.Title,
-                    Currency = b.Account.Currency,
-                    Comment = b.Comment,
-                    Type = b.Type,
-                    CreatedOn = b.CreatedOn,
-                    PlanDate = null,
-                    FromTitle = null,
-                    ToTitle = null,
-                    IsDeleted = b.IsDeleted
+                    ToAccountTitle = "",
+                    CategoryTitle = b.Category.Title,
+                    CategoryHexColor = b.Category.HexColor,
+                    CategoryType = b.Category.Type
                 });
 
             var transferQuery = _command.WithDeleted
@@ -53,52 +47,41 @@ namespace PiggyBank.Domain.Queries.Operations
                 : GetRepository<TransferOperation>().Where(t => t.CreatedBy == _command.UserId && !t.IsDeleted);
 
             var transfers = transferQuery.Select(t =>
-                new OperationDto
+                new
                 {
-                    Id = t.Id,
-                    CategoryId = 0,
-                    CategoryType = null,
-                    CategoryHexColor = null,
-                    CategoryTitle = null,
-                    Amount = t.Amount,
-                    AccountId = 0,
-                    AccountTitle = null,
-                    Currency = GetRepository<Account>().First(a => a.Id == t.To).Currency,
-                    Comment = t.Comment,
-                    Type = t.Type,
-                    CreatedOn = t.CreatedOn,
-                    PlanDate = null,
-                    FromTitle = GetRepository<Account>().First(a => a.Id == t.From).Title,
-                    ToTitle = GetRepository<Account>().First(a => a.Id == t.To).Title,
-                    IsDeleted = t.IsDeleted
+                    t.Id,
+                    t.Amount,
+                    t.Type,
+                    Date = t.CreatedOn,
+                    t.IsDeleted,
+                    AccountTitle = GetRepository<Account>().First(a => a.Id == t.From).Title,
+                    ToAccountTitle = GetRepository<Account>().First(a => a.Id == t.To).Title,
+                    CategoryTitle = "",
+                    CategoryHexColor = "",
+                    CategoryType = CategoryType.Undefined
                 });
 
-            var planQuery = _command.WithDeleted
-                ? GetRepository<PlanOperation>().Where(p => p.CreatedBy == _command.UserId)
-                : GetRepository<PlanOperation>().Where(p => p.CreatedBy == _command.UserId && !p.IsDeleted);
-
-            var plans = planQuery.Select(p =>
-                new OperationDto
+            var operationsQuery = budgets.Union(transfers).Select(o => new OperationDto
+            {
+                Id = o.Id,
+                Amount = o.Amount,
+                Type = o.Type,
+                Date = o.Date,
+                IsDeleted = o.IsDeleted,
+                Account = new OperationAccountDto
                 {
-                    Id = p.Id,
-                    CategoryId = 0,
-                    CategoryType = p.Category.Type,
-                    CategoryHexColor = p.Category.HexColor,
-                    CategoryTitle = p.Category.Title,
-                    Amount = p.Amount,
-                    AccountId = 0,
-                    AccountTitle = p.Account.Title,
-                    Currency = p.Account.Currency,
-                    Comment = p.Comment,
-                    Type = p.Type,
-                    CreatedOn = p.CreatedOn,
-                    PlanDate = p.PlanDate,
-                    FromTitle = null,
-                    ToTitle = null,
-                    IsDeleted = p.IsDeleted
-                });
-
-            var operationsQuery = budgets.Union(transfers).Union(plans).OrderByDescending(o => o.CreatedOn);
+                    Title = o.AccountTitle
+                },
+                ToAccount = o.Type == OperationType.Budget ? null : new OperationAccountDto {Title = o.ToAccountTitle},
+                Category = o.Type == OperationType.Transfer
+                    ? null
+                    : new OperationCategoryDto
+                    {
+                        Title = o.CategoryTitle,
+                        HexColor = o.CategoryHexColor,
+                        Type = o.CategoryType
+                    }
+            }).OrderByDescending(o => o.Date);
 
             var result = new PageResult<OperationDto>
             {
