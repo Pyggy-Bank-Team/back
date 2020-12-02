@@ -32,6 +32,9 @@ namespace PiggyBank.Domain.Services
         public Task DeleteAccounts(DeleteAccountsCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<DeleteAccountsHandler, DeleteAccountsCommand>(command, token);
 
+        public Task AddAccountBatch(AddAccountBatchCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<AddAccountBatchHandler, AddAccountBatchCommand>(command, token);
+
         public Task UpdateAccount(UpdateAccountCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<UpdateAccountHandler, UpdateAccountCommand>(command, token);
     }

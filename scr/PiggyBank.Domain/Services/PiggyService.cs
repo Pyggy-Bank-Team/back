@@ -1,5 +1,4 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PiggyBank.Domain.Infrastructure;
+﻿using PiggyBank.Domain.Infrastructure;
 using PiggyBank.Model;
 using Serilog;
 
@@ -12,8 +11,6 @@ namespace PiggyBank.Domain.Services
 
         public PiggyService(PiggyContext context, ILogger logger)
         {
-            context.Database.Migrate();
-
             _handlerDispatcher = new HandlerDispatcher(context, logger);
             _queryDispatcher = new QueryDispatcher(context, logger);
         }

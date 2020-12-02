@@ -20,6 +20,9 @@ namespace PiggyBank.Domain.Services
         public Task DeleteCategories(DeleteCategoriesCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<DeleteCategoriesHandler, DeleteCategoriesCommand>(command, token);
 
+        public Task AddCategoryBatch(AddCategoryBatchCommand command, CancellationToken token)
+            => _handlerDispatcher.Invoke<AddCategoryBatchHandler, AddCategoryBatchCommand>(command, token);
+
         public Task DeleteCategory(DeleteCategoryCommand command, CancellationToken token)
             => _handlerDispatcher.Invoke<DeleteCategoryHandler, DeleteCategoryCommand>(command, token);
 

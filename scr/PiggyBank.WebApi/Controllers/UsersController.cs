@@ -1,4 +1,5 @@
-﻿using System.Linq;
+﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Identity.Model.Models;
@@ -6,6 +7,9 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
+using PiggyBank.Common.Commands.Accounts;
+using PiggyBank.Common.Commands.Categories;
+using PiggyBank.Common.Interfaces;
 using PiggyBank.WebApi.Extensions;
 using PiggyBank.WebApi.Interfaces;
 using PiggyBank.WebApi.Requests.Users;
@@ -22,9 +26,20 @@ namespace PiggyBank.WebApi.Controllers
         private readonly UserManager<ApplicationUser> _userManager;
         private readonly ITokenService _tokenService;
         private readonly TokenOptions _options;
+        private readonly IItemFactory _factory;
+        private readonly IAccountService _accountService;
+        private readonly ICategoryService _categoryService;
 
-        public UsersController(UserManager<ApplicationUser> userManager, ITokenService tokenService, IOptions<TokenOptions> options)
-            => (_userManager, _tokenService, _options) = (userManager, tokenService, options.Value);
+        public UsersController(UserManager<ApplicationUser> userManager, ITokenService tokenService, IOptions<TokenOptions> options,
+            IItemFactory factory, IAccountService accountService, ICategoryService categoryService)
+        {
+            _userManager = userManager;
+            _tokenService = tokenService;
+            _options = options.Value;
+            _factory = factory;
+            _accountService = accountService;
+            _categoryService = categoryService;
+        }
 
         [AllowAnonymous, HttpPost]
         public async Task<IActionResult> Post(CreateUserRequest request, CancellationToken token)
@@ -43,6 +58,24 @@ namespace PiggyBank.WebApi.Controllers
 
             if (bearerToken)
             {
+                var accountBatchCommand = new AddAccountBatchCommand
+                {
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedOn = DateTime.UtcNow,
+                    Accounts = _factory.GeAccountItems(request.Locale, request.CurrencyBase).ToArray()
+                };
+
+                await _accountService.AddAccountBatch(accountBatchCommand, token);
+
+                var categoryBatchCommand = new AddCategoryBatchCommand
+                {
+                    CreatedBy = Guid.Parse(user.Id),
+                    CreatedOn = DateTime.UtcNow,
+                    Categories = _factory.GetCategoryItems(request.Locale).ToArray()
+                };
+
+                await _categoryService.AddCategoryBatch(categoryBatchCommand, token);
+
                 var tokenResponse = new TokenResponse
                 {
                     AccessToken = bearerToken.Value,

@@ -41,5 +41,7 @@ namespace PiggyBank.Common.Interfaces
         Task PartialUpdateAccount(PartialUpdateAccountCommand command, CancellationToken token);
 
         Task DeleteAccounts(DeleteAccountsCommand command, CancellationToken token);
+
+        Task AddAccountBatch(AddAccountBatchCommand command, CancellationToken token);
     }
 }

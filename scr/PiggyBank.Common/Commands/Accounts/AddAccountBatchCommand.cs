@@ -1,8 +1,13 @@
-﻿using PiggyBank.Common.Enums;
+using PiggyBank.Common.Enums;
 
 namespace PiggyBank.Common.Commands.Accounts
 {
-    public class AddAccountCommand : BaseCreateCommand
+    public class AddAccountBatchCommand : BaseCreateCommand
+    {
+        public AccountItem[] Accounts { get; set; }
+    }
+
+    public class AccountItem
     {
         public string Title { get; set; }
 

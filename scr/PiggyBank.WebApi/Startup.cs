@@ -13,6 +13,7 @@ using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Services;
 using PiggyBank.Model;
 using PiggyBank.WebApi.Extensions;
+using PiggyBank.WebApi.Factories;
 using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Interfaces;
 using PiggyBank.WebApi.Middlewares;
@@ -43,6 +44,7 @@ namespace PiggyBank.WebApi
             services.AddScoped<IOperationService, PiggyService>();
             services.AddScoped<IReportsService, PiggyService>();
             services.AddScoped<ITokenService, TokenService>();
+            services.AddScoped<IItemFactory, ItemFactory>();
             services.AddScoped<InvalidStateFilter>();
 
             services.AddIdentityServices<ApplicationUser>();
@@ -51,7 +53,7 @@ namespace PiggyBank.WebApi
             var connectionString = Configuration.GetConnectionString("PumbaDb");
 
             services.AddDbContext<IdentityContext>(opt => opt.UseSqlServer(connectionString));
-            services.AddDbContext<PiggyContext>(options => options.UseSqlServer(connectionString));
+            services.AddDbContext<PiggyContext>(opt => opt.UseSqlServer(connectionString));
 
             #region Swagger
 

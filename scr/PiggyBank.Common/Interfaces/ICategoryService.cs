@@ -41,5 +41,7 @@ namespace PiggyBank.Common.Interfaces
         Task ArchiveCategory(ArchiveCategoryCommand command, CancellationToken token);
 
         Task DeleteCategories(DeleteCategoriesCommand command, CancellationToken token);
+
+        Task AddCategoryBatch(AddCategoryBatchCommand command, CancellationToken token);
     }
 }

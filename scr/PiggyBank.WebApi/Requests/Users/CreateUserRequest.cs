@@ -14,5 +14,7 @@ namespace PiggyBank.WebApi.Requests.Users
         public string CurrencyBase { get; set; }
         
         public string Email { get; set; }
+        
+        public string Locale { get; set; }
     }
 }

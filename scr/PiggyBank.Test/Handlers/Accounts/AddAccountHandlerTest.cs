@@ -30,8 +30,7 @@ namespace PiggyBank.Test.Handlers.Accounts
                 Type = AccountType.Card,
                 CreatedBy = Guid.NewGuid(),
                 CreatedOn = DateTime.Now,
-                IsArchived = true,
-                IsDeleted = true
+                IsArchived = true
             };
 
             var handler = new AddAccountHandler(_context, command);
