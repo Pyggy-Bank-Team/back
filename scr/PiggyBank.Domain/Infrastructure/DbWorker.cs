@@ -13,6 +13,8 @@ namespace PiggyBank.Domain.Infrastructure
         public DbWorker(PiggyContext context)
             => _context = context;
 
+        public PiggyContext Context => _context;
+
         public DbSet<T> GetRepository<T>() where T : class, IBaseModel
             => _context.Set<T>();
 
