@@ -36,13 +36,13 @@ namespace PiggyBank.WebApi
         public void ConfigureServices(IServiceCollection services)
         {
             services.AddControllers()
-                .ConfigureApiBehaviorOptions(options => options.SuppressModelStateInvalidFilter = true)
+                .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true)
                 .AddNewtonsoftJson();
 
-            services.AddScoped<IAccountService, PiggyService>();
-            services.AddScoped<ICategoryService, PiggyService>();
-            services.AddScoped<IOperationService, PiggyService>();
-            services.AddScoped<IReportsService, PiggyService>();
+            services.AddScoped<IAccountService, AccountService>();
+            services.AddScoped<ICategoryService, CategoryService>();
+            services.AddScoped<IOperationService, OperationService>();
+            services.AddScoped<IReportService, ReportService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IItemFactory, ItemFactory>();
             services.AddScoped<InvalidStateFilter>();
@@ -52,8 +52,8 @@ namespace PiggyBank.WebApi
 
             var connectionString = Configuration.GetConnectionString("PumbaDb");
 
-            services.AddDbContext<IdentityContext>(opt => opt.UseSqlServer(connectionString));
-            services.AddDbContext<PiggyContext>(opt => opt.UseSqlServer(connectionString));
+            services.AddDbContext<IdentityContext>(opt => opt.UseSqlServer(connectionString), ServiceLifetime.Transient);
+            services.AddDbContext<PiggyContext>(opt => opt.UseSqlServer(connectionString), ServiceLifetime.Transient);
 
             #region Swagger
 

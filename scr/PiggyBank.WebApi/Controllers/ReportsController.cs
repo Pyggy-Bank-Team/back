@@ -16,9 +16,9 @@ namespace PiggyBank.WebApi.Controllers
     [ApiController, Route("api/[controller]")]
     public class ReportsController : ControllerBase
     {
-        private readonly IReportsService _service;
+        private readonly IReportService _service;
 
-        public ReportsController(IReportsService service)
+        public ReportsController(IReportService service)
             => _service = service;
 
         [HttpPost, Route("Chart/byCategories")]

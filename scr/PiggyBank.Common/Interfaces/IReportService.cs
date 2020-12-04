@@ -5,7 +5,7 @@ using PiggyBank.Common.Models.Dto.Dashboard;
 
 namespace PiggyBank.Common.Interfaces
 {
-    public interface IReportsService
+    public interface IReportService
     {
         Task<ChartByCategoryDto[]> GetChartByCategories(GetChartCommand command, CancellationToken token);
         Task<ChartByExpensePerDayDto[]> ChartByExpensePerDays(GetChartCommand command, CancellationToken token);
