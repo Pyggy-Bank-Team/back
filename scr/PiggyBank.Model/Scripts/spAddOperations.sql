@@ -48,9 +48,9 @@ BEGIN
                             FETCH NEXT FROM CategoryCursor INTO @CategoryId, @CategoryType;
                         END
 
-                    INSERT INTO [Pb].[Operations](CreatedOn, CreatedBy, Comment, [Type], IsDeleted, Snapshot, Discriminator, CategoryId, Amount,
+                    INSERT INTO [Pb].[Operations](CreatedOn, OperationDate, CreatedBy, Comment, [Type], IsDeleted, Snapshot, Discriminator, CategoryId, Amount,
                                                   AccountId)
-                    VALUES (GETDATE() - @Count % 10, @UserId, CONCAT('The budget operation', @Count), @Type, 0,
+                    VALUES (GETDATE() - @Count % 10, GETDATE() - @Count % 10, @UserId, CONCAT('The budget operation', @Count), @Type, 0,
                             CONCAT('{"CategoryType":', @CategoryType, '}'), 'BudgetOperation', @CategoryId, 100, @AccountId);
                 END
             ELSE
@@ -70,8 +70,8 @@ BEGIN
                             FETCH NEXT FROM AccountCursor INTO @To;
                         END
 
-                    INSERT INTO [Pb].[Operations](CreatedOn, CreatedBy, Comment, [Type], IsDeleted, Discriminator, Amount, [From], [To])
-                    VALUES (GETDATE() - @Count % 10, @UserId, CONCAT('The transfer operation', @Count), @Type, 0, 'TransferOperation', 100,
+                    INSERT INTO [Pb].[Operations](CreatedOn, OperationDate, CreatedBy, Comment, [Type], IsDeleted, Discriminator, Amount, [From], [To])
+                    VALUES (GETDATE() - @Count % 10, GETDATE() - @Count % 10, @UserId, CONCAT('The transfer operation', @Count), @Type, 0, 'TransferOperation', 100,
                             @AccountId, @To);
                 END
 
