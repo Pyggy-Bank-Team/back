@@ -2,7 +2,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Commands.Operations.Budget;
-using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Common.Models;
@@ -10,7 +9,6 @@ using PiggyBank.Common.Models.Dto.Operations;
 using PiggyBank.Common.Queries;
 using PiggyBank.Domain.Handler.Operations;
 using PiggyBank.Domain.Handler.Operations.Budget;
-using PiggyBank.Domain.Handler.Operations.Plan;
 using PiggyBank.Domain.Handler.Operations.Transfer;
 using PiggyBank.Domain.Queries.Operations;
 using PiggyBank.Model;
@@ -27,20 +25,11 @@ namespace PiggyBank.Domain.Services
         public Task AddBudgetOperation(AddBudgetOperationCommand command, CancellationToken token)
             => HandlerDispatcher.Invoke<AddBudgetOperationHandler, AddBudgetOperationCommand>(command, token);
 
-        public Task AddPlanOperation(AddPlanOperationCommand command, CancellationToken token)
-            => HandlerDispatcher.Invoke<AddPlanOperationHandler, AddPlanOperationCommand>(command, token);
-
         public Task AddTransferOperation(AddTransferOperationCommand command, CancellationToken token)
             => HandlerDispatcher.Invoke<AddTransferOperationHandler, AddTransferOperationCommand>(command, token);
 
-        public Task ApplyPlanOperation(ApplyPlanOperationCommand command, CancellationToken token)
-            => HandlerDispatcher.Invoke<ApplyPlanOperationHandler, ApplyPlanOperationCommand>(command, token);
-
         public Task DeleteBudgetOperation(DeleteBudgetOperationCommand command, CancellationToken token)
             => HandlerDispatcher.Invoke<DeleteBudgetOperationHandler, DeleteBudgetOperationCommand>(command, token);
-
-        public Task DeletePlanOperation(DeletePlanOperationCommand command, CancellationToken token)
-            => HandlerDispatcher.Invoke<DeletePlanOperationHandler, DeletePlanOperationCommand>(command, token);
 
         public Task DeleteTransferOperation(DeleteTransferOperationCommand command, CancellationToken token)
             => HandlerDispatcher.Invoke<DeleteTransferOperationHandler, DeleteTransferOperationCommand>(command, token);
@@ -59,12 +48,6 @@ namespace PiggyBank.Domain.Services
 
         public Task UpdatePartialTransferOperation(UpdatePartialTransferOperationCommand command, CancellationToken token)
             => HandlerDispatcher.Invoke<UpdatePartialTransferOperationHandler, UpdatePartialTransferOperationCommand>(command, token);
-
-        public Task UpdatePlanOperation(UpdatePlanOperationCommand command, CancellationToken token)
-            => HandlerDispatcher.Invoke<UpdatePlanOperationHandler, UpdatePlanOperationCommand>(command, token);
-
-        public Task UpdatePartialPlanOperation(UpdatePartialPlanOperationCommand command, CancellationToken token)
-            => HandlerDispatcher.Invoke<UpdatePartialPlanOperationHandler, UpdatePartialPlanOperationCommand>(command, token);
 
         public Task DeleteOperations(DeleteOperationsCommand command, CancellationToken token)
             => HandlerDispatcher.Invoke<DeleteOperationsHandler, DeleteOperationsCommand>(command, token);

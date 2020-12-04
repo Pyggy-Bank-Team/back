@@ -40,12 +40,6 @@ namespace PiggyBank.Domain.Handler.Accounts
                         transferOperation.IsDeleted = true;
                         GetRepository<TransferOperation>().Update(transferOperation);
                     }
-            
-                    foreach (var planOperation in GetRepository<PlanOperation>().Where(b => !b.IsDeleted && b.AccountId == account.Id))
-                    {
-                        planOperation.IsDeleted = true;
-                        GetRepository<PlanOperation>().Update(planOperation);
-                    }
                 }
             }, token);
     }

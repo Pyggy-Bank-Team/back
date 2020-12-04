@@ -11,9 +11,6 @@ namespace PiggyBank.Common.Enums
         Budget = 1,
 
         [Description("Transfer")]
-        Transfer = 2,
-
-        [Description("The planned transaction")]
-        Plan = 3
+        Transfer = 2
     }
 }

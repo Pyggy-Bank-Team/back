@@ -18,8 +18,6 @@ namespace PiggyBank.Model
 
         public DbSet<TransferOperation> TransferOperations { get; set; }
 
-        public DbSet<PlanOperation> PlanOperations { get; set; }
-
         public DbSet<BalanceHistory> BalanceHistories { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
@@ -35,18 +33,6 @@ namespace PiggyBank.Model
             modelBuilder.Entity<BudgetOperation>()
                 .Property(b => b.Amount)
                 .HasColumnName(nameof(BudgetOperation.Amount));
-
-            modelBuilder.Entity<PlanOperation>()
-                .Property(p => p.AccountId)
-                .HasColumnName(nameof(PlanOperation.AccountId));
-
-            modelBuilder.Entity<PlanOperation>()
-                .Property(p => p.CategoryId)
-                .HasColumnName(nameof(PlanOperation.CategoryId));
-
-            modelBuilder.Entity<PlanOperation>()
-                .Property(p => p.Amount)
-                .HasColumnName(nameof(PlanOperation.Amount));
 
             modelBuilder.Entity<TransferOperation>()
                 .Property(t => t.Amount)

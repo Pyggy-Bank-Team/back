@@ -2,7 +2,6 @@
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Commands.Operations.Budget;
-using PiggyBank.Common.Commands.Operations.Plan;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models;
 using PiggyBank.Common.Models.Dto.Operations;
@@ -23,16 +22,6 @@ namespace PiggyBank.Common.Interfaces
         Task AddTransferOperation(AddTransferOperationCommand command, CancellationToken token);
 
         /// <summary>
-        /// Add a new plan operation
-        /// </summary>
-        Task AddPlanOperation(AddPlanOperationCommand command, CancellationToken token);
-
-        /// <summary>
-        /// Apply exists plan operation
-        /// </summary>
-        Task ApplyPlanOperation(ApplyPlanOperationCommand command, CancellationToken token);
-
-        /// <summary>
         /// Get operations
         /// </summary>
         Task<PageResult<OperationDto>> GetOperations(GetOperationsCommand command, CancellationToken token);
@@ -41,11 +30,6 @@ namespace PiggyBank.Common.Interfaces
         /// Delete budget operation
         /// </summary>
         Task DeleteBudgetOperation(DeleteBudgetOperationCommand command, CancellationToken token);
-
-        /// <summary>
-        /// Delete plan operation
-        /// </summary>
-        Task DeletePlanOperation(DeletePlanOperationCommand command, CancellationToken token);
 
         /// <summary>
         /// Delete transfer operation
@@ -59,10 +43,6 @@ namespace PiggyBank.Common.Interfaces
         Task UpdateTransferOperation(UpdateTransferOperationCommand command, CancellationToken token);
 
         Task UpdatePartialTransferOperation(UpdatePartialTransferOperationCommand command, CancellationToken token);
-
-        Task UpdatePlanOperation(UpdatePlanOperationCommand command, CancellationToken token);
-
-        Task UpdatePartialPlanOperation(UpdatePartialPlanOperationCommand command, CancellationToken token);
 
         Task DeleteOperations(DeleteOperationsCommand command, CancellationToken token);
 
