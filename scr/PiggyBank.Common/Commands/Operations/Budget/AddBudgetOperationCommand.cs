@@ -1,4 +1,6 @@
-﻿namespace PiggyBank.Common.Commands.Operations.Budget
+﻿using System;
+
+namespace PiggyBank.Common.Commands.Operations.Budget
 {
     public class AddBudgetOperationCommand : BaseCreateCommand
     {
@@ -9,5 +11,7 @@
         public int AccountId { get; set; }
 
         public string Comment { get; set; }
+        
+        public DateTime OperationDate { get; set; }
     }
 }

@@ -40,6 +40,7 @@ namespace PiggyBank.Domain.Handler.Operations.Budget
                 CategoryId = Command.CategoryId,
                 CreatedOn = Command.CreatedOn,
                 Snapshot = JsonConvert.SerializeObject(snapshot),
+                OperationDate = Command.OperationDate,
                 CreatedBy = Command.CreatedBy
             };
 

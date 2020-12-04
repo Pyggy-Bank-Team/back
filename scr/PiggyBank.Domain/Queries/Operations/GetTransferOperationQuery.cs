@@ -26,7 +26,7 @@ namespace PiggyBank.Domain.Queries.Operations
                     Type = t.Type,
                     Amount = t.Amount,
                     Comment = t.Comment,
-                    Date = t.CreatedOn,
+                    Date = t.OperationDate,
                     FromId = t.From,
                     ToId = t.To
                 })

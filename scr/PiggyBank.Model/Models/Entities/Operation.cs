@@ -1,4 +1,5 @@
-﻿using PiggyBank.Common.Enums;
+﻿using System;
+using PiggyBank.Common.Enums;
 
 namespace PiggyBank.Model.Models.Entities
 {
@@ -11,5 +12,7 @@ namespace PiggyBank.Model.Models.Entities
         public bool IsDeleted { get; set; }
 
         public string Snapshot { get; set; }
+        
+        public DateTime OperationDate { get; set; }
     }
 }

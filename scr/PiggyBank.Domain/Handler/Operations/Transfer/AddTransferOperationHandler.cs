@@ -30,6 +30,7 @@ namespace PiggyBank.Domain.Handler.Operations.Transfer
                 Type = OperationType.Transfer,
                 From = Command.From,
                 To = Command.To,
+                OperationDate = Command.OperationDate,
                 CreatedOn = Command.CreatedOn,
                 Comment = Command.Comment,
                 CreatedBy = Command.CreatedBy

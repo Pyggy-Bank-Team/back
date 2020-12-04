@@ -68,7 +68,8 @@ namespace PiggyBank.WebApi.Controllers
                 Amount = request.Amount,
                 CategoryId = request.CategoryId,
                 Comment = request.Comment,
-                CreatedOn = request.CreatedOn ?? DateTime.UtcNow,
+                OperationDate = request.OperationDate ?? DateTime.UtcNow,
+                CreatedOn = DateTime.UtcNow,
                 CreatedBy = User.GetUserId()
             };
 
@@ -157,7 +158,8 @@ namespace PiggyBank.WebApi.Controllers
                 From = request.From,
                 To = request.To,
                 Comment = request.Comment,
-                CreatedOn = request.CreatedOn ?? DateTime.UtcNow,
+                OperationDate = request.OperationDate ?? DateTime.UtcNow,
+                CreatedOn = DateTime.UtcNow,
                 CreatedBy = User.GetUserId()
             };
 
