@@ -12,5 +12,7 @@ namespace PiggyBank.Common.Models.Dto.Operations
         public OperationType Type { get; set; }
         
         public DateTime Date { get; set; }
+        
+        public string Comment { get; set; }
     }
 }

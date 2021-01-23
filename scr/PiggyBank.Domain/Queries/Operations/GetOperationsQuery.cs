@@ -37,10 +37,13 @@ namespace PiggyBank.Domain.Queries.Operations
                     Date = b.OperationDate,
                     b.IsDeleted,
                     AccountTitle = b.Account.Title,
+                    AccountCurrency = b.Account.Currency,
                     ToAccountTitle = "",
+                    ToAccountCurrency = "",
                     CategoryTitle = b.Category.Title,
                     CategoryHexColor = b.Category.HexColor,
-                    CategoryType = b.Category.Type
+                    CategoryType = b.Category.Type,
+                    b.Comment
                 });
 
             var transferQuery = _command.WithDeleted
@@ -56,10 +59,13 @@ namespace PiggyBank.Domain.Queries.Operations
                     Date = t.OperationDate,
                     t.IsDeleted,
                     AccountTitle = GetRepository<Account>().First(a => a.Id == t.From).Title,
+                    AccountCurrency = GetRepository<Account>().First(a => a.Id == t.From).Currency,
                     ToAccountTitle = GetRepository<Account>().First(a => a.Id == t.To).Title,
+                    ToAccountCurrency = GetRepository<Account>().First(a => a.Id == t.To).Currency,
                     CategoryTitle = "",
                     CategoryHexColor = "",
-                    CategoryType = CategoryType.Undefined
+                    CategoryType = CategoryType.Undefined,
+                    t.Comment
                 });
 
             var operationsQuery = budgets.Union(transfers).Select(o => new OperationDto
@@ -69,11 +75,13 @@ namespace PiggyBank.Domain.Queries.Operations
                 Type = o.Type,
                 Date = o.Date,
                 IsDeleted = o.IsDeleted,
+                Comment = o.Comment,
                 Account = new OperationAccountDto
                 {
-                    Title = o.AccountTitle
+                    Title = o.AccountTitle,
+                    Currency = o.AccountCurrency
                 },
-                ToAccount = o.Type == OperationType.Budget ? null : new OperationAccountDto {Title = o.ToAccountTitle},
+                ToAccount = o.Type == OperationType.Budget ? null : new OperationAccountDto {Title = o.ToAccountTitle, Currency = o.ToAccountCurrency},
                 Category = o.Type == OperationType.Transfer
                     ? null
                     : new OperationCategoryDto

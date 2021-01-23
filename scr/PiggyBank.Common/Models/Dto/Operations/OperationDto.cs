@@ -16,6 +16,8 @@ namespace PiggyBank.Common.Models.Dto.Operations
     public class OperationAccountDto
     {
         public string Title { get; set; }
+        
+        public string Currency { get; set; }
     }
 
     public class OperationCategoryDto
