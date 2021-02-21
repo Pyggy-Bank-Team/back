@@ -14,12 +14,12 @@ namespace PiggyBank.Common.Interfaces
         /// <summary>
         /// Add a new budget operation
         /// </summary>
-        Task AddBudgetOperation(AddBudgetOperationCommand command, CancellationToken token);
+        Task<BudgetDto> AddBudgetOperation(AddBudgetOperationCommand command, CancellationToken token);
 
         /// <summary>
         /// Add a new transfer operation
         /// </summary>
-        Task AddTransferOperation(AddTransferOperationCommand command, CancellationToken token);
+        Task<TransferDto> AddTransferOperation(AddTransferOperationCommand command, CancellationToken token);
 
         /// <summary>
         /// Get operations

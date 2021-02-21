@@ -22,11 +22,11 @@ namespace PiggyBank.Domain.Services
         {
         }
         
-        public Task AddBudgetOperation(AddBudgetOperationCommand command, CancellationToken token)
-            => HandlerDispatcher.Invoke<AddBudgetOperationHandler, AddBudgetOperationCommand>(command, token);
+        public Task<BudgetDto> AddBudgetOperation(AddBudgetOperationCommand command, CancellationToken token)
+            => HandlerDispatcher.Invoke<AddBudgetOperationHandler, AddBudgetOperationCommand, BudgetDto>(command, token);
 
-        public Task AddTransferOperation(AddTransferOperationCommand command, CancellationToken token)
-            => HandlerDispatcher.Invoke<AddTransferOperationHandler, AddTransferOperationCommand>(command, token);
+        public Task<TransferDto> AddTransferOperation(AddTransferOperationCommand command, CancellationToken token)
+            => HandlerDispatcher.Invoke<AddTransferOperationHandler, AddTransferOperationCommand, TransferDto>(command, token);
 
         public Task DeleteBudgetOperation(DeleteBudgetOperationCommand command, CancellationToken token)
             => HandlerDispatcher.Invoke<DeleteBudgetOperationHandler, DeleteBudgetOperationCommand>(command, token);

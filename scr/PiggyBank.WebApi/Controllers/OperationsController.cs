@@ -72,10 +72,8 @@ namespace PiggyBank.WebApi.Controllers
                 CreatedOn = DateTime.UtcNow,
                 CreatedBy = User.GetUserId()
             };
-
-            await _service.AddBudgetOperation(command, token);
-
-            return Ok();
+            
+            return Ok(await _service.AddBudgetOperation(command, token));
         }
 
         [HttpDelete("Budget/{operationId}")]
@@ -162,10 +160,8 @@ namespace PiggyBank.WebApi.Controllers
                 CreatedOn = DateTime.UtcNow,
                 CreatedBy = User.GetUserId()
             };
-
-            await _service.AddTransferOperation(command, token);
-
-            return Ok();
+            
+            return Ok(await _service.AddTransferOperation(command, token));
         }
 
         [HttpDelete("Transfer/{operationId}")]

@@ -6,6 +6,7 @@ using Newtonsoft.Json;
 using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Enums;
+using PiggyBank.Common.Models.Dto.Operations;
 using PiggyBank.Domain.Models.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
@@ -48,7 +49,20 @@ namespace PiggyBank.Domain.Handler.Operations.Budget
 
             accountRepository.Update(account);
 
-            await GetRepository<BudgetOperation>().AddAsync(operation, token);
+            var result = await GetRepository<BudgetOperation>().AddAsync(operation, token);
+            await SaveAsync();
+
+            var entity = result.Entity;
+            Result = new BudgetDto
+            {
+                Id = entity.Id,
+                Amount = entity.Amount,
+                Comment = entity.Comment,
+                Date = entity.OperationDate,
+                Type = entity.Type,
+                AccountId = entity.AccountId,
+                CategoryId = entity.CategoryId
+            };
         }
     }
 }
