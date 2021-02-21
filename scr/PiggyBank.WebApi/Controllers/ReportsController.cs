@@ -21,7 +21,7 @@ namespace PiggyBank.WebApi.Controllers
         public ReportsController(IReportService service)
             => _service = service;
 
-        [HttpPost, Route("Chart/byCategories")]
+        [HttpPost("Chart/byCategories")]
         public Task<ChartByCategoryDto[]> GetChartByCategory(GetChartByCategoriesRequest byCategoriesRequest, CancellationToken token)
         {
             var command = new GetChartCommand
@@ -35,7 +35,7 @@ namespace PiggyBank.WebApi.Controllers
             return _service.GetChartByCategories(command, token);
         }
 
-        [HttpPost, Route("Chart/byExpensePerDays")]
+        [HttpPost("Chart/byExpensePerDays")]
         public Task<ChartByExpensePerDayDto[]> ChartByExpensePerDays(GetChartByExpenseRequest byCategoriesRequest, CancellationToken token)
         {
             var command = new GetChartCommand

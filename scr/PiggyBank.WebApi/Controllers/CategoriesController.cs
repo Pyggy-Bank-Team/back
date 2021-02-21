@@ -25,7 +25,7 @@ namespace PiggyBank.WebApi.Controllers
         public Task<CategoryDto[]> Get(bool all = false, CancellationToken token = default)
             => _service.GetCategories(User.GetUserId(), all, token);
 
-        [HttpGet, Route("{categoryId}")]
+        [HttpGet("{categoryId}")]
         public Task<CategoryDto> GetById(int categoryId, CancellationToken token)
             => _service.GetCategory(categoryId, token);
 
@@ -46,7 +46,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok(newCategory);
         }
 
-        [HttpPut, Route("{categoryId}")]
+        [HttpPut("{categoryId}")]
         [InvalidStateFilter]
         public async Task<IActionResult> Update(int categoryId, UpdateCategoryRequest request, CancellationToken token)
         {
@@ -66,7 +66,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPatch, Route("{categoryId}")]
+        [HttpPatch("{categoryId}")]
         public async Task<IActionResult> PartialUpdate(int categoryId, PartialUpdateCategoryRequest request, CancellationToken token)
         {
             var command = new PartialUpdateCategoryCommand
@@ -85,7 +85,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpDelete, Route("{categoryId}")]
+        [HttpDelete("{categoryId}")]
         public async Task<IActionResult> Delete(int categoryId, CancellationToken token)
         {
             var command = new DeleteCategoryCommand
@@ -99,7 +99,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPatch, Route("{categoryId}/Archive")]
+        [HttpPatch("{categoryId}/Archive")]
         public async Task<IActionResult> Archive(int categoryId, CancellationToken token)
         {
             var userId = User.GetUserId();

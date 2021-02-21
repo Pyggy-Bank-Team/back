@@ -45,7 +45,7 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [InvalidStateFilter]
-        [HttpPut, Route("{accountId}")]
+        [HttpPut("{accountId}")]
         public async Task<IActionResult> Update(int accountId, UpdateAccountRequest request, CancellationToken token)
         {
             var command = new UpdateAccountCommand
@@ -62,7 +62,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPatch, Route("{accountId}")]
+        [HttpPatch("{accountId}")]
         public async Task<IActionResult> PartialUpdate(int accountId, PartialUpdateAccountRequest request, CancellationToken token)
         {
             var command = new PartialUpdateAccountCommand
@@ -79,11 +79,11 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpGet, Route("{accountId}")]
+        [HttpGet("{accountId}")]
         public Task<AccountDto> GetById(int accountId, CancellationToken token)
             => _service.GetAccount(accountId, token);
 
-        [HttpDelete, Route("{accountId}")]
+        [HttpDelete("{accountId}")]
         public async Task<IActionResult> Delete(int accountId, CancellationToken token)
         {
             var userId = User.GetUserId();
@@ -98,7 +98,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPatch, Route("{accountId}/Archive")]
+        [HttpPatch("{accountId}/Archive")]
         public async Task<IActionResult> Archive(int accountId, CancellationToken token)
         {
             var userId = User.GetUserId();

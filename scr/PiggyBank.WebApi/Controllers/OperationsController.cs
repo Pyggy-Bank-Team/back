@@ -58,7 +58,7 @@ namespace PiggyBank.WebApi.Controllers
 
         #region Budget
 
-        [HttpPost, Route("Budget")]
+        [HttpPost("Budget")]
         [InvalidStateFilter]
         public async Task<IActionResult> PostBudget(CreateBudgetOperationRequest request, CancellationToken token)
         {
@@ -78,7 +78,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpDelete, Route("Budget/{operationId}")]
+        [HttpDelete("Budget/{operationId}")]
         public async Task<IActionResult> DeleteBudgetOperation(int operationId, CancellationToken token)
         {
             var command = new DeleteBudgetOperationCommand
@@ -92,7 +92,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPut, Route("Budget/{operationId}")]
+        [HttpPut("Budget/{operationId}")]
         [InvalidStateFilter]
         public async Task<IActionResult> UpdateBudget(int operationId, UpdateBudgetOperationRequest request, CancellationToken token)
         {
@@ -112,7 +112,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPatch, Route("Budget/{operationId}")]
+        [HttpPatch("Budget/{operationId}")]
         [InvalidStateFilter]
         public async Task<IActionResult> PartialUpdateBudget(int operationId, PartialUpdateBudgetOperationRequest request, CancellationToken token)
         {
@@ -132,7 +132,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpGet, Route("Budget/{operationId}")]
+        [HttpGet("Budget/{operationId}")]
         public Task<BudgetDto> GetBudgetOperation(int operationId, CancellationToken token)
         {
             var query = new GetOperationQuery
@@ -148,7 +148,7 @@ namespace PiggyBank.WebApi.Controllers
 
         #region Transfer
 
-        [HttpPost, Route("Transfer")]
+        [HttpPost("Transfer")]
         [InvalidStateFilter]
         public async Task<IActionResult> PostTransfer(CreateTransferOperationRequest request, CancellationToken token)
         {
@@ -168,7 +168,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpDelete, Route("Transfer/{operationId}")]
+        [HttpDelete("Transfer/{operationId}")]
         public async Task<IActionResult> DeleteTransferOperation(int operationId, CancellationToken token)
         {
             var command = new DeleteTransferOperationCommand
@@ -182,7 +182,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPut, Route("Transfer/{operationId}")]
+        [HttpPut("Transfer/{operationId}")]
         [InvalidStateFilter]
         public async Task<IActionResult> UpdateTransferOperation(int operationId, UpdateTransferOperationRequest request, CancellationToken token)
         {
@@ -202,7 +202,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPatch, Route("Transfer/{operationId}")]
+        [HttpPatch("Transfer/{operationId}")]
         [InvalidStateFilter]
         public async Task<IActionResult> UpdatePartialTransferOperation(int operationId, PartialUpdateTransferOperationRequest request,
             CancellationToken token)
@@ -223,7 +223,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpGet, Route("Transfer/{operationId}")]
+        [HttpGet("Transfer/{operationId}")]
         public Task<TransferDto> GetTransferOperation(int operationId, CancellationToken token)
         {
             var query = new GetOperationQuery

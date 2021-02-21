@@ -116,7 +116,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpGet, Route("UserInfo")]
+        [HttpGet("UserInfo")]
         public async Task<IActionResult> GetUserInfo()
         {
             var userId = User.GetUserId();
