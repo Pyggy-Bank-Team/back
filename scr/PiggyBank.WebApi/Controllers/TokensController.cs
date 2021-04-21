@@ -15,17 +15,17 @@ namespace PiggyBank.WebApi.Controllers
     [ApiController, Route("api/[controller]")]
     public class TokensController : ControllerBase
     {
-        private readonly ITokenService _token;
+        private readonly ITokenService _tokenService;
         private readonly TokenOptions _options;
 
         public TokensController(ITokenService service, IOptions<TokenOptions> options)
-            => (_token, _options) = (service, options.Value);
+            => (_tokenService, _options) = (service, options.Value);
 
         [AllowAnonymous, InvalidStateFilter]
         [HttpPost("Connect")]
         public async Task<IActionResult> Connect(GetTokenRequest request, CancellationToken token)
         {
-            var bearerToken = await _token.GetBearerToken(request.UserName, request.Password);
+            var bearerToken = await _tokenService.GetBearerToken(request.UserName, request.Password);
 
             if (bearerToken)
             {
