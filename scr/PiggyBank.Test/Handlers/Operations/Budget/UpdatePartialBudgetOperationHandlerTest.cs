@@ -1,10 +1,13 @@
 ﻿using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Operations;
+using Newtonsoft.Json;
 using PiggyBank.Common.Commands.Operations.Budget;
+using PiggyBank.Common.Enums;
 using PiggyBank.Domain.Handler.Operations.Budget;
+using PiggyBank.Domain.Models.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Xunit;
@@ -32,11 +35,22 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
             {
                 Id = 1,
                 Amount = 10,
-                Comment = "Test comment",
                 AccountId = 1,
-                CategoryId = 1
+                Comment = "Old new",
+                CategoryId = 1,
+                Category = new Category
+                {
+                    Id = 1,
+                    Type = CategoryType.Income
+                },
+                Account = new Account
+                {
+                    Id = 1,
+                    Balance = 100,
+                    IsArchived = false
+                },
+                Snapshot = JsonConvert.SerializeObject(new OperationSnapshot{CategoryType = CategoryType.Income})
             });
-
             await _context.SaveChangesAsync();
 
             var handler = new UpdatePartialBudgetOperationHandler(_context, command);
@@ -48,6 +62,10 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
             Assert.NotEqual(command.Comment, operation.Comment);
             Assert.NotEqual(command.AccountId, operation.AccountId);
             Assert.NotEqual(command.CategoryId, operation.CategoryId);
+
+            var account = _context.Accounts.First();
+            var exceptedAmount = 190;
+            Assert.Equal(exceptedAmount, account.Balance);
         }
         
         [Fact]
