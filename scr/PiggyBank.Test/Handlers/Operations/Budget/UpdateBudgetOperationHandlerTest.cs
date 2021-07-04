@@ -78,17 +78,17 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
             {
                 Amount = 100,
                 Comment = "Test",
-                AccountId = 1,
-                CategoryId = 1
+                AccountId = 2,
+                CategoryId = 2
             };
 
             await _context.BudgetOperations.AddAsync(new BudgetOperation
             {
                 Id = 1,
                 Amount = 10,
-                AccountId = 1,
+                AccountId = 2,
                 Comment = "Old new",
-                CategoryId = 1
+                CategoryId = 2
             });
 
             await _context.SaveChangesAsync();
@@ -106,18 +106,18 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
                 Id = 1,
                 Amount = 100,
                 Comment = "Test",
-                AccountId = 2
+                AccountId = 3
             };
 
             await _context.BudgetOperations.AddAsync(new BudgetOperation
             {
                 Id = 1,
                 Amount = 10,
-                AccountId = 1,
+                AccountId = 3,
                 Comment = "Old new",
                 Account = new Account
                 {
-                    Id = 1,
+                    Id = 3,
                     Balance = 100
                 }
             });
@@ -137,25 +137,25 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
                 Id = 1,
                 Amount = 100,
                 Comment = "Test",
-                AccountId = 1,
-                CategoryId = 2
+                AccountId = 4,
+                CategoryId = 5
             };
 
             await _context.BudgetOperations.AddAsync(new BudgetOperation
             {
                 Id = 1,
                 Amount = 10,
-                AccountId = 1,
-                CategoryId = 1,
+                AccountId = 4,
+                CategoryId = 4,
                 Comment = "Old new",
                 Account = new Account
                 {
-                    Id = 1,
+                    Id = 4,
                     Balance = 100
                 },
                 Category = new Category
                 {
-                    Id = 1,
+                    Id = 4,
                     Type = CategoryType.Expense
                 }
             });
