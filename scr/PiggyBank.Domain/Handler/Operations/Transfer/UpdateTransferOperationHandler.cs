@@ -1,4 +1,5 @@
-﻿using System.Threading;
+﻿using System;
+using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Operations.Transfer;
@@ -18,7 +19,38 @@ namespace PiggyBank.Domain.Handler.Operations.Transfer
             var operation = await repository.FirstOrDefaultAsync(o => o.Id == Command.Id, token);
 
             if (operation == null)
-                return;
+            {
+                //TODO: Add a log
+                throw new ArgumentException($"Can't find operation with {Command.Id}");
+            }
+
+            var fromAccount = await GetRepository<Account>().FirstOrDefaultAsync(a => !a.IsArchived && a.Id == Command.From, token);
+            if (fromAccount == null)
+            {
+                //TODO: Add a log
+                throw new ArgumentException($"Can't find from account with id {Command.From}");
+            }
+
+            var toAccount = await GetRepository<Account>().FirstOrDefaultAsync(c => !c.IsArchived && c.Id == Command.To, token);
+            if (toAccount == null)
+            {
+                //TODO: Add a log
+                throw new ArgumentException($"Can't find to account with id {Command.To}");
+            }
+
+            //If the amount was changed then I'm undo the last change and 
+            //Confirm the current amount
+            if (operation.Amount != Command.Amount)
+            {
+                fromAccount.ChangeBalance(operation.Amount);
+                toAccount.ChangeBalance(-operation.Amount);
+                
+                fromAccount.ChangeBalance(-Command.Amount);
+                toAccount.ChangeBalance(Command.Amount);
+
+                GetRepository<Account>().Update(fromAccount);
+                GetRepository<Account>().Update(toAccount);
+            }
 
             operation.Amount = Command.Amount;
             operation.Comment = Command.Comment;
