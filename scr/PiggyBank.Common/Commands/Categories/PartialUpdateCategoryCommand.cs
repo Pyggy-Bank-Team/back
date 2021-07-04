@@ -1,6 +1,4 @@
-﻿using PiggyBank.Common.Enums;
-
-namespace PiggyBank.Common.Commands.Categories
+﻿namespace PiggyBank.Common.Commands.Categories
 {
     public class PartialUpdateCategoryCommand : BaseModifiedCommand
     {
@@ -10,7 +8,8 @@ namespace PiggyBank.Common.Commands.Categories
 
         public string HexColor { get; set; }
 
-        public CategoryType? Type { get; set; }
+        //PB-72
+        //public CategoryType? Type { get; set; }
 
         public bool? IsArchived { get; set; }
     }

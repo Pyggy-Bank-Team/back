@@ -21,7 +21,6 @@ namespace PiggyBank.Domain.Handler.Categories
                 return;
 
             category.Title = GetOldValueOrNewValue(category.Title, Command.Title);
-            category.Type = Command.Type ?? category.Type;
             category.HexColor = GetOldValueOrNewValue(category.HexColor, Command.HexColor);
             category.IsArchived = Command.IsArchived ?? category.IsArchived;
             category.ModifiedBy = Command.ModifiedBy;

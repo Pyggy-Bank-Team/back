@@ -11,8 +11,8 @@ namespace PiggyBank.WebApi.Requests.Categories
         [Required]
         public string HexColor { get; set; }
 
-        [Required]
-        public CategoryType Type { get; set; }
+        //PB-72
+       //public CategoryType Type { get; set; }
 
         public bool IsArchived { get; set; }
     }

@@ -28,7 +28,6 @@ namespace PiggyBank.Test.Handlers.Categories
                 Id = 1,
                 Title = "New title",
                 HexColor = "#ffffff",
-                Type = CategoryType.Expense,
                 IsArchived = true
             };
 
@@ -47,7 +46,6 @@ namespace PiggyBank.Test.Handlers.Categories
 
             var category = _context.Categories.First();
             Assert.Equal(command.Title, category.Title);
-            Assert.Equal(command.Type, category.Type);
             Assert.Equal(command.HexColor, category.HexColor);
             Assert.Equal(command.IsArchived, category.IsArchived);
         } 

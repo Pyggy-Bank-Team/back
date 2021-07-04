@@ -54,7 +54,6 @@ namespace PiggyBank.WebApi.Controllers
             {
                 Id = categoryId,
                 Title = request.Title,
-                Type = request.Type,
                 HexColor = request.HexColor,
                 IsArchived = request.IsArchived,
                 ModifiedBy = User.GetUserId(),
@@ -73,7 +72,6 @@ namespace PiggyBank.WebApi.Controllers
             {
                 Id = categoryId,
                 Title = request.Title,
-                Type = request.Type,
                 HexColor = request.HexColor,
                 IsArchived = request.IsArchived,
                 ModifiedBy = User.GetUserId(),

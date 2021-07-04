@@ -43,7 +43,6 @@ namespace PiggyBank.Test.Handlers.Categories
             var category = _context.Categories.First();
 
             Assert.Equal(command.Title, category.Title);
-            Assert.NotEqual(command.Type, category.Type);
             Assert.NotEqual(command.HexColor, category.HexColor);
         }
 
@@ -52,8 +51,7 @@ namespace PiggyBank.Test.Handlers.Categories
         {
             var command = new PartialUpdateCategoryCommand
             {
-                Id = 1,
-                Type = Common.Enums.CategoryType.Expense
+                Id = 1
             };
 
             await _context.Categories.AddAsync(new Category
@@ -70,8 +68,7 @@ namespace PiggyBank.Test.Handlers.Categories
             await handler.Invoke(CancellationToken.None);
 
             var category = _context.Categories.First();
-
-            Assert.Equal(command.Type, category.Type);
+            
             Assert.NotEqual(command.Title, category.Title);
             Assert.NotEqual(command.HexColor, category.HexColor);
         }
