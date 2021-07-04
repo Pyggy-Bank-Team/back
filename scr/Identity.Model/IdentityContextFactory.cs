@@ -8,7 +8,7 @@ namespace Identity.Model
         public IdentityContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<IdentityContext>();
-            builder.UseSqlServer("Data Source=DESKTOP-4FJNSDH;Initial Catalog=PiggyBank;Integrated Security=True");
+            builder.UseSqlServer("");
             return new IdentityContext(builder.Options);
         }
     }
