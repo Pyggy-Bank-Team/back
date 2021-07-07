@@ -58,8 +58,7 @@ namespace PiggyBank.WebApi.Controllers
 
         #region Budget
 
-        [HttpPost("Budget")]
-        [InvalidStateFilter]
+        [InvalidState, HttpPost("Budget")]
         public async Task<IActionResult> PostBudget(CreateBudgetOperationRequest request, CancellationToken token)
         {
             var command = new AddBudgetOperationCommand
@@ -90,8 +89,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPut("Budget/{operationId}")]
-        [InvalidStateFilter]
+        [InvalidState, HttpPut("Budget/{operationId}")]
         public async Task<IActionResult> UpdateBudget(int operationId, UpdateBudgetOperationRequest request, CancellationToken token)
         {
             var command = new UpdateBidgetOperationCommand
@@ -110,8 +108,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPatch("Budget/{operationId}")]
-        [InvalidStateFilter]
+        [InvalidState, HttpPatch("Budget/{operationId}")]
         public async Task<IActionResult> PartialUpdateBudget(int operationId, PartialUpdateBudgetOperationRequest request, CancellationToken token)
         {
             var command = new UpdatePartialBidgetOperationCommand
@@ -146,8 +143,7 @@ namespace PiggyBank.WebApi.Controllers
 
         #region Transfer
 
-        [HttpPost("Transfer")]
-        [InvalidStateFilter]
+        [InvalidState, HttpPost("Transfer")]
         public async Task<IActionResult> PostTransfer(CreateTransferOperationRequest request, CancellationToken token)
         {
             var command = new AddTransferOperationCommand
@@ -178,8 +174,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPut("Transfer/{operationId}")]
-        [InvalidStateFilter]
+        [InvalidState, HttpPut("Transfer/{operationId}")]
         public async Task<IActionResult> UpdateTransferOperation(int operationId, UpdateTransferOperationRequest request, CancellationToken token)
         {
             var command = new UpdateTransferOperationCommand
@@ -198,8 +193,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok();
         }
 
-        [HttpPatch("Transfer/{operationId}")]
-        [InvalidStateFilter]
+        [InvalidState, HttpPatch("Transfer/{operationId}")]
         public async Task<IActionResult> UpdatePartialTransferOperation(int operationId, PartialUpdateTransferOperationRequest request,
             CancellationToken token)
         {

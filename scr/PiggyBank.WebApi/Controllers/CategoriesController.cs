@@ -29,7 +29,7 @@ namespace PiggyBank.WebApi.Controllers
         public Task<CategoryDto> GetById(int categoryId, CancellationToken token)
             => _service.GetCategory(categoryId, token);
 
-        [HttpPost, InvalidStateFilter]
+        [HttpPost, InvalidState]
         public async Task<IActionResult> Post(CreateCategoryRequest request, CancellationToken token)
         {
             var command = new AddCategoryCommand
@@ -46,8 +46,7 @@ namespace PiggyBank.WebApi.Controllers
             return Ok(newCategory);
         }
 
-        [HttpPut("{categoryId}")]
-        [InvalidStateFilter]
+        [InvalidState, HttpPut("{categoryId}")]
         public async Task<IActionResult> Update(int categoryId, UpdateCategoryRequest request, CancellationToken token)
         {
             var command = new UpdateCategoryCommand

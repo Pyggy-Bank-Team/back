@@ -5,7 +5,7 @@ using PiggyBank.WebApi.Responses;
 
 namespace PiggyBank.WebApi.Filters
 {
-    public class InvalidStateFilter : ActionFilterAttribute
+    public class InvalidState : ActionFilterAttribute
     {
         public override void OnActionExecuting(ActionExecutingContext context)
         {

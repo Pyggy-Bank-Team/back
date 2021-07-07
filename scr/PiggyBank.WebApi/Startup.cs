@@ -45,7 +45,7 @@ namespace PiggyBank.WebApi
             services.AddScoped<IReportService, ReportService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IItemFactory, ItemFactory>();
-            services.AddScoped<InvalidStateFilter>();
+            services.AddScoped<InvalidState>();
 
             services.AddIdentityServices<ApplicationUser>();
             services.AddStore<IdentityContext>(typeof(ApplicationUser));
