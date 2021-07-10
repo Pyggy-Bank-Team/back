@@ -19,11 +19,12 @@ namespace PiggyBank.Domain.Queries.Reports
 
         public override Task<ChartByExpensePerDayDto[]> Invoke(CancellationToken token)
         {
+            FixCommandDates(_command);
             var operations = GetRepository<BudgetOperation>().Where(b => !b.IsDeleted
                                                                          && b.CreatedBy == _command.UserId
                                                                          && b.Category.Type == CategoryType.Expense
-                                                                         && b.CreatedOn >= _command.From
-                                                                         && b.CreatedOn <= _command.To);
+                                                                         && b.OperationDate >= _command.From
+                                                                         && b.OperationDate <=  _command.To);
 
             return operations.Select(o => new {o.Amount, o.CreatedOn.Year, o.CreatedOn.Month, o.CreatedOn.Day})
                 .GroupBy(o => new {o.Year, o.Month, o.Day})
@@ -34,6 +35,12 @@ namespace PiggyBank.Domain.Queries.Reports
                     Day = g.Key.Day,
                     Amount = g.Sum(o => o.Amount)
                 }).ToArrayAsync(token);
+        }
+
+        private void FixCommandDates(GetChartCommand command)
+        {
+            command.From = command.From.Date;
+            command.To = command.To.Date.AddDays(1).AddMilliseconds(-1);
         }
     }
 }

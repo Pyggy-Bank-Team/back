@@ -18,11 +18,12 @@ namespace PiggyBank.Domain.Queries.Reports
 
         public override Task<ChartByCategoryDto[]> Invoke(CancellationToken token)
         {
+            FixCommandDates(_command);
             var operations = GetRepository<BudgetOperation>().Where(b => !b.IsDeleted  
                                                                          && b.CreatedBy == _command.UserId
                                                                          && b.Category.Type == _command.Type
-                                                                         && b.CreatedOn >= _command.From
-                                                                         && b.CreatedOn <= _command.To);
+                                                                         && b.OperationDate >= _command.From
+                                                                         && b.OperationDate <= _command.To);
 
             //TODO: What is it happen when will we use different currencies?
             return operations.Select(o => new
@@ -43,6 +44,12 @@ namespace PiggyBank.Domain.Queries.Reports
                     Amount = g.Sum(o => o.Amount),
                     Currency = g.Key.Currency
                 }).ToArrayAsync(token);
+        }
+        
+        private void FixCommandDates(GetChartCommand command)
+        {
+            command.From = command.From.Date;
+            command.To = command.To.Date.AddDays(1).AddMilliseconds(-1);
         }
     }
 }
