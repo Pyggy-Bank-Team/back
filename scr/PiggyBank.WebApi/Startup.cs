@@ -8,6 +8,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
+using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Services;
@@ -27,7 +28,7 @@ namespace PiggyBank.WebApi
 {
     public class Startup
     {
-        private const string AllowOriings = "_myAllowSpecificOrigins";
+        private const string AllowOrigins = "SpecificOrigins";
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
             => (Configuration, Environment) = (configuration, environment);
 
@@ -131,9 +132,14 @@ namespace PiggyBank.WebApi
 
             services.AddSingleton(Log.Logger);
 
-            services.AddCors(options =>
+            services.AddCors(corsOptions =>
             {
-                options.AddPolicy(name: AllowOriings, builder => { builder.WithOrigins("http://localhost:5000", "https://localhost:5001");});
+                corsOptions.AddPolicy(name: AllowOrigins, builder =>
+                {
+                    builder.WithOrigins("http://localhost:5000", "https://localhost:5001")
+                        .WithHeaders(HeaderNames.ContentType)
+                        .WithHeaders(HeaderNames.Authorization);
+                });
             });
         }
 
@@ -146,12 +152,12 @@ namespace PiggyBank.WebApi
             }
 
             app.UseRouting();
+            app.UseCors(AllowOrigins);
 
             app.UseAuthentication();
             app.UseAuthorization();
 
             app.UseMiddleware<ExceptionHandlerMiddleware>();
-            app.UseCors(AllowOriings);
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
