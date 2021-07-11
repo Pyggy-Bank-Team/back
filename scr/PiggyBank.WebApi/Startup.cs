@@ -27,6 +27,7 @@ namespace PiggyBank.WebApi
 {
     public class Startup
     {
+        private const string AllowOriings = "_myAllowSpecificOrigins";
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
             => (Configuration, Environment) = (configuration, environment);
 
@@ -129,6 +130,11 @@ namespace PiggyBank.WebApi
                 .WriteTo.MSSqlServer(ninjaDb, options).CreateLogger();
 
             services.AddSingleton(Log.Logger);
+
+            services.AddCors(options =>
+            {
+                options.AddPolicy(name: AllowOriings, builder => { builder.WithOrigins("http://localhost:5000", "https://localhost:5001");});
+            });
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -145,6 +151,7 @@ namespace PiggyBank.WebApi
             app.UseAuthorization();
 
             app.UseMiddleware<ExceptionHandlerMiddleware>();
+            app.UseCors(AllowOriings);
 
             app.UseEndpoints(endpoints => { endpoints.MapControllers(); });
         }
