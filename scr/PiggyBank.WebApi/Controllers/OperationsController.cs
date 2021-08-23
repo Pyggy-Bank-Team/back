@@ -100,7 +100,8 @@ namespace PiggyBank.WebApi.Controllers
                 Amount = request.Amount,
                 Comment = request.Comment,
                 ModifiedBy = User.GetUserId(),
-                ModifiedOn = DateTime.UtcNow
+                ModifiedOn = DateTime.UtcNow,
+                OperationDate = request.OperationDate
             };
 
             await _service.UpdateBidgetOperation(command, token);
@@ -119,7 +120,8 @@ namespace PiggyBank.WebApi.Controllers
                 Amount = request.Amount,
                 Comment = request.Comment,
                 ModifiedBy = User.GetUserId(),
-                ModifiedOn = DateTime.UtcNow
+                ModifiedOn = DateTime.UtcNow,
+                OperationDate = request.OperationDate
             };
 
             await _service.UpdatePartialBidgetOperation(command, token);
@@ -185,7 +187,8 @@ namespace PiggyBank.WebApi.Controllers
                 From = request.From,
                 Comment = request.Comment,
                 ModifiedBy = User.GetUserId(),
-                ModifiedOn = DateTime.UtcNow
+                ModifiedOn = DateTime.UtcNow,
+                OperationDate = request.OperationDate
             };
 
             await _service.UpdateTransferOperation(command, token);
@@ -205,7 +208,8 @@ namespace PiggyBank.WebApi.Controllers
                 From = request.From,
                 To = request.To,
                 ModifiedBy = User.GetUserId(),
-                ModifiedOn = DateTime.UtcNow
+                ModifiedOn = DateTime.UtcNow,
+                OperationDate = request.OperationDate
             };
 
             await _service.UpdatePartialTransferOperation(command, token);

@@ -1,4 +1,5 @@
-﻿using System.ComponentModel.DataAnnotations;
+﻿using System;
+using System.ComponentModel.DataAnnotations;
 
 namespace PiggyBank.Common.Commands.Operations.Budget
 {
@@ -15,5 +16,7 @@ namespace PiggyBank.Common.Commands.Operations.Budget
         public decimal? Amount { get; set; }
 
         public string Comment { get; set; }
+        
+        public DateTime? OperationDate { get; set; }
     }
 }

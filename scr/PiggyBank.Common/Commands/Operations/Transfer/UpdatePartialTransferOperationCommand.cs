@@ -1,4 +1,6 @@
-﻿namespace PiggyBank.Common.Commands.Operations.Transfer
+﻿using System;
+
+namespace PiggyBank.Common.Commands.Operations.Transfer
 {
     public class UpdatePartialTransferOperationCommand : BaseModifiedCommand
     {
@@ -11,5 +13,7 @@
         public decimal? Amount { get; set; }
 
         public string Comment { get; set; }
+
+        public DateTime? OperationDate { get; set; }
     }
 }

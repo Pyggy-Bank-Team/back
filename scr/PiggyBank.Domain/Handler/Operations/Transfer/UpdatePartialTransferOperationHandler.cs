@@ -50,6 +50,7 @@ namespace PiggyBank.Domain.Handler.Operations.Transfer
             operation.To = Command.To ?? operation.To;
             operation.ModifiedBy = Command.ModifiedBy;
             operation.ModifiedOn = Command.ModifiedOn;
+            operation.OperationDate = Command.OperationDate ?? operation.OperationDate;
 
             repository.Update(operation);
         }

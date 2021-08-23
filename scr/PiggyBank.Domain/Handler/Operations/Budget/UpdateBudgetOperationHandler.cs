@@ -60,6 +60,7 @@ namespace PiggyBank.Domain.Handler.Operations.Budget
             operation.AccountId = Command.AccountId;
             operation.ModifiedBy = Command.ModifiedBy;
             operation.ModifiedOn = Command.ModifiedOn;
+            operation.OperationDate = Command.OperationDate;
 
             repository.Update(operation);
         }
