@@ -30,7 +30,8 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
                 Amount = 100,
                 Comment = "Test",
                 AccountId = 1,
-                CategoryId = 1
+                CategoryId = 1,
+                OperationDate = DateTime.UtcNow.AddDays(-2)
             };
 
             await _context.BudgetOperations.AddAsync(new BudgetOperation
@@ -64,6 +65,7 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
 
             Assert.Equal(command.Amount, operation.Amount);
             Assert.Equal(command.Comment, operation.Comment);
+            Assert.Equal(command.OperationDate, operation.OperationDate);
 
             var account = _context.Accounts.First();
             var expectedAmount = 190;

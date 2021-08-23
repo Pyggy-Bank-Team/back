@@ -128,6 +128,37 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
             Assert.NotEqual(command.AccountId, operation.AccountId);
             Assert.NotEqual(command.CategoryId, operation.CategoryId);
         }
+        
+        [Fact]
+        public async Task Invoke_CommandHasOperationDate_Successful()
+        {
+            var command = new UpdatePartialBidgetOperationCommand
+            {
+                Id = 1,
+                OperationDate = DateTime.UtcNow.AddDays(-2)
+            };
+
+            await _context.BudgetOperations.AddAsync(new BudgetOperation
+            {
+                Id = 1,
+                Amount = 10,
+                Comment = "Test comment",
+                AccountId = 1,
+                CategoryId = 1
+            });
+
+            await _context.SaveChangesAsync();
+
+            var handler = new UpdatePartialBudgetOperationHandler(_context, command);
+            await handler.Invoke(CancellationToken.None);
+
+            var operation = await _context.BudgetOperations.FirstAsync();
+            
+            Assert.Equal(command.OperationDate, operation.OperationDate);
+            Assert.NotEqual(command.Amount, operation.Amount);
+            Assert.NotEqual(command.AccountId, operation.AccountId);
+            Assert.NotEqual(command.CategoryId, operation.CategoryId);
+        }
 
         public void Dispose()
         {
