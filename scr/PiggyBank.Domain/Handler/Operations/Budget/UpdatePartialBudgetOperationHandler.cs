@@ -27,7 +27,7 @@ namespace PiggyBank.Domain.Handler.Operations.Budget
                 throw new ArgumentException($"Can't find operation with {Command.Id}");
             }
 
-            //If the amount was changed then I'm undo the last change and 
+            //If the amount was changed then I undo the last change and 
             //Confirm the current amount
             if (Command.Amount.HasValue && operation.Amount != Command.Amount)
             {

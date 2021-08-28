@@ -43,7 +43,7 @@ namespace PiggyBank.Domain.Handler.Operations.Budget
                 throw new ArgumentException($"Can't find category with {Command.AccountId}");
             }
 
-            //If the amount was changed then I'm undo the last change and 
+            //If the amount was changed then I undo the last change and 
             //Confirm the current amount
             if (operation.Amount != Command.Amount)
             {

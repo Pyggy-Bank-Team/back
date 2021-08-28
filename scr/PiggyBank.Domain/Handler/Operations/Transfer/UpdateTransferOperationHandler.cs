@@ -38,7 +38,7 @@ namespace PiggyBank.Domain.Handler.Operations.Transfer
                 throw new ArgumentException($"Can't find to account with id {Command.To}");
             }
 
-            //If the amount was changed then I'm undo the last change and 
+            //If the amount was changed then I undo the last change and 
             //Confirm the current amount
             if (operation.Amount != Command.Amount)
             {
