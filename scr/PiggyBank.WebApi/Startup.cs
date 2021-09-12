@@ -117,18 +117,16 @@ namespace PiggyBank.WebApi
 
             services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.SectionName));
 
-            var ninjaDb = Configuration.GetConnectionString("NinjaDb");
-
             var options = new SinkOptions
             {
                 TableName = "Store",
-                SchemaName = "Pb",
+                SchemaName = "Audit",
                 AutoCreateSqlTable = true
             };
             
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .WriteTo.MSSqlServer(ninjaDb, options).CreateLogger();
+                .WriteTo.MSSqlServer(connectionString, options).CreateLogger();
 
             services.AddSingleton(Log.Logger);
 
