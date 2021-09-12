@@ -10,8 +10,8 @@ using PiggyBank.Model;
 namespace PiggyBank.Model.Migrations
 {
     [DbContext(typeof(PiggyContext))]
-    [Migration("20201204171547_RemovedPlanOperations")]
-    partial class RemovedPlanOperations
+    [Migration("20210912084009_Init")]
+    partial class Init
     {
         protected override void BuildTargetModel(ModelBuilder modelBuilder)
         {
@@ -161,6 +161,9 @@ namespace PiggyBank.Model.Migrations
                     b.Property<DateTime?>("ModifiedOn")
                         .HasColumnType("datetime2");
 
+                    b.Property<DateTime>("OperationDate")
+                        .HasColumnType("datetime2");
+
                     b.Property<string>("Snapshot")
                         .HasColumnType("nvarchar(max)");
 
@@ -212,16 +215,6 @@ namespace PiggyBank.Model.Migrations
                         .HasColumnType("int");
 
                     b.HasDiscriminator().HasValue("TransferOperation");
-                });
-
-            modelBuilder.Entity("PiggyBank.Model.Models.Entities.PlanOperation", b =>
-                {
-                    b.HasBaseType("PiggyBank.Model.Models.Entities.BudgetOperation");
-
-                    b.Property<DateTime>("PlanDate")
-                        .HasColumnType("datetime2");
-
-                    b.HasDiscriminator().HasValue("PlanOperation");
                 });
 
             modelBuilder.Entity("PiggyBank.Model.Models.Entities.BalanceHistory", b =>

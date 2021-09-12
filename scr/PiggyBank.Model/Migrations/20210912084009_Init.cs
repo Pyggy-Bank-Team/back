@@ -3,7 +3,7 @@ using Microsoft.EntityFrameworkCore.Migrations;
 
 namespace PiggyBank.Model.Migrations
 {
-    public partial class Initial : Migration
+    public partial class Init : Migration
     {
         protected override void Up(MigrationBuilder migrationBuilder)
         {
@@ -19,6 +19,8 @@ namespace PiggyBank.Model.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<Guid>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedBy = table.Column<Guid>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     IsArchived = table.Column<bool>(nullable: false),
                     Title = table.Column<string>(nullable: false),
@@ -40,6 +42,8 @@ namespace PiggyBank.Model.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<Guid>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedBy = table.Column<Guid>(nullable: true),
                     IsDeleted = table.Column<bool>(nullable: false),
                     IsArchived = table.Column<bool>(nullable: false),
                     Title = table.Column<string>(nullable: false),
@@ -84,15 +88,17 @@ namespace PiggyBank.Model.Migrations
                         .Annotation("SqlServer:Identity", "1, 1"),
                     CreatedOn = table.Column<DateTime>(nullable: false),
                     CreatedBy = table.Column<Guid>(nullable: false),
+                    ModifiedOn = table.Column<DateTime>(nullable: true),
+                    ModifiedBy = table.Column<Guid>(nullable: true),
                     Comment = table.Column<string>(nullable: true),
                     Type = table.Column<int>(nullable: false),
                     IsDeleted = table.Column<bool>(nullable: false),
-                    Shapshot = table.Column<string>(nullable: true),
+                    Snapshot = table.Column<string>(nullable: true),
+                    OperationDate = table.Column<DateTime>(nullable: false),
                     Discriminator = table.Column<string>(nullable: false),
                     CategoryId = table.Column<int>(nullable: true),
                     Amount = table.Column<decimal>(nullable: true),
                     AccountId = table.Column<int>(nullable: true),
-                    PlanDate = table.Column<DateTime>(nullable: true),
                     From = table.Column<int>(nullable: true),
                     To = table.Column<int>(nullable: true)
                 },
