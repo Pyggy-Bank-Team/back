@@ -18,6 +18,6 @@ namespace PiggyBank.Common.Commands.Operations.Budget
 
         public string Comment { get; set; }
 
-        public DateTime OperationDate { get; set; }
+        public DateTime? OperationDate { get; set; }
     }
 }
