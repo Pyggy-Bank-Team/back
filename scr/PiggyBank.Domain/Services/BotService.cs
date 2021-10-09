@@ -5,6 +5,7 @@ using Identity.Model;
 using Microsoft.AspNetCore.Http;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Handler.Bot;
+using PiggyBank.Domain.Infrastructure;
 using PiggyBank.Model;
 using Serilog;
 using Telegram.Bot;
@@ -19,6 +20,8 @@ namespace PiggyBank.Domain.Services
         private readonly IdentityContext _identityContext;
         private readonly ILogger _logger;
         private readonly ITelegramBotClient _client;
+        private readonly HandlerDispatcher _piggyDispatcher;
+        private readonly HandlerDispatcher _identityDispatcher;
 
         public BotService(PiggyContext piggyContext, IdentityContext identityContext, ILogger logger, ITelegramBotClient client)
         {
@@ -26,6 +29,9 @@ namespace PiggyBank.Domain.Services
             _identityContext = identityContext;
             _logger = logger;
             _client = client;
+
+            _piggyDispatcher = new HandlerDispatcher(piggyContext, logger);
+            _identityDispatcher = new HandlerDispatcher(identityContext, logger);
         }
 
         //Use session for save temp state of operations. This why I added ASP.NET package to Domain
@@ -33,9 +39,9 @@ namespace PiggyBank.Domain.Services
         {
             var method = command.Type switch
             {
-                UpdateType.Message => ProcessMessage(command.Message, token),
-                UpdateType.EditedMessage => ProcessEditedMessage(command.EditedMessage, token),
-                _ => ProcessUnknownMessage(command, token)
+                UpdateType.Message => ProcessMessage(command.Message, session, token),
+                UpdateType.EditedMessage => ProcessEditedMessage(command.EditedMessage, session, token),
+                _ => ProcessUnknownMessage(command, session, token)
             };
 
             try
@@ -49,17 +55,17 @@ namespace PiggyBank.Domain.Services
             }
         }
 
-        private Task ProcessUnknownMessage(Update command, CancellationToken token)
+        private Task ProcessUnknownMessage(Update command, ISession session, CancellationToken token)
         {
             throw new System.NotImplementedException();
         }
 
-        private Task ProcessEditedMessage(Message commandEditedMessage, CancellationToken token)
+        private Task ProcessEditedMessage(Message commandEditedMessage, ISession session, CancellationToken token)
         {
             throw new System.NotImplementedException();
         }
 
-        private Task ProcessMessage(Message commandMessage, CancellationToken token)
+        private Task ProcessMessage(Message commandMessage, ISession session, CancellationToken token)
         {
             var handler = commandMessage.Text switch
             {

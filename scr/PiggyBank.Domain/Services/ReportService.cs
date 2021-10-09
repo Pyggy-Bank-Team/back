@@ -9,7 +9,7 @@ using Serilog;
 
 namespace PiggyBank.Domain.Services
 {
-    public class ReportService : ServiceBase, IReportService
+    public class ReportService : PiggyServiceBase, IReportService
     {
         public ReportService(PiggyContext context, ILogger logger) : base(context, logger)
         {

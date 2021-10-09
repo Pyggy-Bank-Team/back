@@ -4,9 +4,9 @@ using Serilog;
 
 namespace PiggyBank.Domain.Services
 {
-    public abstract class ServiceBase
+    public abstract class PiggyServiceBase
     {
-        protected ServiceBase(PiggyContext context, ILogger logger)
+        protected PiggyServiceBase(PiggyContext context, ILogger logger)
         {
             HandlerDispatcher = new HandlerDispatcher(context, logger);
             QueryDispatcher = new QueryDispatcher(context, logger);
