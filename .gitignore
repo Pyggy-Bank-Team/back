@@ -7,4 +7,4 @@ Release
 .vs
 .idea
 obj
-appsettings.*.json
+*.json
