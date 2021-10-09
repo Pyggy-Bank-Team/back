@@ -23,6 +23,7 @@ using PiggyBank.WebApi.Services;
 using Serilog;
 using Serilog.Events;
 using Serilog.Sinks.MSSqlServer.Sinks.MSSqlServer.Options;
+using Telegram.Bot;
 
 namespace PiggyBank.WebApi
 {
@@ -139,6 +140,13 @@ namespace PiggyBank.WebApi
                         .WithHeaders(HeaderNames.Authorization);
                 });
             });
+
+            var botOptions = Configuration.GetSection(BotOptions.BotSection);
+            services.AddHttpClient<ITelegramBotClient>(client => new TelegramBotClient(botOptions["Token"], client));
+
+            services.Configure<BotOptions>(Configuration.GetSection(BotOptions.BotSection));
+            
+            services.AddHostedService<ConfigureWebHookService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
