@@ -23,7 +23,7 @@ namespace PiggyBank.WebApi.Services
             var telegramClient = _serviceProvider.GetService<ITelegramBotClient>();
 
             var webhookInfo = await telegramClient.GetWebhookInfoAsync(cancellationToken);
-            var webhookUrl = $"{_options.ServerUrl}/api/telegram/update";
+            var webhookUrl = $"{_options.ServerUrl}/api/bot/update";
 
             //If webhook url has been already updated, then do nothing 
             if (!string.IsNullOrEmpty(webhookInfo.Url) && webhookInfo.Url == webhookUrl)
