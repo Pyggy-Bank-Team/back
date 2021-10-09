@@ -1,4 +1,5 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Identity.Model;
@@ -40,7 +41,6 @@ namespace PiggyBank.Domain.Services
             var method = command.Type switch
             {
                 UpdateType.Message => ProcessMessage(command.Message, session, token),
-                UpdateType.EditedMessage => ProcessEditedMessage(command.EditedMessage, session, token),
                 _ => ProcessUnknownMessage(command, session, token)
             };
 
@@ -54,14 +54,10 @@ namespace PiggyBank.Domain.Services
             }
         }
 
-        private Task ProcessUnknownMessage(Update command, ISession session, CancellationToken token)
+        private async Task ProcessUnknownMessage(Update command, ISession session, CancellationToken token)
         {
-            throw new System.NotImplementedException();
-        }
-
-        private Task ProcessEditedMessage(Message commandEditedMessage, ISession session, CancellationToken token)
-        {
-            throw new System.NotImplementedException();
+            var unknownTypeHandler = new UnknownMessageTypeHandler(_piggyContext, command, _client);
+            await _piggyDispatcher.InvokeCompletedHandler<UnknownMessageTypeHandler, Update>(unknownTypeHandler, token);
         }
 
         private async Task ProcessMessage(Message commandMessage, ISession session, CancellationToken token)
@@ -82,7 +78,14 @@ namespace PiggyBank.Domain.Services
                     break;
                 case { } text when double.TryParse(text, out var amount):
                     break;
+                default:
+                    var unknownTypeHandler = new UnknownMessageTypeHandler(_piggyContext, null, _client);
+                    await _piggyDispatcher.InvokeCompletedHandler<UnknownMessageTypeHandler, Update>(unknownTypeHandler, token);
+                    break;
             }
         }
+
+        private string GetUserId(long chatId, CancellationToken token)
+            => _identityContext.Users.FirstOrDefault(u => u.ChatId == chatId)?.Id;
     }
 }

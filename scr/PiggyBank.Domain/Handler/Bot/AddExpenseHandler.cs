@@ -13,9 +13,10 @@ namespace PiggyBank.Domain.Handler.Bot
         public AddExpenseHandler(PiggyContext context, Message command, ITelegramBotClient client) : base(context, command)
             => _client = client;
 
-        public override Task Invoke(CancellationToken token)
+        public override async Task Invoke(CancellationToken token)
         {
-            throw new System.NotImplementedException();
+                var message = "Enter the transaction amount:";
+                await _client.SendTextMessageAsync(Command.Chat.Id, message, cancellationToken:token);
         }
     }
 }
