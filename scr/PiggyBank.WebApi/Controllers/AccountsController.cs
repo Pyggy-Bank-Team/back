@@ -53,7 +53,9 @@ namespace PiggyBank.WebApi.Controllers
                 Balance = request.Balance,
                 Title = request.Title,
                 Type = request.Type,
-                IsArchived = request.IsArchived
+                IsArchived = request.IsArchived,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
             };
 
             await _service.UpdateAccount(command, token);
@@ -70,7 +72,9 @@ namespace PiggyBank.WebApi.Controllers
                 Balance = request.Balance,
                 IsArchive = request.IsArchived,
                 Title = request.Title,
-                Type = request.Type
+                Type = request.Type,
+                ModifiedBy = User.GetUserId(),
+                ModifiedOn = DateTime.UtcNow
             };
 
             await _service.PartialUpdateAccount(command, token);
