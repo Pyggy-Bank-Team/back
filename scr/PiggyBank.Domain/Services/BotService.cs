@@ -3,6 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Http;
 using PiggyBank.Common.Interfaces;
+using PiggyBank.Domain.Handler.Bot;
 using PiggyBank.Model;
 using Serilog;
 using Telegram.Bot;
@@ -22,7 +23,7 @@ namespace PiggyBank.Domain.Services
         //Use session for save temp state of operations. This why I added ASP.NET package to Domain
         public async Task ProcessUpdateCommand(Update command, ISession session, CancellationToken token)
         {
-            var handle = command.Type switch
+            var method = command.Type switch
             {
                 UpdateType.Message => ProcessMessage(command.Message, token),
                 UpdateType.EditedMessage => ProcessEditedMessage(command.EditedMessage, token),
@@ -31,7 +32,7 @@ namespace PiggyBank.Domain.Services
 
             try
             {
-                await handle;
+                await method;
             }
             catch (Exception e)
             {
@@ -52,7 +53,11 @@ namespace PiggyBank.Domain.Services
 
         private Task ProcessMessage(Message commandMessage, CancellationToken token)
         {
-            throw new System.NotImplementedException();
+            var handler = commandMessage.Text switch
+            {
+                string text when text.StartsWith("/start") => new StartHandler(new PiggyContext(), commandMessage, _client),
+                _ => null
+            };
         }
     }
 }
