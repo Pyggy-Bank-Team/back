@@ -51,7 +51,6 @@ namespace PiggyBank.Domain.Services
             catch (Exception e)
             {
                 _logger.Error(e, "Error during handler invoke");
-                throw;
             }
         }
 
@@ -76,6 +75,10 @@ namespace PiggyBank.Domain.Services
                 case { } text when text.StartsWith("/help"):
                     break;
                 case { } text when  text.StartsWith("/settings"):
+                    break;
+                case { } text when text.Contains("➖ Add expense"):
+                    var addExpenseHandler = new AddExpenseHandler(_piggyContext, commandMessage, _client);
+                    await _piggyDispatcher.InvokeCompletedHandler<AddExpenseHandler, Message>(addExpenseHandler, token);
                     break;
                 case { } text when double.TryParse(text, out var amount):
                     break;
