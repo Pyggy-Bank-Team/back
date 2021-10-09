@@ -1,9 +1,9 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Identity.Model;
 using Identity.Model.Models;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Domain.Helpers;
-using PiggyBank.Model;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
@@ -13,7 +13,7 @@ namespace PiggyBank.Domain.Handler.Bot
     {
         private readonly ITelegramBotClient _client;
 
-        public StartHandler(PiggyContext context, Message command,  ITelegramBotClient client) : base(context, command)
+        public StartHandler(IdentityContext context, Message command,  ITelegramBotClient client) : base(context, command)
             =>_client = client;
 
         public override async Task Invoke(CancellationToken token)
@@ -45,7 +45,7 @@ namespace PiggyBank.Domain.Handler.Bot
             await SaveAsync();
 
             var startKeyboard = BotKeyboardHelper.GenerateStartKeyboard();
-            await _client.SendTextMessageAsync(Command.Chat.Id, "Now you can create an operation", replyMarkup: startKeyboard, cancellationToken: token);
+            await _client.SendTextMessageAsync(Command.Chat.Id, "Now you can create operations", replyMarkup: startKeyboard, cancellationToken: token);
         }
     }
 }

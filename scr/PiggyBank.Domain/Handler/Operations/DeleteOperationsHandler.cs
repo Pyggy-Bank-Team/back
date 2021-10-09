@@ -18,7 +18,7 @@ namespace PiggyBank.Domain.Handler.Operations
 
         public override async Task Invoke(CancellationToken token)
         {
-            var deletionService = new DeleteOperationService(Context);
+            var deletionService = new DeleteOperationService((PiggyContext)Context);
             var repository = GetRepository<Operation>();
 
             var ids = Command.Ids;

@@ -15,7 +15,7 @@ namespace PiggyBank.Domain.Handler.Operations.Budget
 
         public override Task Invoke(CancellationToken token)
         {
-            var deletionService = new DeleteOperationService(Context);
+            var deletionService = new DeleteOperationService((PiggyContext)Context);
             return deletionService.DeleteBudgetOperation(Command.Id, Command, token);
         }
     }
