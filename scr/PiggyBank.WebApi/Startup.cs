@@ -1,3 +1,4 @@
+using System;
 using System.Text;
 using Identity.Model;
 using Identity.Model.Models;
@@ -149,6 +150,7 @@ namespace PiggyBank.WebApi
             services.Configure<BotOptions>(Configuration.GetSection(BotOptions.BotSection));
             
             services.AddHostedService<ConfigureWebHookService>();
+            services.AddDistributedMemoryCache();
             services.AddSession();
         }
 

@@ -65,15 +65,21 @@ namespace PiggyBank.Domain.Services
             throw new System.NotImplementedException();
         }
 
-        private Task ProcessMessage(Message commandMessage, ISession session, CancellationToken token)
+        private async Task ProcessMessage(Message commandMessage, ISession session, CancellationToken token)
         {
-            var handler = commandMessage.Text switch
+            switch (commandMessage.Text)
             {
-                string text when text.StartsWith("/start") => new StartHandler(_identityContext, commandMessage, _client),
-                _ => null
-            };
-
-            return Task.CompletedTask;
+                case { } text when text.StartsWith("/start"):
+                    var startHandler = new StartHandler(_identityContext, commandMessage, _client);
+                    await _identityDispatcher.InvokeCompletedHandler<StartHandler, Message>(startHandler, token);
+                    break;
+                case { } text when text.StartsWith("/help"):
+                    break;
+                case { } text when  text.StartsWith("/settings"):
+                    break;
+                case { } text when double.TryParse(text, out var amount):
+                    break;
+            }
         }
     }
 }
