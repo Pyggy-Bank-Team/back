@@ -13,7 +13,7 @@ namespace PiggyBank.WebApi.Controllers
         [HttpPost, Route("update")]
         public async Task<IActionResult> Update([FromServices]IBotService service, [FromBody]Update request, CancellationToken token)
         {
-            await service.ProcessUpdateCommand(request, token);
+            await service.ProcessUpdateCommand(request, HttpContext.Session, token);
             return Ok();
         }
     }

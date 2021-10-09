@@ -143,11 +143,13 @@ namespace PiggyBank.WebApi
             });
 
             var botOptions = Configuration.GetSection(BotOptions.BotSection);
-            services.AddHttpClient<ITelegramBotClient>(client => new TelegramBotClient(botOptions["Token"], client));
+            services.AddHttpClient("tmbot")
+                .AddTypedClient<ITelegramBotClient>(client =>new TelegramBotClient(botOptions["Token"], client));
 
             services.Configure<BotOptions>(Configuration.GetSection(BotOptions.BotSection));
             
             services.AddHostedService<ConfigureWebHookService>();
+            services.AddSession();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -163,6 +165,8 @@ namespace PiggyBank.WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
+
+            app.UseSession();
 
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 

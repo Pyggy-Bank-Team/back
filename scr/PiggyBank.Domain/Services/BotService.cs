@@ -1,6 +1,7 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.AspNetCore.Http;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Model;
 using Serilog;
@@ -12,12 +13,14 @@ namespace PiggyBank.Domain.Services
 {
     public class BotService : ServiceBase, IBotService
     {
+        private readonly ILogger _logger;
         private readonly ITelegramBotClient _client;
 
         public BotService(PiggyContext context, ILogger logger, ITelegramBotClient client) : base(context, logger)
-            => _client = client;
+            => (_logger, _client) = (logger, client);
 
-        public async Task ProcessUpdateCommand(Update command, CancellationToken token)
+        //Use session for save temp state of operations. This why I added ASP.NET package to Domain
+        public async Task ProcessUpdateCommand(Update command, ISession session, CancellationToken token)
         {
             var handle = command.Type switch
             {
@@ -32,7 +35,8 @@ namespace PiggyBank.Domain.Services
             }
             catch (Exception e)
             {
-                
+                _logger.Error(e, "Error during handler invoke");
+                throw; 
             }
         }
 
