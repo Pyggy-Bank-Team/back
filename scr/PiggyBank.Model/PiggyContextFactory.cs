@@ -8,7 +8,7 @@ namespace PiggyBank.Model
         public PiggyContext CreateDbContext(string[] args)
         {
             var builder = new DbContextOptionsBuilder<PiggyContext>();
-            builder.UseSqlServer("");
+            builder.UseSqlServer("Data Source=localhost\\SQL2016;Initial Catalog=PiggyBank;Integrated Security=True");
             return new PiggyContext(builder.Options);
         }
     }

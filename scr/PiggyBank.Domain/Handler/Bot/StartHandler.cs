@@ -32,7 +32,7 @@ namespace PiggyBank.Domain.Handler.Bot
             //TODO decode
 
             var identityRepository = GetRepository<ApplicationUser>();
-            var user = await identityRepository.FirstAsync(u => u.Id == userId, token);
+            var user = await identityRepository.FirstOrDefaultAsync(u => u.Id == userId, token);
 
             if (user == null)
             {
