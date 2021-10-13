@@ -1,9 +1,10 @@
 using System;
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Identity.Model;
+using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
+using PiggyBank.Common.Enums;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Handler.Bot;
 using PiggyBank.Domain.Infrastructure;
@@ -65,7 +66,8 @@ namespace PiggyBank.Domain.Services
 
         private async Task<string> ProcessMessage(Message commandMessage, string operationSnapshotJson, CancellationToken token)
         {
-            var userId = GetUserId(commandMessage.Chat.Id, token);
+            var chatId = commandMessage.Chat.Id;
+            var userId = (await _identityContext.Users.FirstOrDefaultAsync(u => u.ChatId == chatId, token))?.Id;
             var operation = string.IsNullOrWhiteSpace(operationSnapshotJson) ? null : JsonConvert.DeserializeObject<BotOperationSnapshot>(operationSnapshotJson); 
             
             switch (commandMessage.Text)
@@ -74,7 +76,6 @@ namespace PiggyBank.Domain.Services
                     var startHandler = new StartHandler(_identityContext, commandMessage, _client);
                     await _identityDispatcher.InvokeHandler(startHandler, token);
                     return null;
-                    break;
                 case { } text when text.StartsWith("/help"):
                     break;
                 case { } text when  text.StartsWith("/settings"):
@@ -98,10 +99,35 @@ namespace PiggyBank.Domain.Services
                     return JsonConvert.SerializeObject(operation);
             }
 
+            if (operation == null)
+            {
+                var nullOperationHandler = new NullOperationHandler(_piggyContext, commandMessage, _client);
+                await _piggyDispatcher.InvokeHandler(nullOperationHandler, token);
+                return null;
+            }
+
+            switch (operation.Step)
+            {
+                case Step.Zero:
+                    //TODO Add AmountOperationHandler
+                    break;
+                case Step.One:
+                    //TODO Add AccountOperationHandler
+                    break;
+                case Step.Two when operation.Type == OperationType.Budget:
+                    //TODO Add CategoryOperationHandler
+                    break;
+                case Step.Two when operation.Type == OperationType.Transfer:
+                    //TODO Add AccountOperationHandler
+                    break;
+                case Step.Three:
+                    //TODO SaveOperation
+                    break;
+                default:
+                    throw new ArgumentOutOfRangeException();
+            }
+
             return null;
         }
-
-        private string GetUserId(long chatId, CancellationToken token)
-            => _identityContext.Users.FirstOrDefault(u => u.ChatId == chatId)?.Id;
     }
 }
