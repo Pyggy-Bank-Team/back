@@ -15,7 +15,7 @@ namespace PiggyBank.Domain.Infrastructure
         public HandlerDispatcher(DbContext context, ILogger logger)
             => (_context, _logger) = (context, logger);
 
-        public async Task InvokeCompletedHandler<THandler, TCommand>(THandler handler, CancellationToken token) where THandler : BaseHandler<TCommand>
+        public async Task InvokeHandler(BaseHandler handler, CancellationToken token)
         {
             try
             {

@@ -3,10 +3,11 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Identity.Model;
-using Microsoft.AspNetCore.Http;
+using Newtonsoft.Json;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Handler.Bot;
 using PiggyBank.Domain.Infrastructure;
+using PiggyBank.Domain.Models.Operations;
 using PiggyBank.Model;
 using Serilog;
 using Telegram.Bot;
@@ -35,54 +36,69 @@ namespace PiggyBank.Domain.Services
             _identityDispatcher = new HandlerDispatcher(identityContext, logger);
         }
 
-        //Use session for save temp state of operations. This why I added ASP.NET package to Domain
-        public async Task ProcessUpdateCommand(Update command, ISession session, CancellationToken token)
+        public async Task<string> ProcessUpdateCommand(Update command, string operationSnapshotJson, CancellationToken token)
         {
             var method = command.Type switch
             {
-                UpdateType.Message => ProcessMessage(command.Message, session, token),
-                _ => ProcessUnknownMessage(command, session, token)
+                UpdateType.Message => ProcessMessage(command.Message, operationSnapshotJson, token),
+                _ => ProcessUnknownMessage(command, token)
             };
 
             try
             {
-                await method;
+                return await method;
             }
             catch (Exception e)
             {
                 _logger.Error(e, "Error during handler invoke");
             }
+
+            return null;
         }
 
-        private async Task ProcessUnknownMessage(Update command, ISession session, CancellationToken token)
+        private async Task<string> ProcessUnknownMessage(Update command, CancellationToken token)
         {
             var unknownTypeHandler = new UnknownMessageTypeHandler(_piggyContext, command, _client);
-            await _piggyDispatcher.InvokeCompletedHandler<UnknownMessageTypeHandler, Update>(unknownTypeHandler, token);
+            await _piggyDispatcher.InvokeHandler(unknownTypeHandler, token);
+            return null;
         }
 
-        private async Task ProcessMessage(Message commandMessage, ISession session, CancellationToken token)
+        private async Task<string> ProcessMessage(Message commandMessage, string operationSnapshotJson, CancellationToken token)
         {
+            var userId = GetUserId(commandMessage.Chat.Id, token);
+            var operation = string.IsNullOrWhiteSpace(operationSnapshotJson) ? null : JsonConvert.DeserializeObject<BotOperationSnapshot>(operationSnapshotJson); 
+            
             switch (commandMessage.Text)
             {
                 case { } text when text.StartsWith("/start"):
                     var startHandler = new StartHandler(_identityContext, commandMessage, _client);
-                    await _identityDispatcher.InvokeCompletedHandler<StartHandler, Message>(startHandler, token);
+                    await _identityDispatcher.InvokeHandler(startHandler, token);
+                    return null;
                     break;
                 case { } text when text.StartsWith("/help"):
                     break;
                 case { } text when  text.StartsWith("/settings"):
                     break;
                 case { } text when text.Contains("➖ Add expense"):
-                    var addExpenseHandler = new AddExpenseHandler(_piggyContext, commandMessage, _client);
-                    await _piggyDispatcher.InvokeCompletedHandler<AddExpenseHandler, Message>(addExpenseHandler, token);
-                    break;
-                case { } text when double.TryParse(text, out var amount):
-                    break;
-                default:
-                    var unknownTypeHandler = new UnknownMessageTypeHandler(_piggyContext, null, _client);
-                    await _piggyDispatcher.InvokeCompletedHandler<UnknownMessageTypeHandler, Update>(unknownTypeHandler, token);
-                    break;
+                    var addExpenseHandler = new AddExpenseHandler(_piggyContext, commandMessage, _client, userId);
+                    await _piggyDispatcher.InvokeHandler(addExpenseHandler, token);
+                    operation = (BotOperationSnapshot)addExpenseHandler.Result;
+                    return JsonConvert.SerializeObject(operation);
+                
+                case { } text when text.Contains("➕ Add income"):
+                    var addIncomeHandler = new AddIncomeHandler(_piggyContext, commandMessage, _client, userId);
+                    await _piggyDispatcher.InvokeHandler(addIncomeHandler, token);
+                    operation = (BotOperationSnapshot)addIncomeHandler.Result;
+                    return JsonConvert.SerializeObject(operation);
+                
+                case { } text when text.Contains("🔁 Add transfer"):
+                    var addTransferHandler = new AddTransferHandler(_piggyContext, commandMessage, _client, userId);
+                    await _piggyDispatcher.InvokeHandler(addTransferHandler, token);
+                    operation = (BotOperationSnapshot)addTransferHandler.Result;
+                    return JsonConvert.SerializeObject(operation);
             }
+
+            return null;
         }
 
         private string GetUserId(long chatId, CancellationToken token)

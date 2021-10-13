@@ -5,7 +5,14 @@ using Microsoft.EntityFrameworkCore;
 
 namespace PiggyBank.Domain.Handler
 {
-    public abstract class BaseHandler<TCommand> : DbWorker
+    public abstract class BaseHandler : DbWorker
+    {
+        protected BaseHandler(DbContext context) : base(context) { }
+        
+        public abstract Task Invoke(CancellationToken token);
+    }
+    
+    public abstract class BaseHandler<TCommand> : BaseHandler
     {
         public TCommand Command { get; set; }
 
@@ -13,7 +20,5 @@ namespace PiggyBank.Domain.Handler
 
         protected BaseHandler(DbContext context, TCommand command) : base(context)
             => Command = command;
-
-        public abstract Task Invoke(CancellationToken token);
     }
 }

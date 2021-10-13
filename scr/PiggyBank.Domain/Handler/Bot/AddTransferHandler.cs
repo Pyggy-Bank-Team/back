@@ -1,19 +1,19 @@
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Enums;
 using PiggyBank.Domain.Models.Operations;
-using PiggyBank.Model;
 using Telegram.Bot;
 using Telegram.Bot.Types;
 
 namespace PiggyBank.Domain.Handler.Bot
 {
-    public class AddExpenseHandler : BaseHandler<Message>
+    public class AddTransferHandler : BaseHandler<Message>
     {
         private readonly ITelegramBotClient _client;
         private readonly string _userId;
 
-        public AddExpenseHandler(PiggyContext context, Message command, ITelegramBotClient client, string userId) : base(context, command)
+        public AddTransferHandler(DbContext context, Message command,ITelegramBotClient client, string userId) : base(context, command)
         {
             _client = client;
             _userId = userId;
@@ -29,8 +29,7 @@ namespace PiggyBank.Domain.Handler.Bot
                 ChatId = Command.Chat.Id,
                 CreatedBy = _userId,
                 Step = Step.Zero,
-                Type = OperationType.Budget,
-                CategoryType = CategoryType.Expense
+                Type = OperationType.Transfer
             };
         }
     }
