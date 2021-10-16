@@ -1,19 +1,17 @@
 using System;
+using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using Identity.Model;
 using Microsoft.EntityFrameworkCore;
-using Newtonsoft.Json;
+using PiggyBank.Common.Commands.Bot;
 using PiggyBank.Common.Enums;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Handler.Bot;
 using PiggyBank.Domain.Infrastructure;
-using PiggyBank.Domain.Models.Operations;
 using PiggyBank.Model;
 using Serilog;
 using Telegram.Bot;
-using Telegram.Bot.Types;
-using Telegram.Bot.Types.Enums;
 
 namespace PiggyBank.Domain.Services
 {
@@ -37,97 +35,131 @@ namespace PiggyBank.Domain.Services
             _identityDispatcher = new HandlerDispatcher(identityContext, logger);
         }
 
-        public async Task<string> ProcessUpdateCommand(Update command, string operationSnapshotJson, CancellationToken token)
+        public async Task UpdateProcessing(UpdateCommand updateCommand, CancellationToken token)
         {
-            var method = command.Type switch
-            {
-                UpdateType.Message => ProcessMessage(command.Message, operationSnapshotJson, token),
-                _ => ProcessUnknownMessage(command, token)
-            };
-
             try
             {
-                return await method;
+                switch (updateCommand.Text)
+                {
+                    case {} defaultText when CheckForDefaultCommands(defaultText):
+                        await DefaultCommandsProcessing(updateCommand, token);
+                        break;
+                    case {} beginText when CheckForBeginCommands(beginText):
+                        updateCommand.UserId = await GetUserId(updateCommand.ChatId, token);
+                        await BeginCommandsProcessing(updateCommand, token);
+                        break;
+                    default:
+                        updateCommand.UserId = await GetUserId(updateCommand.ChatId, token);
+                        await ExistOperationsProcessing(updateCommand, token);
+                        break;
+                }
             }
             catch (Exception e)
             {
-                _logger.Error(e, "Error during handler invoke");
+                _logger.Error("Error during processing an update command from bot", e);
             }
-
-            return null;
         }
 
-        private async Task<string> ProcessUnknownMessage(Update command, CancellationToken token)
+        private async Task DefaultCommandsProcessing(UpdateCommand updateCommand, CancellationToken token)
         {
-            var unknownTypeHandler = new UnknownMessageTypeHandler(_piggyContext, command, _client);
-            await _piggyDispatcher.InvokeHandler(unknownTypeHandler, token);
-            return null;
-        }
-
-        private async Task<string> ProcessMessage(Message commandMessage, string operationSnapshotJson, CancellationToken token)
-        {
-            var chatId = commandMessage.Chat.Id;
-            var userId = (await _identityContext.Users.FirstOrDefaultAsync(u => u.ChatId == chatId, token))?.Id;
-            var operation = string.IsNullOrWhiteSpace(operationSnapshotJson) ? null : JsonConvert.DeserializeObject<BotOperationSnapshot>(operationSnapshotJson); 
-            
-            switch (commandMessage.Text)
+            switch (updateCommand.Text)
             {
                 case { } text when text.StartsWith("/start"):
-                    var startHandler = new StartHandler(_identityContext, commandMessage, _client);
+                    var startHandler = new StartHandler(_identityContext, updateCommand, _client);
                     await _identityDispatcher.InvokeHandler(startHandler, token);
-                    return null;
+                    break;
                 case { } text when text.StartsWith("/help"):
                     break;
-                case { } text when  text.StartsWith("/settings"):
+                case { } text when text.StartsWith("/settings"):
                     break;
-                case { } text when text.Contains("➖ Add expense"):
-                    var addExpenseHandler = new AddExpenseHandler(_piggyContext, commandMessage, _client, userId);
-                    await _piggyDispatcher.InvokeHandler(addExpenseHandler, token);
-                    operation = (BotOperationSnapshot)addExpenseHandler.Result;
-                    return JsonConvert.SerializeObject(operation);
-                
-                case { } text when text.Contains("➕ Add income"):
-                    var addIncomeHandler = new AddIncomeHandler(_piggyContext, commandMessage, _client, userId);
-                    await _piggyDispatcher.InvokeHandler(addIncomeHandler, token);
-                    operation = (BotOperationSnapshot)addIncomeHandler.Result;
-                    return JsonConvert.SerializeObject(operation);
-                
-                case { } text when text.Contains("🔁 Add transfer"):
-                    var addTransferHandler = new AddTransferHandler(_piggyContext, commandMessage, _client, userId);
-                    await _piggyDispatcher.InvokeHandler(addTransferHandler, token);
-                    operation = (BotOperationSnapshot)addTransferHandler.Result;
-                    return JsonConvert.SerializeObject(operation);
             }
+        }
 
+        private async Task BeginCommandsProcessing(UpdateCommand updateCommand, CancellationToken token)
+        {
+            switch (updateCommand.Text)
+            {
+                case { } text when text.Contains("➖ Add expense"):
+                    var addExpenseHandler = new AddExpenseHandler(_piggyContext, updateCommand, _client);
+                    await _piggyDispatcher.InvokeHandler(addExpenseHandler, token);
+                    break;
+                case { } text when text.Contains("➕ Add income"):
+                    var addIncomeHandler = new AddIncomeHandler(_piggyContext, updateCommand, _client);
+                    await _piggyDispatcher.InvokeHandler(addIncomeHandler, token);
+                    break;
+
+                case { } text when text.Contains("🔁 Add transfer"):
+                    var addTransferHandler = new AddTransferHandler(_piggyContext, updateCommand, _client);
+                    await _piggyDispatcher.InvokeHandler(addTransferHandler, token);
+                    break;
+            }
+        }
+
+        private async Task ExistOperationsProcessing(UpdateCommand updateCommand,  CancellationToken token)
+        {
+            var operation = await _piggyContext.BotOperations.Where(b => b.ChatId == updateCommand.ChatId).OrderByDescending(b => b.CreatedOn).FirstAsync(token);
+            
             if (operation == null)
             {
-                var nullOperationHandler = new NullOperationHandler(_piggyContext, commandMessage, _client);
+                var nullOperationHandler = new NullOperationHandler(_piggyContext, updateCommand, _client);
                 await _piggyDispatcher.InvokeHandler(nullOperationHandler, token);
-                return null;
+                return;
             }
-
-            switch (operation.Step)
+            
+            switch (operation.Stage)
             {
-                case Step.Zero:
-                    //TODO Add AmountOperationHandler
+                case CreationStage.Zero:
+                    var addAmountHandler = new AddAmountHandler(_piggyContext, updateCommand, _client, operation);
+                    await _piggyDispatcher.InvokeHandler(addAmountHandler, token);
                     break;
-                case Step.One:
+                case CreationStage.One:
                     //TODO Add AccountOperationHandler
                     break;
-                case Step.Two when operation.Type == OperationType.Budget:
+                case CreationStage.Two when operation.Type == OperationType.Budget:
                     //TODO Add CategoryOperationHandler
                     break;
-                case Step.Two when operation.Type == OperationType.Transfer:
+                case CreationStage.Two when operation.Type == OperationType.Transfer:
                     //TODO Add AccountOperationHandler
                     break;
-                case Step.Three:
+                case CreationStage.Three:
                     //TODO SaveOperation
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
             }
+        }
+        
 
-            return null;
+        private static bool CheckForDefaultCommands(string messageText)
+        {
+            switch (messageText)
+            {
+                case { } startMessage when startMessage.StartsWith("/start"):
+                case { } helpMessage when helpMessage.StartsWith("/help"):
+                case { } settingsMessage when settingsMessage.StartsWith("/settings"):
+                    return true;
+                default:
+                    return false;
+            }
+        }
+
+        private static bool CheckForBeginCommands(string messageText)
+        {
+            switch (messageText)
+            {
+                case { } expense when expense.Contains("➖ Add expense"):
+                case { } income when income.Contains("➕ Add income"):
+                case { } transfer when transfer.Contains("🔁 Add transfer"):
+                    return true;
+                default:
+                    return false;
+            }
+        }
+        
+        private async Task<string> GetUserId(long chatId, CancellationToken token)
+        {
+            var user = await _identityContext.Users.FirstOrDefaultAsync(u => u.ChatId == chatId, token);
+            return user?.Id;
         }
     }
 }

@@ -19,6 +19,8 @@ namespace PiggyBank.Model
         public DbSet<TransferOperation> TransferOperations { get; set; }
 
         public DbSet<BalanceHistory> BalanceHistories { get; set; }
+        
+        public DbSet<BotOperation> BotOperations { get; set; }
 
         protected override void OnModelCreating(ModelBuilder modelBuilder)
         {

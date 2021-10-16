@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using Identity.Model;
 using Identity.Model.Models;
@@ -150,8 +149,6 @@ namespace PiggyBank.WebApi
             services.Configure<BotOptions>(Configuration.GetSection(BotOptions.BotSection));
             
             services.AddHostedService<ConfigureWebHookService>();
-            services.AddDistributedMemoryCache();
-            services.AddSession();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -167,8 +164,6 @@ namespace PiggyBank.WebApi
 
             app.UseAuthentication();
             app.UseAuthorization();
-
-            app.UseSession();
 
             app.UseMiddleware<ExceptionHandlerMiddleware>();
 

@@ -1,11 +1,11 @@
 using System.Threading;
 using System.Threading.Tasks;
-using Telegram.Bot.Types;
+using PiggyBank.Common.Commands.Bot;
 
 namespace PiggyBank.Common.Interfaces
 {
     public interface IBotService
     {
-        Task<string> ProcessUpdateCommand(Update command, string operationSnapshotJson, CancellationToken token);
+        Task UpdateProcessing(UpdateCommand updateCommand, CancellationToken token);
     }
 }

@@ -1,37 +1,36 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Commands.Bot;
 using PiggyBank.Common.Enums;
-using PiggyBank.Domain.Models.Operations;
+using PiggyBank.Model.Models.Entities;
 using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace PiggyBank.Domain.Handler.Bot
 {
-    public class AddIncomeHandler : BaseHandler<Message>
+    public class AddIncomeHandler : BaseHandler<UpdateCommand>
     {
-        private readonly ITelegramBotClient _client;
-        private readonly string _userId;
+        private const string Message = "Enter the transaction amount:";
 
-        public AddIncomeHandler(DbContext context, Message command, ITelegramBotClient client, string userId) : base(context, command)
-        {
-            _client = client;
-            _userId = userId;
-        }
+        private readonly ITelegramBotClient _client;
+
+        public AddIncomeHandler(DbContext context, UpdateCommand command, ITelegramBotClient client) : base(context, command)
+            => _client = client;
 
         public override async Task Invoke(CancellationToken token)
         {
-            var message = "Enter the transaction amount:";
-            await _client.SendTextMessageAsync(Command.Chat.Id, message, cancellationToken: token);
-
-            Result = new BotOperationSnapshot
+            await GetRepository<BotOperation>().AddAsync(new BotOperation
             {
-                ChatId = Command.Chat.Id,
-                CreatedBy = _userId,
-                Step = Step.Zero,
+                ChatId = Command.ChatId,
+                CreatedBy = Guid.Parse(Command.UserId),
+                CreatedOn = DateTime.UtcNow,
+                Stage = CreationStage.Zero,
                 Type = OperationType.Budget,
                 CategoryType = CategoryType.Income
-            };
+            }, token);
+
+            await _client.SendTextMessageAsync(Command.ChatId, Message, cancellationToken: token);
         }
     }
 }
