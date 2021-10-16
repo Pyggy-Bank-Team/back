@@ -2,9 +2,9 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Interfaces.Models;
 using PiggyBank.Domain.Handler;
 using PiggyBank.Model;
-using PiggyBank.Model.Interfaces;
 using PiggyBank.Model.Models.Entities;
 using Xunit;
 

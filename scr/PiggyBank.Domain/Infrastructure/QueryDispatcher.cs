@@ -1,18 +1,18 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
 using PiggyBank.Domain.Queries;
-using PiggyBank.Model;
 using Serilog;
 
 namespace PiggyBank.Domain.Infrastructure
 {
     public class QueryDispatcher
     {
-        private readonly PiggyContext _context;
+        private readonly DbContext _context;
         private readonly ILogger _logger;
 
-        public QueryDispatcher(PiggyContext context, ILogger logger)
+        public QueryDispatcher(DbContext context, ILogger logger)
             => (_context, _logger) = (context, logger);
 
         public Task<TOutput> Invoke<TQuery, TOutput>(CancellationToken token, object param1, object param2) where TQuery : BaseQuery<TOutput>

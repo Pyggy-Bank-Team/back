@@ -11,7 +11,7 @@ using Serilog;
 
 namespace PiggyBank.Domain.Services
 {
-    public class AccountService : ServiceBase, IAccountService
+    public class AccountService : PiggyServiceBase, IAccountService
     {
         public AccountService(PiggyContext context, ILogger logger) : base(context, logger)
         {
