@@ -121,7 +121,8 @@ namespace PiggyBank.Domain.Services
                     await _piggyDispatcher.InvokeHandler(categoryOperationHandler, token);
                     break;
                 case CreationStage.Two when operation.Type == OperationType.Transfer:
-                    //TODO Add AccountOperationHandler
+                    var account1OperationHandler = new Account1OperationHandler(_piggyContext, updateCommand, _client, operation);
+                    await _piggyDispatcher.InvokeHandler(account1OperationHandler, token);
                     break;
                 default:
                     throw new ArgumentOutOfRangeException();
