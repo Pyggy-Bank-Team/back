@@ -52,10 +52,8 @@ namespace PiggyBank.Domain.Handler.Bot
             foreach (var account in accounts.Take(30))
                 keys.Add(new KeyboardButton[]{account.Title});
             
-            var startKeyboard = new ReplyKeyboardMarkup(keys);
+            var startKeyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
             await _client.SendTextMessageAsync(Command.ChatId, "Choose your accounts", replyMarkup: startKeyboard, cancellationToken: token);
-
-            Result = _operation;
         }
     }
 }

@@ -113,7 +113,8 @@ namespace PiggyBank.Domain.Services
                     await _piggyDispatcher.InvokeHandler(addAmountHandler, token);
                     break;
                 case CreationStage.One:
-                    //TODO Add AccountOperationHandler
+                    var accountOperationHandler = new AccountOperationHandler(_piggyContext, updateCommand, _client, operation);
+                    await _piggyDispatcher.InvokeHandler(accountOperationHandler, token);
                     break;
                 case CreationStage.Two when operation.Type == OperationType.Budget:
                     //TODO Add CategoryOperationHandler
