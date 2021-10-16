@@ -6,13 +6,14 @@ using PiggyBank.Common.Enums;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Telegram.Bot;
+using Telegram.Bot.Types.ReplyMarkups;
 
 namespace PiggyBank.Domain.Handler.Bot
 {
     public class AddExpenseHandler : BaseHandler<UpdateCommand>
     {
         private const string Message = "Enter the transaction amount:";
-        
+
         private readonly ITelegramBotClient _client;
 
         public AddExpenseHandler(PiggyContext context, UpdateCommand command, ITelegramBotClient client) : base(context, command)
@@ -29,8 +30,8 @@ namespace PiggyBank.Domain.Handler.Bot
                 Type = OperationType.Budget,
                 CategoryType = CategoryType.Expense
             }, token);
-            
-            await _client.SendTextMessageAsync(Command.ChatId, Message, cancellationToken: token);
+
+            await _client.SendTextMessageAsync(Command.ChatId, Message, replyMarkup: new ReplyKeyboardRemove(), cancellationToken: token);
         }
     }
 }
