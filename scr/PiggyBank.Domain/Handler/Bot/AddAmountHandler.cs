@@ -33,7 +33,7 @@ namespace PiggyBank.Domain.Handler.Bot
 
             var accounts = GetRepository<Account>().Where(a => a.CreatedBy == _operation.CreatedBy && !a.IsArchived && !a.IsDeleted);
 
-            if (!accounts.Any())
+            if (!await accounts.AnyAsync(token))
             {
                 var message = "Couldn't find any accounts. Please add new account by PiggyBank app and try again.";
                 await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
@@ -47,13 +47,23 @@ namespace PiggyBank.Domain.Handler.Bot
 
             GetRepository<BotOperation>().Update(_operation);
 
-            //TODO
-            var keys = new List<KeyboardButton[]>();
-            foreach (var account in accounts.Take(30))
-                keys.Add(new KeyboardButton[]{account.Title});
-            
-            var startKeyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
-            await _client.SendTextMessageAsync(Command.ChatId, "Choose your accounts", replyMarkup: startKeyboard, cancellationToken: token);
+            IEnumerable<KeyboardButton[]> BuildKeyboard(IReadOnlyList<Account> a)
+            {
+                for (var i = 0; i < a.Count; i++)
+                {
+                    if (i + 1 >= a.Count)
+                        yield return new[] { new KeyboardButton(a[i].Title) };
+                    else
+                    {
+                        yield return new[] { new KeyboardButton(a[i].Title), new KeyboardButton(a[i + 1].Title) };
+                        i++;
+                    }
+                }
+            }
+
+            var keys = BuildKeyboard(accounts.ToArray());
+            var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
+            await _client.SendTextMessageAsync(Command.ChatId, "Choose your accounts", replyMarkup: keyboard, cancellationToken: token);
         }
     }
 }

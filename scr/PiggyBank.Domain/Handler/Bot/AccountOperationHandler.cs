@@ -45,39 +45,59 @@ namespace PiggyBank.Domain.Handler.Bot
             {
                 var categories = GetRepository<Category>().Where(c => c.CreatedBy == _operation.CreatedBy && c.Type == _operation.CategoryType && !c.IsArchived && !c.IsDeleted);
                 
-                if (!categories.Any())
+                if (!await categories.AnyAsync(token))
                 {
                     var message = "Couldn't find any categories. Please add new category by PiggyBank app and try again.";
                     await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
                     return;
                 }
-                
-                //TODO
-                var keys = new List<KeyboardButton[]>();
-                foreach (var a in categories.Take(30))
-                    keys.Add(new KeyboardButton[]{a.Title});
-            
-                var startKeyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
-                await _client.SendTextMessageAsync(Command.ChatId, "Choose your accounts", replyMarkup: startKeyboard, cancellationToken: token);
+
+                IEnumerable<KeyboardButton[]> BuildKeyboard(IReadOnlyList<Category> c)
+                {
+                    for (var i = 0; i < c.Count; i++)
+                    {
+                        if (i + 1 >= c.Count)
+                            yield return new[] { new KeyboardButton(c[i].Title) };
+                        else
+                        {
+                            yield return new[] { new KeyboardButton(c[i].Title), new KeyboardButton(c[i + 1].Title) };
+                            i++;
+                        }
+                    }
+                }
+
+                var keys = BuildKeyboard(categories.ToArray());
+                var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
+                await _client.SendTextMessageAsync(Command.ChatId, "Choose your accounts", replyMarkup: keyboard, cancellationToken: token);
             }
             else
             {
                 var accounts = GetRepository<Account>().Where(a => a.CreatedBy == _operation.CreatedBy && !a.IsArchived && !a.IsDeleted);
 
-                if (!accounts.Any())
+                if (! await accounts.AnyAsync(token))
                 {
                     var message = "Couldn't find any accounts. Please add new account by PiggyBank app and try again.";
                     await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
                     return;
                 }
                 
-                //TODO
-                var keys = new List<KeyboardButton[]>();
-                foreach (var a in accounts.Take(30))
-                    keys.Add(new KeyboardButton[]{a.Title});
-            
-                var startKeyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
-                await _client.SendTextMessageAsync(Command.ChatId, "Choose your accounts", replyMarkup: startKeyboard, cancellationToken: token);
+                IEnumerable<KeyboardButton[]> BuildKeyboard(IReadOnlyList<Account> a)
+                {
+                    for (var i = 0; i < a.Count; i++)
+                    {
+                        if (i + 1 >= a.Count)
+                            yield return new[] { new KeyboardButton(a[i].Title) };
+                        else
+                        {
+                            yield return new[] { new KeyboardButton(a[i].Title), new KeyboardButton(a[i + 1].Title) };
+                            i++;
+                        }
+                    }
+                }
+
+                var keys = BuildKeyboard(accounts.ToArray());
+                var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
+                await _client.SendTextMessageAsync(Command.ChatId, "Choose your accounts", replyMarkup: keyboard, cancellationToken: token);
             }
         }
     }
