@@ -12,12 +12,12 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace PiggyBank.Domain.Handler.Bot
 {
-    public class AddAmountHandler : BaseHandler<UpdateCommand>
+    public class AmountInputHandler : BaseHandler<UpdateCommand>
     {
         private readonly ITelegramBotClient _client;
         private readonly BotOperation _operation;
 
-        public AddAmountHandler(DbContext context, UpdateCommand command, ITelegramBotClient client, BotOperation operation) : base(context, command)
+        public AmountInputHandler(DbContext context, UpdateCommand command, ITelegramBotClient client, BotOperation operation) : base(context, command)
             => (_client, _operation) = (client, operation);
 
         public override async Task Invoke(CancellationToken token)
@@ -41,7 +41,7 @@ namespace PiggyBank.Domain.Handler.Bot
             }
             
             _operation.Amount = amount;
-            _operation.Stage = CreationStage.One;
+            _operation.Stage = CreationStage.AccountSelection;
             _operation.ModifiedBy = Guid.Parse(Command.UserId);
             _operation.ModifiedOn = DateTime.UtcNow;
 
