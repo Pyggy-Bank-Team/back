@@ -12,12 +12,12 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace PiggyBank.Domain.Handler.Bot
 {
-    public class AccountOperationHandler : BaseHandler<UpdateCommand>
+    public class ToCategoriesOrToAccountsHandler : BaseHandler<UpdateCommand>
     {
         private readonly ITelegramBotClient _client;
         private readonly BotOperation _operation;
 
-        public AccountOperationHandler(DbContext context, UpdateCommand command, ITelegramBotClient client, BotOperation operation) : base(context, command)
+        public ToCategoriesOrToAccountsHandler(DbContext context, UpdateCommand command, ITelegramBotClient client, BotOperation operation) : base(context, command)
         {
             _client = client;
             _operation = operation;
@@ -34,7 +34,7 @@ namespace PiggyBank.Domain.Handler.Bot
                 return;
             }
             
-            _operation.Stage = CreationStage.Two;
+            _operation.Stage = CreationStage.CategoryOrAccountSelection;
             _operation.ModifiedBy = Guid.Parse(Command.UserId);
             _operation.ModifiedOn = DateTime.UtcNow;
             _operation.AccountId = account.Id;

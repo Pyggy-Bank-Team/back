@@ -26,7 +26,7 @@ namespace PiggyBank.Domain.Handler.Bot
                 ChatId = Command.ChatId,
                 CreatedBy = Guid.Parse(Command.UserId),
                 CreatedOn = DateTime.UtcNow,
-                Stage = CreationStage.Zero,
+                Stage = CreationStage.AmountInput,
                 Type = OperationType.Budget,
                 CategoryType = CategoryType.Income
             }, token);
