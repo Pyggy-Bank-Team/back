@@ -1,26 +1,24 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Commands.Bot;
 using PiggyBank.Domain.Helpers;
 using Telegram.Bot;
-using Telegram.Bot.Types;
 
 namespace PiggyBank.Domain.Handler.Bot
 {
-    public class UnknownMessageTypeHandler : BaseHandler<Update>
+    public class UnknownMessageTypeHandler : BaseHandler<UnknownMessageTypeCommand>
     {
         private readonly ITelegramBotClient _client;
 
-        public UnknownMessageTypeHandler(DbContext context, Update command, ITelegramBotClient client) : base(context, command)
-        {
-            _client = client;
-        }
+        public UnknownMessageTypeHandler(DbContext context, UnknownMessageTypeCommand command, ITelegramBotClient client) : base(context, command)
+            => _client = client;
 
         public override async Task Invoke(CancellationToken token)
         {
             var message = "Oppps! Unsupported type of message. Try again 😉";
             var startKeyboard = BotKeyboardHelper.GenerateStartKeyboard();
-            await _client.SendTextMessageAsync(Command.Message.Chat.Id, message, replyMarkup: startKeyboard, cancellationToken: token);
+            await _client.SendTextMessageAsync(Command.ChatId, message, replyMarkup: startKeyboard, cancellationToken: token);
         }
     }
 }

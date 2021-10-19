@@ -60,6 +60,12 @@ namespace PiggyBank.Domain.Services
             }
         }
 
+        public Task UnknownMessageTypeProcessing(UnknownMessageTypeCommand command, CancellationToken token)
+        {
+            var unknownMessageTypeHandler = new UnknownMessageTypeHandler(_piggyContext, command, _client);
+            return _piggyDispatcher.InvokeHandler(unknownMessageTypeHandler, token);
+        }
+
         private async Task DefaultCommandsProcessing(UpdateCommand updateCommand, CancellationToken token)
         {
             switch (updateCommand.Text)

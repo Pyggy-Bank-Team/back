@@ -7,5 +7,6 @@ namespace PiggyBank.Common.Interfaces
     public interface IBotService
     {
         Task UpdateProcessing(UpdateCommand updateCommand, CancellationToken token);
+        Task UnknownMessageTypeProcessing(UnknownMessageTypeCommand command, CancellationToken token);
     }
 }
