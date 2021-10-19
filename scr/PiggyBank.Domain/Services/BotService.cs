@@ -56,7 +56,7 @@ namespace PiggyBank.Domain.Services
             }
             catch (Exception e)
             {
-                _logger.Error("Error during processing an update command from bot", e);
+                _logger.Error(e, "Error during processing an update command from bot");
             }
         }
 
