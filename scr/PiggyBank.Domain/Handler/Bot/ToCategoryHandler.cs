@@ -12,12 +12,12 @@ using Telegram.Bot;
 
 namespace PiggyBank.Domain.Handler.Bot
 {
-    public class CategorySelectionHandler : BaseHandler<UpdateCommand>
+    public class ToCategoryHandler : BaseHandler<UpdateCommand>
     {
         private readonly ITelegramBotClient _client;
         private readonly BotOperation _operation;
 
-        public CategorySelectionHandler(DbContext context, UpdateCommand command, ITelegramBotClient client, BotOperation operation) : base(context, command)
+        public ToCategoryHandler(DbContext context, UpdateCommand command, ITelegramBotClient client, BotOperation operation) : base(context, command)
         {
             _client = client;
             _operation = operation;

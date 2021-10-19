@@ -115,19 +115,19 @@ namespace PiggyBank.Domain.Services
             switch (operation.Stage)
             {
                 case CreationStage.AmountInput:
-                    var addAmountHandler = new FromAccountsHandler(_piggyContext, updateCommand, _client, operation);
+                    var addAmountHandler = new AmountInputHandler(_piggyContext, updateCommand, _client, operation);
                     await _piggyDispatcher.InvokeHandler(addAmountHandler, token);
                     break;
                 case CreationStage.AccountSelection:
-                    var accountOperationHandler = new ToCategoriesOrToAccountsHandler(_piggyContext, updateCommand, _client, operation);
+                    var accountOperationHandler = new FromAccountHandler(_piggyContext, updateCommand, _client, operation);
                     await _piggyDispatcher.InvokeHandler(accountOperationHandler, token);
                     break;
                 case CreationStage.CategoryOrAccountSelection when operation.Type == OperationType.Budget:
-                    var categoryOperationHandler = new CategorySelectionHandler(_piggyContext, updateCommand, _client, operation);
+                    var categoryOperationHandler = new ToCategoryHandler(_piggyContext, updateCommand, _client, operation);
                     await _piggyDispatcher.InvokeHandler(categoryOperationHandler, token);
                     break;
                 case CreationStage.CategoryOrAccountSelection when operation.Type == OperationType.Transfer:
-                    var account1OperationHandler = new AccountSelectionHandler(_piggyContext, updateCommand, _client, operation);
+                    var account1OperationHandler = new ToAccountHandler(_piggyContext, updateCommand, _client, operation);
                     await _piggyDispatcher.InvokeHandler(account1OperationHandler, token);
                     break;
                 default:

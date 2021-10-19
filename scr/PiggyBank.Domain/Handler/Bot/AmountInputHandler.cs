@@ -12,12 +12,12 @@ using Telegram.Bot.Types.ReplyMarkups;
 
 namespace PiggyBank.Domain.Handler.Bot
 {
-    public class FromAccountsHandler : BaseHandler<UpdateCommand>
+    public class AmountInputHandler : BaseHandler<UpdateCommand>
     {
         private readonly ITelegramBotClient _client;
         private readonly BotOperation _operation;
 
-        public FromAccountsHandler(DbContext context, UpdateCommand command, ITelegramBotClient client, BotOperation operation) : base(context, command)
+        public AmountInputHandler(DbContext context, UpdateCommand command, ITelegramBotClient client, BotOperation operation) : base(context, command)
             => (_client, _operation) = (client, operation);
 
         public override async Task Invoke(CancellationToken token)
