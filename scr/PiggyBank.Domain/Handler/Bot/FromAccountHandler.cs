@@ -33,7 +33,7 @@ namespace PiggyBank.Domain.Handler.Bot
                 await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
                 return;
             }
-            
+
             _operation.Stage = CreationStage.CategoryOrAccountSelection;
             _operation.ModifiedBy = Guid.Parse(Command.UserId);
             _operation.ModifiedOn = DateTime.UtcNow;
@@ -44,7 +44,7 @@ namespace PiggyBank.Domain.Handler.Bot
             if (_operation.Type == OperationType.Budget)
             {
                 var categories = GetRepository<Category>().Where(c => c.CreatedBy == _operation.CreatedBy && c.Type == _operation.CategoryType && !c.IsArchived && !c.IsDeleted);
-                
+
                 if (!await categories.AnyAsync(token))
                 {
                     var message = "Couldn't find any categories. Please add new category by PiggyBank app and try again.";
@@ -67,20 +67,20 @@ namespace PiggyBank.Domain.Handler.Bot
                 }
 
                 var keys = BuildKeyboard(categories.ToArray());
-                var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
-                await _client.SendTextMessageAsync(Command.ChatId, "Choose your accounts", replyMarkup: keyboard, cancellationToken: token);
+                var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard: true);
+                await _client.SendTextMessageAsync(Command.ChatId, "Choose category", replyMarkup: keyboard, cancellationToken: token);
             }
             else
             {
-                var accounts = GetRepository<Account>().Where(a => a.CreatedBy == _operation.CreatedBy && !a.IsArchived && !a.IsDeleted);
+                var accounts = GetRepository<Account>().Where(a => a.CreatedBy == _operation.CreatedBy && !a.IsArchived && !a.IsDeleted && a.Id != account.Id);
 
-                if (! await accounts.AnyAsync(token))
+                if (!await accounts.AnyAsync(token))
                 {
                     var message = "Couldn't find any accounts. Please add new account by PiggyBank app and try again.";
                     await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
                     return;
                 }
-                
+
                 IEnumerable<KeyboardButton[]> BuildKeyboard(IReadOnlyList<Account> a)
                 {
                     for (var i = 0; i < a.Count; i++)
@@ -96,8 +96,8 @@ namespace PiggyBank.Domain.Handler.Bot
                 }
 
                 var keys = BuildKeyboard(accounts.ToArray());
-                var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
-                await _client.SendTextMessageAsync(Command.ChatId, "Choose your accounts", replyMarkup: keyboard, cancellationToken: token);
+                var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard: true);
+                await _client.SendTextMessageAsync(Command.ChatId, "Choose account", replyMarkup: keyboard, cancellationToken: token);
             }
         }
     }
