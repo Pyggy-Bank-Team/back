@@ -75,8 +75,12 @@ namespace PiggyBank.Domain.Services
                     await _identityDispatcher.InvokeHandler(startHandler, token);
                     break;
                 case { } text when text.StartsWith("/help"):
+                    var helpHandler = new HelpHandler(_piggyContext, updateCommand, _client);
+                    await _piggyDispatcher.InvokeHandler(helpHandler, token);
                     break;
                 case { } text when text.StartsWith("/settings"):
+                    var settingsHandler = new SettingsHandler(_piggyContext, updateCommand, _client);
+                    await _piggyDispatcher.InvokeHandler(settingsHandler, token);
                     break;
             }
         }
