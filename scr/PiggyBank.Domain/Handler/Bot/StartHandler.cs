@@ -1,3 +1,4 @@
+using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Identity.Model;
@@ -28,8 +29,8 @@ namespace PiggyBank.Domain.Handler.Bot
                 return;
             }
 
-            var userId = splitText[1];
-            //TODO decode
+            var encodingUserId = splitText[1];
+            var userId = System.Text.Encoding.UTF8.GetString(Convert.FromBase64String(encodingUserId));
 
             var identityRepository = GetRepository<ApplicationUser>();
             var user = await identityRepository.FirstOrDefaultAsync(u => u.Id == userId, token);
