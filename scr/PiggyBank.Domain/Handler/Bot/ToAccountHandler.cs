@@ -61,8 +61,8 @@ namespace PiggyBank.Domain.Handler.Bot
 
             await GetRepository<TransferOperation>().AddAsync(operation, token);
             
-            var message1 = "You just create new operation.";
-            await _client.SendTextMessageAsync(Command.ChatId, message1, replyMarkup:BotKeyboardHelper.GenerateStartKeyboard(), cancellationToken: token);
+            var finalMessage = $"{fromAccount.Title} > {toAccount.Title} {operation.Amount} {fromAccount.Currency}";
+            await _client.SendTextMessageAsync(Command.ChatId, finalMessage, replyMarkup:BotKeyboardHelper.GenerateStartKeyboard(), cancellationToken: token);
         }
     }
 }

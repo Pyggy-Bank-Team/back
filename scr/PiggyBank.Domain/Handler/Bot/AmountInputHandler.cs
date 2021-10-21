@@ -35,7 +35,7 @@ namespace PiggyBank.Domain.Handler.Bot
 
             if (!await accounts.AnyAsync(token))
             {
-                var message = "Couldn't find any accounts. Please add new account by PiggyBank app and try again.";
+                var message = "Couldn't find any accounts.To continue please add new accounts by PiggyBank app and try again.";
                 await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
                 return;
             }
@@ -63,7 +63,7 @@ namespace PiggyBank.Domain.Handler.Bot
 
             var keys = BuildKeyboard(accounts.ToArray());
             var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
-            await _client.SendTextMessageAsync(Command.ChatId, "Choose your accounts", replyMarkup: keyboard, cancellationToken: token);
+            await _client.SendTextMessageAsync(Command.ChatId, "Choose the account from which you want to transfer money", replyMarkup: keyboard, cancellationToken: token);
         }
     }
 }

@@ -47,7 +47,7 @@ namespace PiggyBank.Domain.Handler.Bot
 
                 if (!await categories.AnyAsync(token))
                 {
-                    var message = "Couldn't find any categories. Please add new category by PiggyBank app and try again.";
+                    var message = "Couldn't find any categories.To continue please add new categories by PiggyBank app and try again.";
                     await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
                     return;
                 }
@@ -68,7 +68,7 @@ namespace PiggyBank.Domain.Handler.Bot
 
                 var keys = BuildKeyboard(categories.ToArray());
                 var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard: true);
-                await _client.SendTextMessageAsync(Command.ChatId, "Choose category", replyMarkup: keyboard, cancellationToken: token);
+                await _client.SendTextMessageAsync(Command.ChatId, "Choose the category to which you want to transfer money", replyMarkup: keyboard, cancellationToken: token);
             }
             else
             {
@@ -97,7 +97,7 @@ namespace PiggyBank.Domain.Handler.Bot
 
                 var keys = BuildKeyboard(accounts.ToArray());
                 var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard: true);
-                await _client.SendTextMessageAsync(Command.ChatId, "Choose account", replyMarkup: keyboard, cancellationToken: token);
+                await _client.SendTextMessageAsync(Command.ChatId, "Choose the account to which you want to transfer money", replyMarkup: keyboard, cancellationToken: token);
             }
         }
     }
