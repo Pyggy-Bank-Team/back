@@ -13,12 +13,12 @@ namespace PiggyBank.Domain.Handler.Bot
     public class ToAccountHandler : BaseHandler<UpdateCommand>
     {
         private readonly ITelegramBotClient _client;
-        private readonly BotOperation _operation;
+        private readonly BotOperation _botOperation;
 
-        public ToAccountHandler(DbContext context, UpdateCommand command,  ITelegramBotClient client, BotOperation operation) : base(context, command)
+        public ToAccountHandler(DbContext context, UpdateCommand command,  ITelegramBotClient client, BotOperation botOperation) : base(context, command)
         {
             _client = client;
-            _operation = operation;
+            _botOperation = botOperation;
         }
 
         public override async Task Invoke(CancellationToken token)
@@ -34,25 +34,27 @@ namespace PiggyBank.Domain.Handler.Bot
                 return;
             }
             
-            _operation.Stage = CreationStage.Done;
-            _operation.ModifiedBy = Guid.Parse(Command.UserId);
-            _operation.ModifiedOn = DateTime.UtcNow;
-            _operation.ToAccountId = toAccount.Id;
+            _botOperation.Stage = CreationStage.Done;
+            _botOperation.ModifiedBy = Guid.Parse(Command.UserId);
+            _botOperation.ModifiedOn = DateTime.UtcNow;
+            _botOperation.ToAccountId = toAccount.Id;
 
-            GetRepository<BotOperation>().Update(_operation);
+            GetRepository<BotOperation>().Update(_botOperation);
 
             var operation = new TransferOperation
             {
-                Amount = _operation.Amount.Value,
+                Amount = _botOperation.Amount.GetValueOrDefault(),
                 Type = OperationType.Transfer,
-                From = _operation.AccountId.Value,
-                To = _operation.ToAccountId.Value,
-                OperationDate = _operation.CreatedOn,
+                From = _botOperation.AccountId.GetValueOrDefault(),
+                To = _botOperation.ToAccountId.Value,
+                OperationDate = _botOperation.CreatedOn,
                 CreatedOn = DateTime.UtcNow,
-                CreatedBy = _operation.CreatedBy
+                CreatedBy = _botOperation.CreatedBy,
+                Source = Source.Bot,
+                BotOperationId = _botOperation.Id
             };
 
-            var fromAccount = await accountRepository.FirstOrDefaultAsync(a => a.Id == _operation.AccountId, token);
+            var fromAccount = await accountRepository.FirstOrDefaultAsync(a => a.Id == _botOperation.AccountId, token);
 
             fromAccount.ChangeBalance(-operation.Amount);
             toAccount.ChangeBalance(operation.Amount);
@@ -61,8 +63,8 @@ namespace PiggyBank.Domain.Handler.Bot
 
             await GetRepository<TransferOperation>().AddAsync(operation, token);
             
-            var message1 = "You just create new operation.";
-            await _client.SendTextMessageAsync(Command.ChatId, message1, replyMarkup:BotKeyboardHelper.GenerateStartKeyboard(), cancellationToken: token);
+            var finalMessage = $"{fromAccount.Title} > {toAccount.Title} {operation.Amount} {fromAccount.Currency}";
+            await _client.SendTextMessageAsync(Command.ChatId, finalMessage, replyMarkup:BotKeyboardHelper.GenerateStartKeyboard(), cancellationToken: token);
         }
     }
 }

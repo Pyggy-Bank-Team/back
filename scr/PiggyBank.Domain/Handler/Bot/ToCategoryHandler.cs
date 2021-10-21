@@ -15,37 +15,37 @@ namespace PiggyBank.Domain.Handler.Bot
     public class ToCategoryHandler : BaseHandler<UpdateCommand>
     {
         private readonly ITelegramBotClient _client;
-        private readonly BotOperation _operation;
+        private readonly BotOperation _botOperation;
 
-        public ToCategoryHandler(DbContext context, UpdateCommand command, ITelegramBotClient client, BotOperation operation) : base(context, command)
+        public ToCategoryHandler(DbContext context, UpdateCommand command, ITelegramBotClient client, BotOperation botOperation) : base(context, command)
         {
             _client = client;
-            _operation = operation;
+            _botOperation = botOperation;
         }
 
         public override async Task Invoke(CancellationToken token)
         {
-            var category = await GetRepository<Category>().FirstOrDefaultAsync(c => c.Title == Command.Text && c.Type == _operation.CategoryType, token);
-                
+            var category = await GetRepository<Category>().FirstOrDefaultAsync(c => c.Title == Command.Text && c.Type == _botOperation.CategoryType, token);
+
             if (category == null)
             {
-                var message = "Couldn't find any categories. Please add new category by PiggyBank app and try again.";
+                var message = "Couldn't find any categories. To continue please add new category by PiggyBank app and try again.";
                 await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
                 return;
             }
-            
-            _operation.Stage = CreationStage.Done;
-            _operation.ModifiedBy = Guid.Parse(Command.UserId);
-            _operation.ModifiedOn = DateTime.UtcNow;
-            _operation.CategoryId = category.Id;
-            
-            GetRepository<BotOperation>().Update(_operation);
 
-            var account = await GetRepository<Account>().FirstOrDefaultAsync(a => a.Id == _operation.AccountId, token);
-            
+            _botOperation.Stage = CreationStage.Done;
+            _botOperation.ModifiedBy = Guid.Parse(Command.UserId);
+            _botOperation.ModifiedOn = DateTime.UtcNow;
+            _botOperation.CategoryId = category.Id;
+
+            GetRepository<BotOperation>().Update(_botOperation);
+
+            var account = await GetRepository<Account>().FirstOrDefaultAsync(a => a.Id == _botOperation.AccountId, token);
+
             if (account == null)
             {
-                var message = "Couldn't find any accounts. Please add new category by PiggyBank app and try again.";
+                var message = "Couldn't find any accounts. To continue please add new category by PiggyBank app and try again.";
                 await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
                 return;
             }
@@ -57,15 +57,16 @@ namespace PiggyBank.Domain.Handler.Bot
 
             var operation = new BudgetOperation
             {
-                Amount =_operation.Amount.Value,
+                Amount = _botOperation.Amount.GetValueOrDefault(),
                 Type = OperationType.Budget,
-                AccountId = _operation.AccountId.Value,
-                CategoryId = _operation.CategoryId.Value,
+                AccountId = _botOperation.AccountId.GetValueOrDefault(),
+                CategoryId = _botOperation.CategoryId.Value,
                 CreatedOn = DateTime.UtcNow,
                 Snapshot = JsonConvert.SerializeObject(snapshot),
-                OperationDate = _operation.CreatedOn,
-                CreatedBy = _operation.CreatedBy,
-                Source = Source.Bot
+                OperationDate = _botOperation.CreatedOn,
+                CreatedBy = _botOperation.CreatedBy,
+                Source = Source.Bot,
+                BotOperationId = _botOperation.Id
             };
 
             account.ChangeBalance(category.Type == CategoryType.Income ? operation.Amount : -operation.Amount);
@@ -73,9 +74,11 @@ namespace PiggyBank.Domain.Handler.Bot
             GetRepository<Account>().Update(account);
 
             await GetRepository<BudgetOperation>().AddAsync(operation, token);
-            
-            var message1 = "You just create new operation.";
-            await _client.SendTextMessageAsync(Command.ChatId, message1, replyMarkup:BotKeyboardHelper.GenerateStartKeyboard(), cancellationToken: token);
+
+            var finalMessage = category.Type == CategoryType.Expense
+                ? $"{account.Title} > {category.Title} -{operation.Amount} {account.Currency}"
+                : $"{category.Title} > {account.Title} +{operation.Amount} {account.Currency}";
+            await _client.SendTextMessageAsync(Command.ChatId, finalMessage, replyMarkup: BotKeyboardHelper.GenerateStartKeyboard(), cancellationToken: token);
         }
     }
 }

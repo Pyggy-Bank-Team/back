@@ -46,7 +46,7 @@ namespace PiggyBank.Domain.Handler.Bot
             await SaveAsync();
 
             var startKeyboard = BotKeyboardHelper.GenerateStartKeyboard();
-            await _client.SendTextMessageAsync(Command.ChatId, "Now you can create operations", replyMarkup: startKeyboard, cancellationToken: token);
+            await _client.SendTextMessageAsync(Command.ChatId, "Congratulations! You have successfully connected the bot. Now you can add transactions directly from here 🙂", replyMarkup: startKeyboard, cancellationToken: token);
         }
     }
 }

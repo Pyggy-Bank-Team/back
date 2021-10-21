@@ -1,4 +1,5 @@
 ﻿using System;
+using System.ComponentModel.DataAnnotations.Schema;
 using PiggyBank.Common.Enums;
 
 namespace PiggyBank.Model.Models.Entities
@@ -16,5 +17,10 @@ namespace PiggyBank.Model.Models.Entities
         public DateTime OperationDate { get; set; }
         
         public Source Source { get; set; }
+        
+        public int? BotOperationId { get; set; }
+        
+        [ForeignKey(nameof(BotOperationId))]
+        public virtual BotOperation BotOperation { get; set; }
     }
 }
