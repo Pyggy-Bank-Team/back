@@ -18,4 +18,8 @@
       <Folder Include="Migrations" />
     </ItemGroup>
 
+    <ItemGroup>
+      <ProjectReference Include="..\PiggyBank.Common\PiggyBank.Common.csproj" />
+    </ItemGroup>
+
 </Project>

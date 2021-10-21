@@ -14,5 +14,7 @@ namespace PiggyBank.Model.Models.Entities
         public string Snapshot { get; set; }
         
         public DateTime OperationDate { get; set; }
+        
+        public Source Source { get; set; }
     }
 }

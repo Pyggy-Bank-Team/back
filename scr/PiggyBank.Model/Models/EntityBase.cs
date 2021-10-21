@@ -1,6 +1,6 @@
-﻿using PiggyBank.Model.Interfaces;
-using System;
+﻿using System;
 using System.ComponentModel.DataAnnotations;
+using PiggyBank.Common.Interfaces.Models;
 
 namespace PiggyBank.Model.Models
 {

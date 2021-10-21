@@ -13,7 +13,7 @@ namespace PiggyBank.Domain.Handler.Operations.Transfer
 
         public override Task Invoke(CancellationToken token)
         {
-            var deletionService = new DeleteOperationService(Context);
+            var deletionService = new DeleteOperationService((PiggyContext)Context);
             return deletionService.DeleteTransferOperation(Command.Id, Command, token);
         }
     }
