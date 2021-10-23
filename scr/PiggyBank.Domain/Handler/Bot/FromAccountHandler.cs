@@ -39,8 +39,6 @@ namespace PiggyBank.Domain.Handler.Bot
             _operation.ModifiedOn = DateTime.UtcNow;
             _operation.AccountId = account.Id;
 
-           // GetRepository<BotOperation>().Update(_operation);
-
             if (_operation.Type == OperationType.Budget)
             {
                 var categories = GetRepository<Category>().Where(c => c.CreatedBy == _operation.CreatedBy && c.Type == _operation.CategoryType && !c.IsArchived && !c.IsDeleted);
