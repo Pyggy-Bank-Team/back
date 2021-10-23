@@ -39,8 +39,6 @@ namespace PiggyBank.Domain.Handler.Bot
             _botOperation.ModifiedOn = DateTime.UtcNow;
             _botOperation.CategoryId = category.Id;
 
-            GetRepository<BotOperation>().Update(_botOperation);
-
             var account = await GetRepository<Account>().FirstOrDefaultAsync(a => a.Id == _botOperation.AccountId, token);
 
             if (account == null)
@@ -70,8 +68,6 @@ namespace PiggyBank.Domain.Handler.Bot
             };
 
             account.ChangeBalance(category.Type == CategoryType.Income ? operation.Amount : -operation.Amount);
-
-            GetRepository<Account>().Update(account);
 
             await GetRepository<BudgetOperation>().AddAsync(operation, token);
 

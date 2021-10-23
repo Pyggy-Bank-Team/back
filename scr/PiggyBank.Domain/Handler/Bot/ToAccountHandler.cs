@@ -39,8 +39,6 @@ namespace PiggyBank.Domain.Handler.Bot
             _botOperation.ModifiedOn = DateTime.UtcNow;
             _botOperation.ToAccountId = toAccount.Id;
 
-            GetRepository<BotOperation>().Update(_botOperation);
-
             var operation = new TransferOperation
             {
                 Amount = _botOperation.Amount.GetValueOrDefault(),

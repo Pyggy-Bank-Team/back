@@ -45,8 +45,6 @@ namespace PiggyBank.Domain.Handler.Bot
             _operation.ModifiedBy = Guid.Parse(Command.UserId);
             _operation.ModifiedOn = DateTime.UtcNow;
 
-            GetRepository<BotOperation>().Update(_operation);
-
             IEnumerable<KeyboardButton[]> BuildKeyboard(IReadOnlyList<Account> a)
             {
                 for (var i = 0; i < a.Count; i++)
