@@ -25,7 +25,7 @@ namespace PiggyBank.Domain.Handler.Bot
 
         public override async Task Invoke(CancellationToken token)
         {
-            var account = GetRepository<Account>().FirstOrDefaultAsync(a => a.Title == Command.Text, token);
+            var account = await GetRepository<Account>().FirstOrDefaultAsync(a => a.Title == Command.Text, token);
 
             if (account == null)
             {
@@ -39,7 +39,7 @@ namespace PiggyBank.Domain.Handler.Bot
             _operation.ModifiedOn = DateTime.UtcNow;
             _operation.AccountId = account.Id;
 
-            GetRepository<BotOperation>().Update(_operation);
+           // GetRepository<BotOperation>().Update(_operation);
 
             if (_operation.Type == OperationType.Budget)
             {
