@@ -48,6 +48,10 @@ namespace PiggyBank.Domain.Services
                         updateCommand.UserId = await GetUserId(updateCommand.ChatId, token);
                         await BeginCommandsProcessing(updateCommand, token);
                         break;
+                    case {} tryAgainText when tryAgainText.Contains("Try again"):
+                        var tryAgainHandler = new TryAgainHandler(_piggyContext, updateCommand, _client);
+                        await _piggyDispatcher.InvokeHandler(tryAgainHandler, token);
+                        break;
                     default:
                         updateCommand.UserId = await GetUserId(updateCommand.ChatId, token);
                         await ExistOperationsProcessing(updateCommand, token);
