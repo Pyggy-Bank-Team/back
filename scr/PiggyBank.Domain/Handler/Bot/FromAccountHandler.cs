@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Bot;
 using PiggyBank.Common.Enums;
+using PiggyBank.Domain.Helpers;
 using PiggyBank.Model.Models.Entities;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -34,11 +35,6 @@ namespace PiggyBank.Domain.Handler.Bot
                 return;
             }
 
-            _operation.Stage = CreationStage.CategoryOrAccountSelection;
-            _operation.ModifiedBy = Guid.Parse(Command.UserId);
-            _operation.ModifiedOn = DateTime.UtcNow;
-            _operation.AccountId = account.Id;
-
             if (_operation.Type == OperationType.Budget)
             {
                 var categories = GetRepository<Category>().Where(c => c.CreatedBy == _operation.CreatedBy && c.Type == _operation.CategoryType && !c.IsArchived && !c.IsDeleted);
@@ -46,7 +42,8 @@ namespace PiggyBank.Domain.Handler.Bot
                 if (!await categories.AnyAsync(token))
                 {
                     var message = "Couldn't find any categories.To continue please add new categories by PiggyBank app and try again.";
-                    await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
+                    var tryAgainKeyboard = BotKeyboardHelper.GenerateTryAgainKeyboard();
+                    await _client.SendTextMessageAsync(Command.ChatId, message, replyMarkup: tryAgainKeyboard, cancellationToken: token);
                     return;
                 }
 
@@ -75,7 +72,8 @@ namespace PiggyBank.Domain.Handler.Bot
                 if (!await accounts.AnyAsync(token))
                 {
                     var message = "Couldn't find any accounts. Please add new account by PiggyBank app and try again.";
-                    await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
+                    var tryAgainKeyboard = BotKeyboardHelper.GenerateTryAgainKeyboard();
+                    await _client.SendTextMessageAsync(Command.ChatId, message, replyMarkup: tryAgainKeyboard, cancellationToken: token);
                     return;
                 }
 
@@ -97,6 +95,11 @@ namespace PiggyBank.Domain.Handler.Bot
                 var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard: true);
                 await _client.SendTextMessageAsync(Command.ChatId, "Choose the account to which you want to transfer money", replyMarkup: keyboard, cancellationToken: token);
             }
+
+            _operation.Stage = CreationStage.CategoryOrAccountSelection;
+            _operation.ModifiedBy = Guid.Parse(Command.UserId);
+            _operation.ModifiedOn = DateTime.UtcNow;
+            _operation.AccountId = account.Id;
         }
     }
 }

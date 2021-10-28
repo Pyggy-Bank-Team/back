@@ -6,6 +6,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Bot;
 using PiggyBank.Common.Enums;
+using PiggyBank.Domain.Helpers;
 using PiggyBank.Model.Models.Entities;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;
@@ -35,11 +36,12 @@ namespace PiggyBank.Domain.Handler.Bot
 
             if (!await accounts.AnyAsync(token))
             {
-                var message = "Couldn't find any accounts.To continue please add new accounts by PiggyBank app and try again.";
-                await _client.SendTextMessageAsync(Command.ChatId, message, cancellationToken: token);
+                var message = "Couldn't find any accounts.To continue please add new accounts by PiggyBank app and click on button bellow.";
+                var tryAgainKeyboard = BotKeyboardHelper.GenerateTryAgainKeyboard(amount);
+                await _client.SendTextMessageAsync(Command.ChatId, message, replyMarkup: tryAgainKeyboard, cancellationToken: token);
                 return;
             }
-            
+
             _operation.Amount = amount;
             _operation.Stage = CreationStage.AccountSelection;
             _operation.ModifiedBy = Guid.Parse(Command.UserId);
@@ -60,7 +62,7 @@ namespace PiggyBank.Domain.Handler.Bot
             }
 
             var keys = BuildKeyboard(accounts.ToArray());
-            var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard:true);
+            var keyboard = new ReplyKeyboardMarkup(keys, resizeKeyboard: true);
             await _client.SendTextMessageAsync(Command.ChatId, "Choose the account from which you want to transfer money", replyMarkup: keyboard, cancellationToken: token);
         }
     }
