@@ -126,6 +126,7 @@ namespace PiggyBank.WebApi.Controllers
 
             return Ok(new UserResponse
             {
+                Id = user.Id,
                 UserName = user.UserName,
                 Email = user.Email,
                 CurrencyBase = user.CurrencyBase
