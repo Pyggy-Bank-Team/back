@@ -26,7 +26,7 @@ namespace PiggyBank.Domain.Handler.Bot
 
         public override async Task Invoke(CancellationToken token)
         {
-            var account = await GetRepository<Account>().FirstOrDefaultAsync(a => a.Title == Command.Text, token);
+            var account = await GetRepository<Account>().FirstOrDefaultAsync(a => a.CreatedBy == _operation.CreatedBy && a.Title == Command.Text, token);
 
             if (account == null)
             {
