@@ -42,6 +42,11 @@ namespace PiggyBank.Domain.Handler.Bot
                 return;
             }
 
+            //If we already have an user with linked chat_id, then clear chat_id property 
+            var linkedUser = await identityRepository.FirstOrDefaultAsync(u => u.ChatId == Command.ChatId, token);
+            if (linkedUser != null)
+                linkedUser.ChatId = null;
+            
             user.ChatId = Command.ChatId;
 
             var startKeyboard = BotKeyboardHelper.GenerateStartKeyboard();
