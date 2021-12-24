@@ -17,6 +17,8 @@
   </ItemGroup>
 
   <ItemGroup>
+    <ProjectReference Include="..\..\PiggyBank.Common\PiggyBank.Common.csproj" />
+    <ProjectReference Include="..\..\PiggyBank.Domain\PiggyBank.Domain.csproj" />
     <ProjectReference Include="..\PiggyBank.Domain\PiggyBank.Domain.csproj" />
   </ItemGroup>
 

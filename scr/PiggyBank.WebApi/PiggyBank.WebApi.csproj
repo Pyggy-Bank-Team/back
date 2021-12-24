@@ -2,7 +2,8 @@
 
   <PropertyGroup>
     <TargetFramework>netcoreapp3.1</TargetFramework>
-    <AspNetCoreHostingModel>InProcess</AspNetCoreHostingModel>
+    <AspNetCoreHostingModel>OutOfProcess</AspNetCoreHostingModel>
+    <AspNetCoreModuleName>AspNetCoreModule</AspNetCoreModuleName>
     <Platforms>AnyCPU;x64</Platforms>
     <UserSecretsId>3a0729ce-3144-4203-8bb3-c5703724d2d7</UserSecretsId>
   </PropertyGroup>
