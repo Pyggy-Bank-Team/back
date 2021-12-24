@@ -1,14 +1,14 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
-using Domain.Test.Subs;
+using Domain.Tests.Subs;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Reports;
 using PiggyBank.Domain.Queries.Reports;
 using PiggyBank.Model;
 using Xunit;
 
-namespace Domain.Test.Queries.Dashboard
+namespace Domain.Tests.Queries.Dashboard
 {
     public class GetChartByCategoriesQueryTests
     {

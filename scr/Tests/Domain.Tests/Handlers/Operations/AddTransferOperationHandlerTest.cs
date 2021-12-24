@@ -11,7 +11,7 @@ using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Domain.Handler.Operations.Transfer;
 using Xunit;
 
-namespace Domain.Test.Handlers.Operations
+namespace Domain.Tests.Handlers.Operations
 {
     public class AddTransferOperationHandlerTest : IDisposable
     {

@@ -12,7 +12,7 @@ using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Xunit;
 
-namespace Domain.Test.Handlers.Operations.Budget
+namespace Domain.Tests.Handlers.Operations.Budget
 {
     public class UpdateBudgetOperationHandlerTest : IDisposable
     {

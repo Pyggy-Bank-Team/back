@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using PiggyBank.Common.Enums;
 using Xunit;
 
-namespace Domain.Test.Handlers.Categories
+namespace Domain.Tests.Handlers.Categories
 {
     public class PartialUpdateCategoryHandlerTest : IDisposable
     {

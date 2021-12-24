@@ -10,7 +10,7 @@ using System.Threading.Tasks;
 using PiggyBank.Common.Enums;
 using Xunit;
 
-namespace Domain.Test.Handlers.Accounts
+namespace Domain.Tests.Handlers.Accounts
 {
     public class PartialUpdateAccountHandlerTest : IDisposable
     {

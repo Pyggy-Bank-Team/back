@@ -9,7 +9,7 @@ using PiggyBank.Domain.Handler.Accounts;
 using PiggyBank.Model;
 using Xunit;
 
-namespace Domain.Test.Handlers.Accounts
+namespace Domain.Tests.Handlers.Accounts
 {
     public class AddAccountHandlerTest : IDisposable
     {

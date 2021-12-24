@@ -9,7 +9,7 @@ using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Xunit;
 
-namespace Domain.Test.Handlers.Accounts
+namespace Domain.Tests.Handlers.Accounts
 {
     public class DeleteAccountHandlerTest : IDisposable
     {
