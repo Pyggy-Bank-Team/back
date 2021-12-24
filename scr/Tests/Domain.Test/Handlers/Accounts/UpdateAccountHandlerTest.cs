@@ -10,7 +10,7 @@ using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Xunit;
 
-namespace PiggyBank.Test.Handlers.Accounts
+namespace Domain.Test.Handlers.Accounts
 {
     public class UpdateAccountHandlerTest : IDisposable
     {

@@ -7,9 +7,10 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Enums;
 using Xunit;
 
-namespace PiggyBank.Test.Handlers.Accounts
+namespace Domain.Test.Handlers.Accounts
 {
     public class PartialUpdateAccountHandlerTest : IDisposable
     {
@@ -53,13 +54,13 @@ namespace PiggyBank.Test.Handlers.Accounts
             var command = new PartialUpdateAccountCommand
             {
                 Id = 1,
-                Type = Common.Enums.AccountType.Cash
+                Type = AccountType.Cash
             };
 
             _context.Accounts.Add(new Account
             {
                 Id = 1,
-                Type = Common.Enums.AccountType.Card,
+                Type = AccountType.Card,
                 Title = "My test",
                 Currency = "USD"
             });
@@ -88,7 +89,7 @@ namespace PiggyBank.Test.Handlers.Accounts
             _context.Accounts.Add(new Account
             {
                 Id = 1,
-                Type = Common.Enums.AccountType.Card,
+                Type = AccountType.Card,
                 Title = "My test",
                 Currency = "USD",
                 IsArchived = false
@@ -118,7 +119,7 @@ namespace PiggyBank.Test.Handlers.Accounts
             _context.Accounts.Add(new Account
             {
                 Id = 2,
-                Type = Common.Enums.AccountType.Card,
+                Type = AccountType.Card,
                 Title = "My test",
                 Currency = "USD",
                 IsArchived = false

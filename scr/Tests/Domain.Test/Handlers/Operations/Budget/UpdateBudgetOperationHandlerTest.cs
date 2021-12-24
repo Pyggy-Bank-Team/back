@@ -12,7 +12,7 @@ using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Xunit;
 
-namespace PiggyBank.Test.Handlers.Operations.Budget
+namespace Domain.Test.Handlers.Operations.Budget
 {
     public class UpdateBudgetOperationHandlerTest : IDisposable
     {
@@ -68,7 +68,7 @@ namespace PiggyBank.Test.Handlers.Operations.Budget
             Assert.Equal(command.OperationDate, operation.OperationDate);
 
             var account = _context.Accounts.First();
-            var expectedAmount = 190;
+            var expectedAmount = 100;
             
             Assert.Equal(expectedAmount, account.Balance);
         }

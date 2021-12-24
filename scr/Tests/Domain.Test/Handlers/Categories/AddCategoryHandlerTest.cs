@@ -9,7 +9,7 @@ using PiggyBank.Domain.Handler.Categories;
 using PiggyBank.Model;
 using Xunit;
 
-namespace PiggyBank.Test.Handlers.Categories
+namespace Domain.Test.Handlers.Categories
 {
     public class AddCategoryHandlerTest : IDisposable
     {

@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using PiggyBank.Model.Models.Entities;
 
-namespace PiggyBank.Test.Subs
+namespace Domain.Test.Subs
 {
     public static class Operations
     {

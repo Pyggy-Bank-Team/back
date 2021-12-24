@@ -8,7 +8,7 @@ using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Xunit;
 
-namespace PiggyBank.Test.Handlers
+namespace Domain.Test.Handlers
 {
     public class BaseHandlerTest : IDisposable
     {

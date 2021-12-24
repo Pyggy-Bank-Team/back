@@ -8,7 +8,7 @@ using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Xunit;
 
-namespace PiggyBank.Test.Handlers.Operations.Transfer
+namespace Domain.Test.Handlers.Operations.Transfer
 {
     public class UpdateTransferOperationHandlerTest : IDisposable
     {

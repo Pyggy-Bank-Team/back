@@ -15,7 +15,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Model", "Identity.
 EndProject
 Project("{2150E333-8FDC-42A3-9474-1A3956D46DE8}") = "Tests", "Tests", "{7F0D32BF-9261-439F-B313-DA368F4CE4A9}"
 EndProject
-Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "PiggyBank.Test", "Tests\PiggyBank.Test\PiggyBank.Test.csproj", "{50E6BFB5-E08B-46DB-97C8-D0AED42B477F}"
+Project("{FAE04EC0-301F-11D3-BF4B-00C04F79EFBC}") = "Domain.Test", "Tests\Domain.Test\Domain.Test.csproj", "{50E6BFB5-E08B-46DB-97C8-D0AED42B477F}"
 EndProject
 Global
 	GlobalSection(SolutionConfigurationPlatforms) = preSolution

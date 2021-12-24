@@ -7,9 +7,10 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Enums;
 using Xunit;
 
-namespace PiggyBank.Test.Handlers.Categories
+namespace Domain.Test.Handlers.Categories
 {
     public class PartialUpdateCategoryHandlerTest : IDisposable
     {
@@ -30,7 +31,7 @@ namespace PiggyBank.Test.Handlers.Categories
             await _context.Categories.AddAsync(new Category
             {
                 Id = 1,
-                Type = Common.Enums.CategoryType.Income,
+                Type = CategoryType.Income,
                 Title = "My test",
                 HexColor = "#000000"
             });
@@ -57,7 +58,7 @@ namespace PiggyBank.Test.Handlers.Categories
             await _context.Categories.AddAsync(new Category
             {
                 Id = 1,
-                Type = Common.Enums.CategoryType.Income,
+                Type = CategoryType.Income,
                 Title = "My test",
                 HexColor = "#000000"
             });
@@ -85,7 +86,7 @@ namespace PiggyBank.Test.Handlers.Categories
             await _context.Categories.AddAsync(new Category
             {
                 Id = 1,
-                Type = Common.Enums.CategoryType.Income,
+                Type = CategoryType.Income,
                 Title = "My test",
                 HexColor = "#000000",
                 IsArchived = false
@@ -115,7 +116,7 @@ namespace PiggyBank.Test.Handlers.Categories
             await _context.Categories.AddAsync(new Category
             {
                 Id = 2,
-                Type = Common.Enums.CategoryType.Income,
+                Type = CategoryType.Income,
                 Title = "My test",
                 HexColor = "#000000",
                 IsArchived = false
