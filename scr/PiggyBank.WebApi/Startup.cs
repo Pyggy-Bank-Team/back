@@ -119,18 +119,23 @@ namespace PiggyBank.WebApi
 
             services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.SectionName));
 
-            var options = new SinkOptions
+            //This conditional need for testing WebApi
+            //The appsettings.json can be empty only during tests
+            if (!string.IsNullOrEmpty(connectionString))
             {
-                TableName = "Store",
-                SchemaName = "Audit",
-                AutoCreateSqlTable = true
-            };
+                var options = new SinkOptions
+                {
+                    TableName = "Store",
+                    SchemaName = "Audit",
+                    AutoCreateSqlTable = true
+                };
             
-            Log.Logger = new LoggerConfiguration()
-                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                .WriteTo.MSSqlServer(connectionString, options).CreateLogger();
+                Log.Logger = new LoggerConfiguration()
+                    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                    .WriteTo.MSSqlServer(connectionString, options).CreateLogger();
 
-            services.AddSingleton(Log.Logger);
+                services.AddSingleton(Log.Logger);
+            }
 
             services.AddCors(corsOptions =>
             {
