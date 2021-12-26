@@ -98,44 +98,47 @@ namespace PiggyBank.WebApi
 
             var tokenOptions = Configuration.GetSection(TokenOptions.SectionName);
 
-            services.AddAuthentication("Bearer")
-                .AddJwtBearer("Bearer", options =>
-                {
-                    options.ClaimsIssuer = tokenOptions["Issuer"];
-                    options.RequireHttpsMetadata = false;
-                    options.Audience = tokenOptions["Audience"];
-                    options.RequireHttpsMetadata = false;
-                    options.TokenValidationParameters = new TokenValidationParameters
-                    {
-                        ValidateIssuer = true,
-                        ValidIssuer = tokenOptions["Issuer"],
-                        ValidateAudience = true,
-                        ValidAudience = tokenOptions["Audience"],
-                        ValidateIssuerSigningKey = true,
-                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenOptions["ClientSecret"])),
-                        ValidateLifetime = false
-                    };
-                });
+            // if (!Environment.IsEnvironment("Test"))
+            // {
+            //     services.AddAuthentication("Bearer")
+            //         .AddJwtBearer("Bearer", options =>
+            //         {
+            //             options.ClaimsIssuer = tokenOptions["Issuer"];
+            //             options.RequireHttpsMetadata = false;
+            //             options.Audience = tokenOptions["Audience"];
+            //             options.RequireHttpsMetadata = false;
+            //             options.TokenValidationParameters = new TokenValidationParameters
+            //             {
+            //                 ValidateIssuer = true,
+            //                 ValidIssuer = tokenOptions["Issuer"],
+            //                 ValidateAudience = true,
+            //                 ValidAudience = tokenOptions["Audience"],
+            //                 ValidateIssuerSigningKey = true,
+            //                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenOptions["ClientSecret"])),
+            //                 ValidateLifetime = false
+            //             };
+            //         });
+            // }
 
             services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.SectionName));
 
+            var options = new SinkOptions
+            {
+                TableName = "Store",
+                SchemaName = "Audit",
+                AutoCreateSqlTable = true
+            };
+            
             //This conditional need for testing WebApi
             //The appsettings.json can be empty only during tests
-            if (!string.IsNullOrEmpty(connectionString))
-            {
-                var options = new SinkOptions
-                {
-                    TableName = "Store",
-                    SchemaName = "Audit",
-                    AutoCreateSqlTable = true
-                };
-            
-                Log.Logger = new LoggerConfiguration()
-                    .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-                    .WriteTo.MSSqlServer(connectionString, options).CreateLogger();
+            // if (!Environment.IsEnvironment("Test"))
+            // {
+            //     Log.Logger = new LoggerConfiguration()
+            //         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+            //         .WriteTo.MSSqlServer(connectionString, options).CreateLogger();
+            // }
 
-                services.AddSingleton(Log.Logger);
-            }
+            services.AddSingleton(Log.Logger);
 
             services.AddCors(corsOptions =>
             {
@@ -152,8 +155,9 @@ namespace PiggyBank.WebApi
                 .AddTypedClient<ITelegramBotClient>(client =>new TelegramBotClient(botOptions["Token"], client));
 
             services.Configure<BotOptions>(Configuration.GetSection(BotOptions.BotSection));
-            
-            services.AddHostedService<ConfigureWebHookService>();
+
+            // if (!Environment.IsEnvironment("Test"))
+            //     services.AddHostedService<ConfigureWebHookService>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

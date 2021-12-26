@@ -1,5 +1,25 @@
 ﻿<wpf:ResourceDictionary xml:space="preserve" xmlns:x="http://schemas.microsoft.com/winfx/2006/xaml" xmlns:s="clr-namespace:System;assembly=mscorlib" xmlns:ss="urn:shemas-jetbrains-com:settings-storage-xaml" xmlns:wpf="http://schemas.microsoft.com/winfx/2006/xaml/presentation">
-	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b8832384_002D2fba_002D4015_002D8524_002Dc31d6fed5081/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="All tests from &amp;lt;Tests&amp;gt;\&amp;lt;Domain.Test&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2504f260_002D85e9_002D4036_002D8fa5_002D9c8ef64c33e3/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Post_Default_UserIsCreated #3" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::AE3BFF6C-ED52-4AEB-823D-5F6F667129F8::.NETCoreApp,Version=v3.1::WebApi.Tests.UsersControllerTest.Post_Default_UserIsCreated&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=2d9e64dc_002Dab2f_002D4b17_002Da6f2_002Dc3ec423bde53/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Post_Default_UserIsCreated" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::AE3BFF6C-ED52-4AEB-823D-5F6F667129F8::.NETCoreApp,Version=v3.1::WebApi.Tests.UsersControllerTest.Post_Default_UserIsCreated&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=57b383e2_002D63fb_002D4413_002Dbc26_002D2221dda01295/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="Post_Default_UserIsCreated #2" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::AE3BFF6C-ED52-4AEB-823D-5F6F667129F8::.NETCoreApp,Version=v3.1::WebApi.Tests.UsersControllerTest.Post_Default_UserIsCreated&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=b8832384_002D2fba_002D4015_002D8524_002Dc31d6fed5081/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" Name="All tests from &amp;lt;Tests&amp;gt;\&amp;lt;Domain.Test&amp;gt;" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
+  &lt;TestAncestor&gt;&#xD;
+    &lt;TestId&gt;xUnit::AE3BFF6C-ED52-4AEB-823D-5F6F667129F8::.NETCoreApp,Version=v3.1::WebApi.Tests.UsersControllerTest.Post_Default_UserIsCreated&lt;/TestId&gt;&#xD;
+  &lt;/TestAncestor&gt;&#xD;
+&lt;/SessionState&gt;</s:String>
+	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ce1c62b8_002Dc51b_002D4f00_002D885e_002Dcc9f6df5dc20/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Post_Default_UserIsCreated #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::AE3BFF6C-ED52-4AEB-823D-5F6F667129F8::.NETCoreApp,Version=v3.1::WebApi.Tests.UsersControllerTest.Post_Default_UserIsCreated&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
