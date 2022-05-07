@@ -4,7 +4,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Categories;
-using PiggyBank.Domain.Handler.Categories;
+using PiggyBank.Domain.Handlers.Categories;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Xunit;

@@ -6,7 +6,7 @@ using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Operations;
 using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Enums;
-using PiggyBank.Domain.Handler.Operations.Budget;
+using PiggyBank.Domain.Handlers.Operations.Budget;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Xunit;

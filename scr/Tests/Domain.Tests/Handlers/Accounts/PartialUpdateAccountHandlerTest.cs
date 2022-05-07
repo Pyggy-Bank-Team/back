@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Accounts;
-using PiggyBank.Domain.Handler.Accounts;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using System;
@@ -8,6 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Enums;
+using PiggyBank.Domain.Handlers.Accounts;
 using Xunit;
 
 namespace Domain.Tests.Handlers.Accounts

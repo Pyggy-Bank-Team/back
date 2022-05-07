@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Categories;
 using PiggyBank.Common.Interfaces;
 using PiggyBank.Common.Models.Dto;
-using PiggyBank.Domain.Handler.Categories;
+using PiggyBank.Domain.Handlers.Categories;
 using PiggyBank.Domain.Queries.Categories;
 using PiggyBank.Model;
 using Serilog;

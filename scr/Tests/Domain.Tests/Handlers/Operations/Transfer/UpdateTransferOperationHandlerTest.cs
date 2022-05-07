@@ -3,7 +3,7 @@ using System.Linq;
 using System.Threading;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Operations.Transfer;
-using PiggyBank.Domain.Handler.Operations.Transfer;
+using PiggyBank.Domain.Handlers.Operations.Transfer;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Xunit;

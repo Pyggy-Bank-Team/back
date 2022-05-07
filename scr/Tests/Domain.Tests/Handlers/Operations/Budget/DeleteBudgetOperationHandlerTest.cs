@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using Newtonsoft.Json;
 using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Enums;
-using PiggyBank.Domain.Handler.Operations.Budget;
+using PiggyBank.Domain.Handlers.Operations.Budget;
 using PiggyBank.Domain.Models.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;

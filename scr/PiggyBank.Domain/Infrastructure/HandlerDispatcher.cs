@@ -2,7 +2,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Domain.Handler;
+using PiggyBank.Domain.Handlers;
 using Serilog;
 
 namespace PiggyBank.Domain.Infrastructure

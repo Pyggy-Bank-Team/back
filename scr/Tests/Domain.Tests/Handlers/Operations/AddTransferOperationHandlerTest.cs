@@ -1,6 +1,5 @@
 ﻿using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Operations;
-using PiggyBank.Domain.Handler.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using System;
@@ -8,7 +7,7 @@ using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Operations.Transfer;
-using PiggyBank.Domain.Handler.Operations.Transfer;
+using PiggyBank.Domain.Handlers.Operations.Transfer;
 using Xunit;
 
 namespace Domain.Tests.Handlers.Operations

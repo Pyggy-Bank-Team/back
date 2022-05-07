@@ -7,7 +7,7 @@ using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Bot;
 using PiggyBank.Common.Enums;
 using PiggyBank.Common.Interfaces;
-using PiggyBank.Domain.Handler.Bot;
+using PiggyBank.Domain.Handlers.Bot;
 using PiggyBank.Domain.Infrastructure;
 using PiggyBank.Model;
 using Serilog;

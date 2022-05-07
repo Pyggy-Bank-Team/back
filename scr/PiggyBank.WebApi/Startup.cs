@@ -1,6 +1,7 @@
 using System.Text;
 using Identity.Model;
 using Identity.Model.Models;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -10,7 +11,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
-using PiggyBank.Common.Interfaces;
+using PiggyBank.Domain;
 using PiggyBank.Domain.Services;
 using PiggyBank.Model;
 using PiggyBank.WebApi.Extensions;
@@ -42,14 +43,15 @@ namespace PiggyBank.WebApi
                 .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true)
                 .AddNewtonsoftJson();
 
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IOperationService, OperationService>();
-            services.AddScoped<IReportService, ReportService>();
+            // services.AddScoped<IAccountService, AccountService>();
+            // services.AddScoped<ICategoryService, CategoryService>();
+            // services.AddScoped<IOperationService, OperationService>();
+            // services.AddScoped<IReportService, ReportService>();
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IItemFactory, ItemFactory>();
-            services.AddScoped<IBotService, BotService>();
+            // services.AddScoped<IBotService, BotService>();
             services.AddScoped<InvalidState>();
+            services.AddMediatR(typeof(MediatREntryPoint).Assembly);
 
             services.AddIdentityServices<ApplicationUser>();
             services.AddStore<IdentityContext>(typeof(ApplicationUser));

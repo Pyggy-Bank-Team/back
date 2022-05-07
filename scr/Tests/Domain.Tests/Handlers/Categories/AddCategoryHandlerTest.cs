@@ -5,7 +5,7 @@ using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Categories;
 using PiggyBank.Common.Enums;
 using PiggyBank.Common.Models.Dto;
-using PiggyBank.Domain.Handler.Categories;
+using PiggyBank.Domain.Handlers.Categories;
 using PiggyBank.Model;
 using Xunit;
 

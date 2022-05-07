@@ -5,7 +5,8 @@ using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Accounts;
 using PiggyBank.Common.Enums;
 using PiggyBank.Common.Models.Dto;
-using PiggyBank.Domain.Handler.Accounts;
+using PiggyBank.Domain.Commands.Accounts;
+using PiggyBank.Domain.Handlers.Accounts;
 using PiggyBank.Model;
 using Xunit;
 
