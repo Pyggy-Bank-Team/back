@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Interfaces.Models;
 using PiggyBank.Domain.Handlers;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
@@ -48,7 +47,7 @@ namespace Domain.Tests.Handlers
         }
     }
 
-    public class TestModel : IBaseModel
+    public class TestModel 
     {
         public int Id { get; set; }
     }

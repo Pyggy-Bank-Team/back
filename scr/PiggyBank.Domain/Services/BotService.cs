@@ -6,7 +6,6 @@ using Identity.Model;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Bot;
 using PiggyBank.Common.Enums;
-using PiggyBank.Common.Interfaces;
 using PiggyBank.Domain.Handlers.Bot;
 using PiggyBank.Domain.Infrastructure;
 using PiggyBank.Model;
@@ -15,7 +14,7 @@ using Telegram.Bot;
 
 namespace PiggyBank.Domain.Services
 {
-    public class BotService : IBotService
+    public class BotService
     {
         private readonly PiggyContext _piggyContext;
         private readonly IdentityContext _identityContext;

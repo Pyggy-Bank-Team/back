@@ -1,6 +1,7 @@
 using System.Collections.Generic;
 using PiggyBank.Common.Commands.Accounts;
 using PiggyBank.Common.Commands.Categories;
+using PiggyBank.Domain.Commands.Accounts;
 
 namespace PiggyBank.WebApi.Interfaces
 {

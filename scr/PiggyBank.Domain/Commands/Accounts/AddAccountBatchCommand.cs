@@ -1,6 +1,7 @@
+using PiggyBank.Common.Commands;
 using PiggyBank.Common.Enums;
 
-namespace PiggyBank.Common.Commands.Accounts
+namespace PiggyBank.Domain.Commands.Accounts
 {
     public class AddAccountBatchCommand : BaseCreateCommand
     {

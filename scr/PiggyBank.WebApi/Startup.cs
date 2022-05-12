@@ -160,6 +160,7 @@ namespace PiggyBank.WebApi
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorPipelineBehavior<,>));
 
             services.AddScoped<IValidator<AddAccountCommand>, AddAccountCommandValidator>();
+            services.AddScoped<IValidator<ArchiveAccountCommand>, ArchiveAccountCommandValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

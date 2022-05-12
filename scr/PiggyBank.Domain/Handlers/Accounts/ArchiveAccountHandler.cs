@@ -1,29 +1,38 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Accounts;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
+using MediatR;
+using PiggyBank.Common;
+using PiggyBank.Domain.Commands.Accounts;
+using PiggyBank.Domain.Results.Accounts;
+using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.Handlers.Accounts
 {
-    public class ArchiveAccountHandler : BaseHandler<ArchiveAccountCommand>
+    public class ArchiveAccountHandler : IRequestHandler<ArchiveAccountCommand, ArchiveAccountResult>
     {
-        public ArchiveAccountHandler(PiggyContext context, ArchiveAccountCommand command)
-            : base(context, command) { }
+        private readonly IAccountRepository _repository;
 
-        public override async Task Invoke(CancellationToken token)
+        public ArchiveAccountHandler(IAccountRepository repository)
         {
-            var repository = GetRepository<Account>();
-            var account = await repository.FirstOrDefaultAsync(a => a.Id == Command.Id && !a.IsDeleted, cancellationToken: token);
+            _repository = repository;
+        }
 
-            if (account == null || account.IsArchived)
-                return;
+        public async Task<ArchiveAccountResult> Handle(ArchiveAccountCommand request, CancellationToken cancellationToken)
+        {
+            var account = await _repository.GetAsync(request.Id, cancellationToken);
+
+            if (account == null)
+                return new ArchiveAccountResult { ErrorCode = ErrorCodes.NotFound };
+
+            if (account.IsArchived || account.IsDeleted)
+                return new ArchiveAccountResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new[] { "Account is already archived or deleted" } };
 
             account.IsArchived = true;
-            account.ModifiedBy = Command.ModifiedBy;
-            account.ModifiedOn = Command.ModifiedOn;
-            repository.Update(account);
+            account.ModifiedBy = request.ModifiedBy;
+            account.ModifiedOn = request.ModifiedOn;
+
+            var _ = await _repository.UpdateAsync(account, cancellationToken);
+            return new ArchiveAccountResult();
         }
     }
 }
