@@ -2,7 +2,6 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Accounts;
-using PiggyBank.Common.Interfaces;
 using PiggyBank.Common.Models.Dto;
 using PiggyBank.Domain.Commands.Accounts;
 using PiggyBank.Domain.Handlers.Accounts;
@@ -12,14 +11,11 @@ using Serilog;
 
 namespace PiggyBank.Domain.Services
 {
-    public class AccountService : PiggyServiceBase, IAccountService
+    public class AccountService : PiggyServiceBase
     {
         public AccountService(PiggyContext context, ILogger logger) : base(context, logger)
         {
         }
-        
-        public Task<AccountDto> AddAccount(AddAccountCommand command, CancellationToken token)
-            => HandlerDispatcher.Invoke<AddAccountHandler, AddAccountCommand, AccountDto>(command, token);
 
         public Task ArchiveAccount(ArchiveAccountCommand command, CancellationToken token)
             => HandlerDispatcher.Invoke<ArchiveAccountHandler, ArchiveAccountCommand>(command, token);

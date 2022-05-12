@@ -1,4 +1,6 @@
+using System;
 using System.Text;
+using FluentValidation;
 using Identity.Model;
 using Identity.Model.Models;
 using MediatR;
@@ -12,7 +14,10 @@ using Microsoft.IdentityModel.Tokens;
 using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
 using PiggyBank.Domain;
+using PiggyBank.Domain.Commands.Accounts;
+using PiggyBank.Domain.PipelineBehaviours;
 using PiggyBank.Domain.Services;
+using PiggyBank.Domain.Validators.Accounts;
 using PiggyBank.Model;
 using PiggyBank.WebApi.Extensions;
 using PiggyBank.WebApi.Factories;
@@ -31,6 +36,7 @@ namespace PiggyBank.WebApi
     public class Startup
     {
         private const string AllowOrigins = "SpecificOrigins";
+
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
             => (Configuration, Environment) = (configuration, environment);
 
@@ -67,7 +73,7 @@ namespace PiggyBank.WebApi
             {
                 services.AddSwaggerGen(c =>
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo {Title = "PiggyBank API", Version = "v1"});
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "PiggyBank API", Version = "v1" });
 
                     var scheme = new OpenApiSecurityScheme
                     {
@@ -99,28 +105,24 @@ namespace PiggyBank.WebApi
             #endregion
 
             var tokenOptions = Configuration.GetSection(TokenOptions.SectionName);
-
-            // if (!Environment.IsEnvironment("Test"))
-            // {
-            //     services.AddAuthentication("Bearer")
-            //         .AddJwtBearer("Bearer", options =>
-            //         {
-            //             options.ClaimsIssuer = tokenOptions["Issuer"];
-            //             options.RequireHttpsMetadata = false;
-            //             options.Audience = tokenOptions["Audience"];
-            //             options.RequireHttpsMetadata = false;
-            //             options.TokenValidationParameters = new TokenValidationParameters
-            //             {
-            //                 ValidateIssuer = true,
-            //                 ValidIssuer = tokenOptions["Issuer"],
-            //                 ValidateAudience = true,
-            //                 ValidAudience = tokenOptions["Audience"],
-            //                 ValidateIssuerSigningKey = true,
-            //                 IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenOptions["ClientSecret"])),
-            //                 ValidateLifetime = false
-            //             };
-            //         });
-            // }
+            services.AddAuthentication("Bearer")
+                .AddJwtBearer("Bearer", options =>
+                {
+                    options.ClaimsIssuer = tokenOptions["Issuer"];
+                    options.RequireHttpsMetadata = false;
+                    options.Audience = tokenOptions["Audience"];
+                    options.RequireHttpsMetadata = false;
+                    options.TokenValidationParameters = new TokenValidationParameters
+                    {
+                        ValidateIssuer = true,
+                        ValidIssuer = tokenOptions["Issuer"],
+                        ValidateAudience = true,
+                        ValidAudience = tokenOptions["Audience"],
+                        ValidateIssuerSigningKey = true,
+                        IssuerSigningKey = new SymmetricSecurityKey(Encoding.ASCII.GetBytes(tokenOptions["ClientSecret"])),
+                        ValidateLifetime = false
+                    };
+                });
 
             services.Configure<TokenOptions>(Configuration.GetSection(TokenOptions.SectionName));
 
@@ -130,15 +132,10 @@ namespace PiggyBank.WebApi
                 SchemaName = "Audit",
                 AutoCreateSqlTable = true
             };
-            
-            //This conditional need for testing WebApi
-            //The appsettings.json can be empty only during tests
-            // if (!Environment.IsEnvironment("Test"))
-            // {
-            //     Log.Logger = new LoggerConfiguration()
-            //         .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
-            //         .WriteTo.MSSqlServer(connectionString, options).CreateLogger();
-            // }
+
+            Log.Logger = new LoggerConfiguration()
+                .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
+                .WriteTo.MSSqlServer(connectionString, options).CreateLogger();
 
             services.AddSingleton(Log.Logger);
 
@@ -154,12 +151,15 @@ namespace PiggyBank.WebApi
 
             var botOptions = Configuration.GetSection(BotOptions.BotSection);
             services.AddHttpClient("tmbot")
-                .AddTypedClient<ITelegramBotClient>(client =>new TelegramBotClient(botOptions["Token"], client));
+                .AddTypedClient<ITelegramBotClient>(client => new TelegramBotClient(botOptions["Token"], client));
 
             services.Configure<BotOptions>(Configuration.GetSection(BotOptions.BotSection));
+            services.AddHostedService<ConfigureWebHookService>();
 
-            // if (!Environment.IsEnvironment("Test"))
-            //     services.AddHostedService<ConfigureWebHookService>();
+            services.AddMediatR(typeof(PiggyBank.Domain.MediatREntryPoint).Assembly);
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorPipelineBehavior<,>));
+
+            services.AddScoped<IValidator<AddAccountCommand>, AddAccountCommandValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

@@ -1,7 +1,9 @@
-﻿using System.Threading;
+﻿using System.Linq;
+using System.Threading;
 using System.Threading.Tasks;
+using FluentValidation;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common;
 using PiggyBank.Common.Models.Dto;
 using PiggyBank.Domain.Commands.Accounts;
 using PiggyBank.Domain.Results.Accounts;
@@ -13,43 +15,49 @@ namespace PiggyBank.Domain.Handlers.Accounts
     public class AddAccountHandler : IRequestHandler<AddAccountCommand, AddAccountResult>
     {
         private readonly IAccountRepository _repository;
+        private readonly IValidator<AddAccountCommand> _validator;
 
-        public AddAccountHandler(IAccountRepository repository)
+        public AddAccountHandler(IAccountRepository repository, IValidator<AddAccountCommand> validator)
         {
             _repository = repository;
-        }
-
-        public override async Task Invoke(CancellationToken token)
-        {
-            var result = await GetRepository<Account>().AddAsync(new Account
-            {
-                Balance = DbLoggerCategory.Database.Command.Balance,
-                Currency = DbLoggerCategory.Database.Command.Currency,
-                IsArchived = DbLoggerCategory.Database.Command.IsArchived,
-                Title = DbLoggerCategory.Database.Command.Title,
-                Type = DbLoggerCategory.Database.Command.Type,
-                CreatedBy = DbLoggerCategory.Database.Command.CreatedBy,
-                CreatedOn = DbLoggerCategory.Database.Command.CreatedOn
-            }, token);
-
-            await SaveAsync();
-            var account = result.Entity;
-            Result = new AccountDto
-            {
-                Id = account.Id,
-                Balance = account.Balance,
-                Currency = account.Currency,
-                Title = account.Title,
-                Type = account.Type,
-                IsArchived = account.IsArchived,
-                CreatedBy = account.CreatedBy,
-                CreatedOn = account.CreatedOn
-            };
+            _validator = validator;
         }
 
         public async Task<AddAccountResult> Handle(AddAccountCommand request, CancellationToken cancellationToken)
         {
-            var newAccount = await _repository.AddAsync(new Account(), cancellationToken);
+            var validatorResult = await _validator.ValidateAsync(request, cancellationToken);
+
+            if (!validatorResult.IsValid)
+                return new AddAccountResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = validatorResult.Errors.Select(e => e.ErrorMessage).ToArray() };
+
+            var newAccount = new Account
+            {
+                Balance = request.Balance,
+                Currency = request.Currency,
+                IsArchived = request.IsArchived,
+                Title = request.Title,
+                Type = request.Type,
+                CreatedBy = request.CreatedBy,
+                CreatedOn = request.CreatedOn
+            };
+
+            var createdAccount = await _repository.AddAsync(newAccount, cancellationToken);
+
+            return new AddAccountResult
+            {
+                Data = new AccountDto
+                {
+                    Id = createdAccount.Id,
+                    Balance = createdAccount.Balance,
+                    Currency = createdAccount.Currency,
+                    Title = createdAccount.Title,
+                    Type = createdAccount.Type,
+                    IsArchived = createdAccount.IsArchived,
+                    CreatedBy = createdAccount.CreatedBy,
+                    CreatedOn = createdAccount.CreatedOn,
+                    IsDeleted = createdAccount.IsDeleted
+                }
+            };
         }
     }
 }
