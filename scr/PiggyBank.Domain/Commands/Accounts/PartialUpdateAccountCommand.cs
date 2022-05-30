@@ -1,8 +1,11 @@
-﻿using PiggyBank.Common.Enums;
+﻿using MediatR;
+using PiggyBank.Common.Commands;
+using PiggyBank.Common.Enums;
+using PiggyBank.Domain.Results.Accounts;
 
-namespace PiggyBank.Common.Commands.Accounts
+namespace PiggyBank.Domain.Commands.Accounts
 {
-    public class PartialUpdateAccountCommand : BaseModifiedCommand
+    public class PartialUpdateAccountCommand : BaseModifiedCommand, IRequest<PartialUpdateAccountResult>
     {
         public int Id { get; set; }
 

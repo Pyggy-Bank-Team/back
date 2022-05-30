@@ -1,46 +1,30 @@
-using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PiggyBank.Common.Commands.Accounts;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
+using MediatR;
+using PiggyBank.Domain.Commands.Accounts;
+using PiggyBank.Domain.Results.Accounts;
 
 namespace PiggyBank.Domain.Handlers.Accounts
 {
-    public class DeleteAccountsHandler : BaseHandler<DeleteAccountsCommand>
+    public class DeleteAccountsHandler : IRequestHandler<DeleteAccountsCommand, DeleteAccountsResult>
     {
-        public DeleteAccountsHandler(PiggyContext context, DeleteAccountsCommand command)
-            : base(context, command)
+        private readonly IMediator _mediator;
+
+        public DeleteAccountsHandler(IMediator mediator)
+            => _mediator = mediator;
+
+        public async Task<DeleteAccountsResult> Handle(DeleteAccountsCommand request, CancellationToken cancellationToken)
         {
-        }
-
-        public override Task Invoke(CancellationToken token)
-            => Task.Run(() =>
+            foreach (var accountId in request.Ids)
             {
-                var repository = GetRepository<Account>();
+                var deleteAccountCommand = new DeleteAccountCommand { Id = accountId, ModifiedBy = request.ModifiedBy, ModifiedOn = request.ModifiedOn };
+                var deleteAccountResult = await _mediator.Send(deleteAccountCommand, cancellationToken);
 
-                var ids = Command.Ids;
-                foreach (var account in repository.Where(a => ids.Contains(a.Id)))
-                {
-                    account.IsDeleted = true;
-                    account.ModifiedBy = Command.ModifiedBy;
-                    account.ModifiedOn = Command.ModifiedOn;
-                    repository.Update(account);
-                    
-                    //Delete all related operations
+                if (!deleteAccountResult.IsSuccess)
+                    return new DeleteAccountsResult { ErrorCode = deleteAccountResult.ErrorCode, Messages = deleteAccountResult.Messages };
+            }
 
-                    foreach (var budgetOperation in GetRepository<BudgetOperation>().Where(b => !b.IsDeleted && b.AccountId == account.Id))
-                    {
-                        budgetOperation.IsDeleted = true;
-                        GetRepository<BudgetOperation>().Update(budgetOperation);
-                    }
-            
-                    foreach (var transferOperation in GetRepository<TransferOperation>().Where(b => !b.IsDeleted && (b.From == account.Id || b.To == account.Id)))
-                    {
-                        transferOperation.IsDeleted = true;
-                        GetRepository<TransferOperation>().Update(transferOperation);
-                    }
-                }
-            }, token);
+            return new DeleteAccountsResult();
+        }
     }
 }

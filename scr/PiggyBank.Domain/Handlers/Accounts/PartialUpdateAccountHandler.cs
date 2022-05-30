@@ -1,33 +1,38 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Accounts;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
+using MediatR;
+using PiggyBank.Common;
+using PiggyBank.Domain.Commands.Accounts;
+using PiggyBank.Domain.Results.Accounts;
+using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.Handlers.Accounts
 {
-    public class PartialUpdateAccountHandler : BaseHandler<PartialUpdateAccountCommand>
+    public class PartialUpdateAccountHandler : IRequestHandler<PartialUpdateAccountCommand, PartialUpdateAccountResult>
     {
-        public PartialUpdateAccountHandler(PiggyContext context, PartialUpdateAccountCommand command)
-            : base(context, command) { }
+        private readonly IAccountRepository _repository;
 
-        public override async Task Invoke(CancellationToken token)
+        public PartialUpdateAccountHandler(IAccountRepository repository)
         {
-            var account = await GetRepository<Account>().FirstOrDefaultAsync(a => a.Id == Command.Id, token);
+            _repository = repository;
+        }
 
-            if (account == null)
-                return;
+        public async Task<PartialUpdateAccountResult> Handle(PartialUpdateAccountCommand request, CancellationToken cancellationToken)
+        {
+            var account = await _repository.GetAsync(request.Id, cancellationToken);
 
-            account.Title = string.IsNullOrWhiteSpace(Command.Title) ? account.Title : Command.Title;
-            account.Type = Command.Type ?? account.Type;
-            account.Balance = Command.Balance ?? account.Balance;
-            //account.Currency = string.IsNullOrWhiteSpace(Command.Currency) ? account.Currency : Command.Currency;
-            account.IsArchived = Command.IsArchive ?? account.IsArchived;
-            account.ModifiedBy = Command.ModifiedBy;
-            account.ModifiedOn = Command.ModifiedOn;
+            if (account == null || account.IsDeleted)
+                return new PartialUpdateAccountResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new[] { "Account not found or deleted" } };
 
-            GetRepository<Account>().Update(account);
+            account.Title = string.IsNullOrWhiteSpace(request.Title) ? account.Title : request.Title;
+            account.Type = request.Type ?? account.Type;
+            account.Balance = request.Balance ?? account.Balance;
+            account.IsArchived = request.IsArchive ?? account.IsArchived;
+            account.ModifiedBy = request.ModifiedBy;
+            account.ModifiedOn = request.ModifiedOn;
+
+            var _ = await _repository.UpdateAsync(account, cancellationToken);
+            return new PartialUpdateAccountResult();
         }
     }
 }
