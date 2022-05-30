@@ -158,6 +158,7 @@ namespace PiggyBank.WebApi
 
             services.AddMediatR(typeof(PiggyBank.Domain.MediatREntryPoint).Assembly);
             services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorPipelineBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
 
             services.AddScoped<IValidator<AddAccountCommand>, AddAccountCommandValidator>();
             services.AddScoped<IValidator<ArchiveAccountCommand>, ArchiveAccountCommandValidator>();
