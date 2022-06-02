@@ -1,12 +1,13 @@
-﻿using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Models.Dto;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
-using System.Linq;
+﻿using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Microsoft.EntityFrameworkCore;
+using PiggyBank.Common.Models.Dto;
+using PiggyBank.Domain.Queries;
+using PiggyBank.Model;
+using PiggyBank.Model.Models.Entities;
 
-namespace PiggyBank.Domain.Queries.Accounts
+namespace PiggyBank.Domain.Handlers.Accounts
 {
     public class GetAccountByIdQuery : BaseQuery<AccountDto>
     {
