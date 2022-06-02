@@ -1,4 +1,5 @@
 using System.Text;
+using Common.Commands.Accounts;
 using FluentValidation;
 using Identity.Model;
 using Identity.Model.Models;
@@ -10,9 +11,7 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
-using PiggyBank.Common.Commands.Accounts;
 using PiggyBank.Domain;
 using PiggyBank.Domain.PipelineBehaviours;
 using PiggyBank.Domain.Validators.Accounts;

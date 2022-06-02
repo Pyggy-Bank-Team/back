@@ -1,8 +1,8 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
-using PiggyBank.Common.Commands.Bot;
-using PiggyBank.Common.Enums;
+using Common.Commands.Bot;
+using Common.Enums;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using Telegram.Bot;

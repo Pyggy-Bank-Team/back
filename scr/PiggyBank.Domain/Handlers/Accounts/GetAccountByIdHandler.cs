@@ -1,11 +1,10 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Common;
+using Common.Queries;
+using Common.Results.Accounts;
+using Common.Results.Models.Dto;
 using MediatR;
-using PiggyBank.Common;
-using PiggyBank.Common.Queries;
-using PiggyBank.Common.Results.Accounts;
-using PiggyBank.Common.Results.Models.Dto;
-using PiggyBank.Domain.Queries;
 using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.Handlers.Accounts

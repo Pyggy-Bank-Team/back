@@ -2,7 +2,7 @@
 using System.Collections.Generic;
 using System.ComponentModel.DataAnnotations;
 using System.ComponentModel.DataAnnotations.Schema;
-using PiggyBank.Common.Enums;
+using Common.Enums;
 
 namespace PiggyBank.Model.Models.Entities
 {

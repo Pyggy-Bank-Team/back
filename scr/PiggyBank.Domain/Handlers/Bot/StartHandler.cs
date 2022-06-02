@@ -1,10 +1,10 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Commands.Bot;
 using Identity.Model;
 using Identity.Model.Models;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Bot;
 using PiggyBank.Domain.Helpers;
 using Telegram.Bot;
 

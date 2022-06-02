@@ -1,10 +1,10 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Commands.Operations.Transfer;
+using Common.Enums;
+using Common.Results.Models.Dto.Operations;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Operations.Transfer;
-using PiggyBank.Common.Enums;
-using PiggyBank.Common.Results.Models.Dto.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 

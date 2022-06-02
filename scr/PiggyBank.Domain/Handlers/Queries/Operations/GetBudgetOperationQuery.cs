@@ -1,9 +1,9 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Queries;
+using Common.Results.Models.Dto.Operations;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Queries;
-using PiggyBank.Common.Results.Models.Dto.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 

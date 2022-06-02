@@ -1,5 +1,5 @@
 using System.Collections.Generic;
-using PiggyBank.Common.Commands.Categories;
+using Common.Commands.Categories;
 
 namespace PiggyBank.WebApi.Interfaces
 {

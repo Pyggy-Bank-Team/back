@@ -1,8 +1,8 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PiggyBank.Common.Commands.Operations;
-using PiggyBank.Common.Enums;
+using Common.Commands.Operations;
+using Common.Enums;
 using PiggyBank.Domain.InternalServices;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;

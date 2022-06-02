@@ -1,6 +1,6 @@
 using System.Collections.Generic;
-using PiggyBank.Common.Commands.Categories;
-using PiggyBank.Common.Enums;
+using Common.Commands.Categories;
+using Common.Enums;
 using PiggyBank.WebApi.Interfaces;
 
 namespace PiggyBank.WebApi.Factories

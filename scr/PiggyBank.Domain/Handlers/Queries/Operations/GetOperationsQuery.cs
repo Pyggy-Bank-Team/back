@@ -4,10 +4,10 @@ using PiggyBank.Model.Models.Entities;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PiggyBank.Common.Commands.Operations;
-using PiggyBank.Common.Enums;
-using PiggyBank.Common.Results.Models;
-using PiggyBank.Common.Results.Models.Dto.Operations;
+using Common.Commands.Operations;
+using Common.Enums;
+using Common.Results.Models;
+using Common.Results.Models.Dto.Operations;
 
 namespace PiggyBank.Domain.Queries.Operations
 {

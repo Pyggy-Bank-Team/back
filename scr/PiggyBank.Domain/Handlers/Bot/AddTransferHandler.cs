@@ -1,9 +1,9 @@
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Commands.Bot;
+using Common.Enums;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Bot;
-using PiggyBank.Common.Enums;
 using PiggyBank.Model.Models.Entities;
 using Telegram.Bot;
 using Telegram.Bot.Types.ReplyMarkups;

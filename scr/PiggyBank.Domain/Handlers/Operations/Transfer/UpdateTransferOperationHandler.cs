@@ -1,8 +1,8 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Commands.Operations.Transfer;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 

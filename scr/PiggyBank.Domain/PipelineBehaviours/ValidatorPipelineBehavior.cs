@@ -1,10 +1,10 @@
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using Common;
+using Common.Results;
 using FluentValidation;
 using MediatR;
-using PiggyBank.Common;
-using PiggyBank.Common.Results;
 
 namespace PiggyBank.Domain.PipelineBehaviours
 {

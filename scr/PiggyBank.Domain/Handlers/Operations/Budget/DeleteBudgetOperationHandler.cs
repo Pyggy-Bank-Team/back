@@ -1,6 +1,6 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using PiggyBank.Common.Commands.Operations.Budget;
+using Common.Commands.Operations.Budget;
 using PiggyBank.Domain.InternalServices;
 using PiggyBank.Model;
 

@@ -5,7 +5,7 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
-using PiggyBank.Common.Results.Models.Dto;
+using Common.Results.Models.Dto;
 
 namespace PiggyBank.Domain.Queries.Categories
 {
