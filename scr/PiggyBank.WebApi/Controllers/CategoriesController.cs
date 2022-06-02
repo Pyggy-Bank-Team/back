@@ -1,7 +1,5 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PiggyBank.Common.Commands.Categories;
-using PiggyBank.Common.Models.Dto;
 using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;

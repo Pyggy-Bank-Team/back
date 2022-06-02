@@ -5,8 +5,8 @@ using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Commands.Accounts;
 using PiggyBank.Common.Enums;
-using PiggyBank.Domain.Commands.Accounts;
 using PiggyBank.Domain.Handlers.Accounts;
 using Xunit;
 

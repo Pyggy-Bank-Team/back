@@ -1,7 +1,7 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Common.Commands.Categories;
-using PiggyBank.Common.Models.Dto;
+using PiggyBank.Common.Results.Models.Dto;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 

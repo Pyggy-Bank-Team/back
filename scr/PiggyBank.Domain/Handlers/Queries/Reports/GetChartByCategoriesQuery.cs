@@ -3,7 +3,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Reports;
-using PiggyBank.Common.Models.Dto.Dashboard;
+using PiggyBank.Common.Results.Models.Dto.Dashboard;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 

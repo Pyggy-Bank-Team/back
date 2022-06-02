@@ -1,7 +1,6 @@
 using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Mvc;
-using PiggyBank.Common.Commands.Bot;
 using Serilog;
 using Telegram.Bot.Types;
 using Telegram.Bot.Types.Enums;

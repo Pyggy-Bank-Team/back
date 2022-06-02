@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Enums;
-using PiggyBank.Common.Models.Dto.Operations;
+using PiggyBank.Common.Results.Models.Dto.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 

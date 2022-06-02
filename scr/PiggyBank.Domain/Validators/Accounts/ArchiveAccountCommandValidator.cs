@@ -1,5 +1,5 @@
 using FluentValidation;
-using PiggyBank.Domain.Commands.Accounts;
+using PiggyBank.Common.Commands.Accounts;
 
 namespace PiggyBank.Domain.Validators.Accounts
 {

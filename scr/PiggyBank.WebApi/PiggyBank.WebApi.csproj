@@ -20,7 +20,7 @@
 
   <ItemGroup>
     <ProjectReference Include="..\Identity.Model\Identity.Model.csproj" />
-    <ProjectReference Include="..\PiggyBank.Common\PiggyBank.Common.csproj" />
+    <ProjectReference Include="..\Common\Common.csproj" />
     <ProjectReference Include="..\PiggyBank.Domain\PiggyBank.Domain.csproj" />
   </ItemGroup>
 

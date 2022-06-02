@@ -3,9 +3,10 @@ using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Models.Dto;
+using PiggyBank.Common.Queries;
+using PiggyBank.Common.Results.Accounts;
+using PiggyBank.Common.Results.Models.Dto;
 using PiggyBank.Domain.Queries;
-using PiggyBank.Domain.Results.Accounts;
 using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.Handlers.Accounts

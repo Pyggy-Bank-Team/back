@@ -1,5 +1,4 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using PiggyBank.Common.Enums;
 
 namespace PiggyBank.WebApi.Requests.Categories
 {

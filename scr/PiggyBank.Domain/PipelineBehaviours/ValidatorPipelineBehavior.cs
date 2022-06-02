@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using FluentValidation;
 using MediatR;
 using PiggyBank.Common;
-using PiggyBank.Domain.Results;
+using PiggyBank.Common.Results;
 
 namespace PiggyBank.Domain.PipelineBehaviours
 {

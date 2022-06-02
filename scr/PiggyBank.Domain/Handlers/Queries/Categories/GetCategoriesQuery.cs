@@ -1,11 +1,11 @@
 ﻿using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Models.Dto;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 using System;
 using System.Linq;
 using System.Threading;
 using System.Threading.Tasks;
+using PiggyBank.Common.Results.Models.Dto;
 
 namespace PiggyBank.Domain.Queries.Categories
 {

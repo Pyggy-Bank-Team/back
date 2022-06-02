@@ -9,7 +9,7 @@ Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiggyBank.Model", "PiggyBan
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiggyBank.WebApi", "PiggyBank.WebApi\PiggyBank.WebApi.csproj", "{43565676-04E4-4010-BF51-A0275B5CEDBA}"
 EndProject
-Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "PiggyBank.Common", "PiggyBank.Common\PiggyBank.Common.csproj", "{E9B36920-CC10-4D58-833C-20D9BBA56AB6}"
+Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Common", "Common\Common.csproj", "{E9B36920-CC10-4D58-833C-20D9BBA56AB6}"
 EndProject
 Project("{9A19103F-16F7-4668-BE54-9A1E7A4F7556}") = "Identity.Model", "Identity.Model\Identity.Model.csproj", "{98C0A761-3575-460A-B139-3A25A45199E3}"
 EndProject

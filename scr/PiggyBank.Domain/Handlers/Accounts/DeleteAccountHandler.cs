@@ -1,9 +1,9 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using PiggyBank.Domain.Commands.Accounts;
-using PiggyBank.Domain.Commands.Operations;
-using PiggyBank.Domain.Results.Accounts;
+using PiggyBank.Common.Commands.Accounts;
+using PiggyBank.Common.Commands.Operations;
+using PiggyBank.Common.Results.Accounts;
 using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.Handlers.Accounts

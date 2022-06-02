@@ -1,7 +1,7 @@
 using System.Threading;
 using System.Threading.Tasks;
 using MediatR;
-using PiggyBank.Domain.Results;
+using PiggyBank.Common.Results;
 using Serilog;
 
 namespace PiggyBank.Domain.PipelineBehaviours

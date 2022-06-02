@@ -1,5 +1,5 @@
-﻿using PiggyBank.Common.Enums;
-using System.ComponentModel.DataAnnotations;
+﻿using System.ComponentModel.DataAnnotations;
+using PiggyBank.Common.Enums;
 
 namespace PiggyBank.Model.Models.Entities
 {

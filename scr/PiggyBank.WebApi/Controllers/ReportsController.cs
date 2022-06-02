@@ -3,9 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PiggyBank.Common.Commands.Reports;
-using PiggyBank.Common.Enums;
-using PiggyBank.Common.Models.Dto.Dashboard;
 using PiggyBank.WebApi.Extensions;
 using PiggyBank.WebApi.Requests.Reports;
 
