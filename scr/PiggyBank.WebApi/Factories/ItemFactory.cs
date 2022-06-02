@@ -1,5 +1,4 @@
 using System.Collections.Generic;
-using PiggyBank.Common.Commands.Accounts;
 using PiggyBank.Common.Commands.Categories;
 using PiggyBank.Common.Enums;
 using PiggyBank.Domain.Commands.Accounts;

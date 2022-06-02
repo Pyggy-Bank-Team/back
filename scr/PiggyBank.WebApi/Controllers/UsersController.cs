@@ -7,7 +7,6 @@ using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Identity;
 using Microsoft.AspNetCore.Mvc;
 using Microsoft.Extensions.Options;
-using PiggyBank.Common.Commands.Accounts;
 using PiggyBank.Common.Commands.Categories;
 using PiggyBank.WebApi.Extensions;
 using PiggyBank.WebApi.Filters;

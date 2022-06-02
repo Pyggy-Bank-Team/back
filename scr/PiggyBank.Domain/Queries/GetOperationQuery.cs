@@ -1,6 +1,6 @@
 using System;
 
-namespace PiggyBank.Common.Queries
+namespace PiggyBank.Domain.Queries
 {
     public class GetOperationQuery
     {

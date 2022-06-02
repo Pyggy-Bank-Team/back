@@ -3,7 +3,6 @@ using System.Threading;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
 using PiggyBank.Common.Models.Dto.Operations;
-using PiggyBank.Common.Queries;
 using PiggyBank.Model;
 using PiggyBank.Model.Models.Entities;
 

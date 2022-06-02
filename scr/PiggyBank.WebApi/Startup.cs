@@ -1,4 +1,3 @@
-using System;
 using System.Text;
 using FluentValidation;
 using Identity.Model;
@@ -16,7 +15,6 @@ using Microsoft.OpenApi.Models;
 using PiggyBank.Domain;
 using PiggyBank.Domain.Commands.Accounts;
 using PiggyBank.Domain.PipelineBehaviours;
-using PiggyBank.Domain.Services;
 using PiggyBank.Domain.Validators.Accounts;
 using PiggyBank.Model;
 using PiggyBank.WebApi.Extensions;
@@ -35,8 +33,6 @@ namespace PiggyBank.WebApi
 {
     public class Startup
     {
-        private const string AllowOrigins = "SpecificOrigins";
-
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
             => (Configuration, Environment) = (configuration, environment);
 
@@ -139,16 +135,6 @@ namespace PiggyBank.WebApi
 
             services.AddSingleton(Log.Logger);
 
-            services.AddCors(corsOptions =>
-            {
-                corsOptions.AddPolicy(name: AllowOrigins, builder =>
-                {
-                    builder.WithOrigins("http://localhost:5000", "https://localhost:5001")
-                        .WithHeaders(HeaderNames.ContentType)
-                        .WithHeaders(HeaderNames.Authorization);
-                });
-            });
-
             var botOptions = Configuration.GetSection(BotOptions.BotSection);
             services.AddHttpClient("tmbot")
                 .AddTypedClient<ITelegramBotClient>(client => new TelegramBotClient(botOptions["Token"], client));
@@ -162,6 +148,8 @@ namespace PiggyBank.WebApi
 
             services.AddScoped<IValidator<AddAccountCommand>, AddAccountCommandValidator>();
             services.AddScoped<IValidator<ArchiveAccountCommand>, ArchiveAccountCommandValidator>();
+
+            services.AddScoped<IValidator<UpdateAccountCommand>, UpdateAccountCommandValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -173,7 +161,6 @@ namespace PiggyBank.WebApi
             }
 
             app.UseRouting();
-            app.UseCors(AllowOrigins);
 
             app.UseAuthentication();
             app.UseAuthorization();

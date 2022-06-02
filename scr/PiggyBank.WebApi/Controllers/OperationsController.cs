@@ -9,7 +9,6 @@ using PiggyBank.Common.Commands.Operations.Budget;
 using PiggyBank.Common.Commands.Operations.Transfer;
 using PiggyBank.Common.Models;
 using PiggyBank.Common.Models.Dto.Operations;
-using PiggyBank.Common.Queries;
 using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Requests.Operations.Budget;
 using PiggyBank.WebApi.Requests.Operations.Transfer;

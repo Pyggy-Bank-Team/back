@@ -1,34 +1,38 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
-using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Commands.Accounts;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
+using MediatR;
+using PiggyBank.Common;
+using PiggyBank.Domain.Commands.Accounts;
+using PiggyBank.Domain.Results.Accounts;
+using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.Handlers.Accounts
 {
-    public class UpdateAccountHandler : BaseHandler<UpdateAccountCommand>
+    public class UpdateAccountHandler : IRequestHandler<UpdateAccountCommand, UpdateAccountResult>
     {
-        public UpdateAccountHandler(PiggyContext context, UpdateAccountCommand command)
-            : base(context, command) { }
+        private readonly IAccountRepository _repository;
 
-        public override async Task Invoke(CancellationToken token)
+        public UpdateAccountHandler(IAccountRepository repository)
         {
-            var account = await GetRepository<Account>().FirstOrDefaultAsync(a => a.Id == Command.Id, cancellationToken: token);
+            _repository = repository;
+        }
+
+        public async Task<UpdateAccountResult> Handle(UpdateAccountCommand request, CancellationToken cancellationToken)
+        {
+            var account = await _repository.GetAsync(request.Id, cancellationToken);
 
             if (account == null)
-                return;
+                return new UpdateAccountResult { ErrorCode = ErrorCodes.NotFound };
 
-            account.Title = Command.Title;
-            account.Type = Command.Type;
-            account.Balance = Command.Balance;
-            account.IsArchived = Command.IsArchived;
-            account.ModifiedBy = Command.ModifiedBy;
-            account.ModifiedOn = Command.ModifiedOn;
-            //TODO After mvp need add functionality for update currency
-            // account.Currency = Command.Currency;
+            account.Title = request.Title;
+            account.Type = request.Type;
+            account.Balance = request.Balance;
+            account.IsArchived = request.IsArchived;
+            account.ModifiedBy = request.ModifiedBy;
+            account.ModifiedOn = request.ModifiedOn;
 
-            GetRepository<Account>().Update(account);
+            var _ = await _repository.UpdateAsync(account, cancellationToken);
+            return new UpdateAccountResult();
         }
     }
 }
