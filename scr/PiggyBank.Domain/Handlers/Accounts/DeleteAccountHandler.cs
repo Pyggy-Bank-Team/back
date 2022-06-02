@@ -21,7 +21,7 @@ namespace PiggyBank.Domain.Handlers.Accounts
 
         public async Task<DeleteAccountResult> Handle(DeleteAccountCommand request, CancellationToken cancellationToken)
         {
-            var account = await _repository.GetAsync(request.Id, cancellationToken);
+            var account = await _repository.GetAsync(request.ModifiedBy, request.Id, cancellationToken);
 
             if (account == null || account.IsDeleted)
                 return new DeleteAccountResult();

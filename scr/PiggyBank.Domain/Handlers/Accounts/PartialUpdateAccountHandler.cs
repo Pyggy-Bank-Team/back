@@ -19,7 +19,7 @@ namespace PiggyBank.Domain.Handlers.Accounts
 
         public async Task<PartialUpdateAccountResult> Handle(PartialUpdateAccountCommand request, CancellationToken cancellationToken)
         {
-            var account = await _repository.GetAsync(request.Id, cancellationToken);
+            var account = await _repository.GetAsync(request.ModifiedBy, request.Id, cancellationToken);
 
             if (account == null || account.IsDeleted)
                 return new PartialUpdateAccountResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new[] { "Account not found or deleted" } };

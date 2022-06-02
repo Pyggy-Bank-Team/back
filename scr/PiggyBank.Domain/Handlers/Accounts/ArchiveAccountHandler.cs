@@ -19,7 +19,7 @@ namespace PiggyBank.Domain.Handlers.Accounts
 
         public async Task<ArchiveAccountResult> Handle(ArchiveAccountCommand request, CancellationToken cancellationToken)
         {
-            var account = await _repository.GetAsync(request.Id, cancellationToken);
+            var account = await _repository.GetAsync(request.ModifiedBy, request.Id, cancellationToken);
 
             if (account == null)
                 return new ArchiveAccountResult { ErrorCode = ErrorCodes.NotFound };
