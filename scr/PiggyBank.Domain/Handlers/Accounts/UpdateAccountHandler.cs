@@ -21,8 +21,8 @@ namespace PiggyBank.Domain.Handlers.Accounts
         {
             var account = await _repository.GetAsync(request.ModifiedBy, request.Id, cancellationToken);
 
-            if (account == null)
-                return new UpdateAccountResult { ErrorCode = ErrorCodes.NotFound };
+            if (account == null || account.IsDeleted)
+                return new UpdateAccountResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new[] { "Account not found or deleted" } };
 
             account.Title = request.Title;
             account.Type = request.Type;

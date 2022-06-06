@@ -17,7 +17,7 @@ namespace PiggyBank.Domain.Handlers.Accounts
 
         public async Task<AddDefaultAccountsResult> Handle(AddDefaultAccountsCommand request, CancellationToken cancellationToken)
         {
-            if (IsRussianLanguage(request.Locale))
+            if (UseRussianLanguage(request.Locale))
             {
                 foreach (var command in GenerateAccountsWithRussianTitles(request))
                 {
@@ -35,7 +35,7 @@ namespace PiggyBank.Domain.Handlers.Accounts
             return new AddDefaultAccountsResult();
         }
 
-        private bool IsRussianLanguage(string locale)
+        private bool UseRussianLanguage(string locale)
         {
             if (string.IsNullOrWhiteSpace(locale))
                 return false;

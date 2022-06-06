@@ -13,9 +13,7 @@ namespace PiggyBank.Domain.Handlers.Accounts
         private readonly IAccountRepository _repository;
 
         public ArchiveAccountHandler(IAccountRepository repository)
-        {
-            _repository = repository;
-        }
+            =>  _repository = repository;
 
         public async Task<ArchiveAccountResult> Handle(ArchiveAccountCommand request, CancellationToken cancellationToken)
         {

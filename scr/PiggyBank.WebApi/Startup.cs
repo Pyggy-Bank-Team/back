@@ -1,5 +1,6 @@
 using System.Text;
 using Common.Commands.Accounts;
+using Common.Commands.Operations;
 using Common.Queries;
 using FluentValidation;
 using Identity.Model;
@@ -16,6 +17,7 @@ using Microsoft.OpenApi.Models;
 using PiggyBank.Domain;
 using PiggyBank.Domain.PipelineBehaviours;
 using PiggyBank.Domain.Validators.Accounts;
+using PiggyBank.Domain.Validators.Operations;
 using PiggyBank.Model;
 using PiggyBank.WebApi.Extensions;
 using PiggyBank.WebApi.Factories;
@@ -153,6 +155,7 @@ namespace PiggyBank.WebApi
             services.AddScoped<IValidator<GetAccountQuery>, GetAccountQueryValidator>();
             services.AddScoped<IValidator<DeleteAccountCommand>, DeleteAccountCommandValidator>();
             services.AddScoped<IValidator<DeleteAccountsCommand>, DeleteAccountsCommandValidator>();
+            services.AddScoped<IValidator<DeleteRelatedOperationsCommand>, DeleteRelatedOperationsCommandValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)

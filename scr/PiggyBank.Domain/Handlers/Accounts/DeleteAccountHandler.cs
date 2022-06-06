@@ -32,7 +32,9 @@ namespace PiggyBank.Domain.Handlers.Accounts
 
             var deleteRelatedOperationsCommand = new DeleteRelatedOperationsCommand
             {
-                AccountId = account.Id
+                AccountId = account.Id,
+                ModifiedBy = request.ModifiedBy,
+                ModifiedOn = request.ModifiedOn
             };
             
             var deleteRelatedOperationsResult = await _mediator.Send(deleteRelatedOperationsCommand, cancellationToken);
