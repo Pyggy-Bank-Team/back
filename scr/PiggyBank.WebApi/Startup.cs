@@ -1,5 +1,6 @@
 using System.Text;
 using Common.Commands.Accounts;
+using Common.Queries;
 using FluentValidation;
 using Identity.Model;
 using Identity.Model.Models;
@@ -43,8 +44,7 @@ namespace PiggyBank.WebApi
             services.AddControllers()
                 .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true)
                 .AddNewtonsoftJson();
-
-            // services.AddScoped<IAccountService, AccountService>();
+            
             // services.AddScoped<ICategoryService, CategoryService>();
             // services.AddScoped<IOperationService, OperationService>();
             // services.AddScoped<IReportService, ReportService>();
@@ -147,8 +147,12 @@ namespace PiggyBank.WebApi
 
             services.AddScoped<IValidator<AddAccountCommand>, AddAccountCommandValidator>();
             services.AddScoped<IValidator<ArchiveAccountCommand>, ArchiveAccountCommandValidator>();
-
+            services.AddScoped<IValidator<GetAccountsQuery>, GetAccountsQueryValidator>();
             services.AddScoped<IValidator<UpdateAccountCommand>, UpdateAccountCommandValidator>();
+            services.AddScoped<IValidator<PartialUpdateAccountCommand>, PartialUpdateAccountCommandValidator>();
+            services.AddScoped<IValidator<GetAccountQuery>, GetAccountQueryValidator>();
+            services.AddScoped<IValidator<DeleteAccountCommand>, DeleteAccountCommandValidator>();
+            services.AddScoped<IValidator<DeleteAccountsCommand>, DeleteAccountsCommandValidator>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
