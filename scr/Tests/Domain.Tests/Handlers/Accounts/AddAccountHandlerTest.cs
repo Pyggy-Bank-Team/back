@@ -1,11 +1,12 @@
 ﻿using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Commands.Accounts;
+using Common.Enums;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Enums;
-using PiggyBank.Common.Results.Models.Dto;
 using PiggyBank.Domain.Handlers.Accounts;
 using PiggyBank.Model;
+using PiggyBank.Model.Repositories;
 using Xunit;
 
 namespace Domain.Tests.Handlers.Accounts
@@ -18,34 +19,36 @@ namespace Domain.Tests.Handlers.Accounts
             => _context = new PiggyContext(new DbContextOptionsBuilder<PiggyContext>()
                 .UseInMemoryDatabase(databaseName: "AddAccountHandler_InMemory").Options);
 
-        [Fact]
-        public async Task Invoke_Default_AddedAccount()
+        [Theory]
+        [InlineData(AccountType.Card, "USD")]
+        [InlineData(AccountType.Cash, "EUR")]
+        public async Task Handle_Default_AddedAccount(AccountType type, string currency)
         {
+            var repository = new AccountRepository(_context);
+            var handler = new AddAccountHandler(repository);
+            
             var command = new AddAccountCommand
             {
                 Balance = 100,
-                Currency = "USD",
+                Currency = currency,
                 Title = "Test title",
-                Type = AccountType.Card,
+                Type = type,
                 CreatedBy = Guid.NewGuid(),
                 CreatedOn = DateTime.Now,
                 IsArchived = true
             };
+            
+            var result = await handler.Handle(command, CancellationToken.None);
 
-            var handler = new AddAccountHandler(_context, command);
-            await handler.Invoke(CancellationToken.None);
-
-            var account = (AccountDto) handler.Result;
-
-            Assert.Equal(command.Balance, account.Balance);
-            Assert.Equal(command.Currency, account.Currency);
-            Assert.Equal(command.Type, account.Type);
-            Assert.Equal(command.Title, account.Title);
-            Assert.Equal(command.CreatedBy, account.CreatedBy);
-            Assert.Equal(command.CreatedOn, account.CreatedOn);
-            Assert.Equal(command.IsArchived, account.IsArchived);
-            Assert.False(account.IsDeleted);
-            Assert.NotEqual(default, account.Id);
+            Assert.Equal(command.Balance, result.Data.Balance);
+            Assert.Equal(command.Currency, result.Data.Currency);
+            Assert.Equal(command.Type, result.Data.Type);
+            Assert.Equal(command.Title, result.Data.Title);
+            Assert.Equal(command.CreatedBy, result.Data.CreatedBy);
+            Assert.Equal(command.CreatedOn, result.Data.CreatedOn);
+            Assert.Equal(command.IsArchived, result.Data.IsArchived);
+            Assert.False(result.Data.IsDeleted);
+            Assert.NotEqual(default, result.Data.Id);
         }
 
         public void Dispose()

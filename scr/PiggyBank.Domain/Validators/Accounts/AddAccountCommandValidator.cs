@@ -13,7 +13,7 @@ namespace PiggyBank.Domain.Validators.Accounts
             RuleFor(a => a.Currency).NotEmpty();
             RuleFor(a => a.CreatedBy).NotEqual(Guid.Empty);
             RuleFor(a => a.Title).NotEmpty();
-            RuleFor(a => a.CreatedOn).GreaterThanOrEqualTo(DateTime.UtcNow);
+            RuleFor(a => a.CreatedOn).ExclusiveBetween(DateTime.UtcNow.AddMinutes(-2), DateTime.UtcNow.AddMinutes(2));
         }
     }
 }

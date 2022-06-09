@@ -22,5 +22,14 @@
 	<s:String x:Key="/Default/Environment/UnitTesting/UnitTestSessionStore/Sessions/=ce1c62b8_002Dc51b_002D4f00_002D885e_002Dcc9f6df5dc20/@EntryIndexedValue">&lt;SessionState ContinuousTestingMode="0" IsActive="True" Name="Post_Default_UserIsCreated #4" xmlns="urn:schemas-jetbrains-com:jetbrains-ut-session"&gt;&#xD;
   &lt;TestAncestor&gt;&#xD;
     &lt;TestId&gt;xUnit::AE3BFF6C-ED52-4AEB-823D-5F6F667129F8::.NETCoreApp,Version=v3.1::WebApi.Tests.UsersControllerTest.Post_Default_UserIsCreated&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::50E6BFB5-E08B-46DB-97C8-D0AED42B477F::.NETCoreApp,Version=v3.1::Domain.Tests.Handlers.Accounts.AddAccountHandlerTest.Invoke_Default_AddedAccount&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::50E6BFB5-E08B-46DB-97C8-D0AED42B477F::.NETCoreApp,Version=v3.1::Domain.Tests.Handlers.Accounts.AddAccountHandlerTest.Handle_Default_AddedAccount&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::50E6BFB5-E08B-46DB-97C8-D0AED42B477F::.NETCoreApp,Version=v3.1::Domain.Tests.Validators.Accounts.AddAccountCommandValidatorTests.Validation_Default_NoErrors&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::50E6BFB5-E08B-46DB-97C8-D0AED42B477F::.NETCoreApp,Version=v3.1::Domain.Tests.Validators.Accounts.AddAccountCommandValidatorTests.Validation_AccountTypeIsWrong_AccountTypeError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::50E6BFB5-E08B-46DB-97C8-D0AED42B477F::.NETCoreApp,Version=v3.1::Domain.Tests.Validators.Accounts.AddAccountCommandValidatorTests.Validation_CurrencyIsEmptyOrNull_CurrencyError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::50E6BFB5-E08B-46DB-97C8-D0AED42B477F::.NETCoreApp,Version=v3.1::Domain.Tests.Validators.Accounts.AddAccountCommandValidatorTests.Validation_TitleIsEmptyOrNull_TitleError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::50E6BFB5-E08B-46DB-97C8-D0AED42B477F::.NETCoreApp,Version=v3.1::Domain.Tests.Validators.Accounts.AddAccountCommandValidatorTests.Validation_CreatedByIsEmpty_CreatedByError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::50E6BFB5-E08B-46DB-97C8-D0AED42B477F::.NETCoreApp,Version=v3.1::Domain.Tests.Validators.Accounts.AddAccountCommandValidatorTests.Validation_CreatedOnIsYesterday_CreatedOnError&lt;/TestId&gt;&#xD;
+    &lt;TestId&gt;xUnit::50E6BFB5-E08B-46DB-97C8-D0AED42B477F::.NETCoreApp,Version=v3.1::Domain.Tests.Validators.Accounts.AddAccountCommandValidatorTests&lt;/TestId&gt;&#xD;
   &lt;/TestAncestor&gt;&#xD;
 &lt;/SessionState&gt;</s:String></wpf:ResourceDictionary>
