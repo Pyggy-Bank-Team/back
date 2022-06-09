@@ -19,6 +19,8 @@ using PiggyBank.Domain.PipelineBehaviours;
 using PiggyBank.Domain.Validators.Accounts;
 using PiggyBank.Domain.Validators.Operations;
 using PiggyBank.Model;
+using PiggyBank.Model.Interfaces;
+using PiggyBank.Model.Repositories;
 using PiggyBank.WebApi.Extensions;
 using PiggyBank.WebApi.Factories;
 using PiggyBank.WebApi.Filters;
@@ -53,6 +55,7 @@ namespace PiggyBank.WebApi
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IItemFactory, ItemFactory>();
             // services.AddScoped<IBotService, BotService>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<InvalidState>();
             services.AddMediatR(typeof(MediatREntryPoint).Assembly);
 

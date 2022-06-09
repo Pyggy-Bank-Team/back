@@ -21,7 +21,7 @@ namespace PiggyBank.Domain.Handlers.Accounts
 
         public async Task<GetAccountsResult> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
         {
-            var accounts = await _repository.GetAccountsAsync(request.UserId, cancellationToken);
+            var accounts = _repository.GetAccountsAsync(request.UserId);
 
             if (request.All)
                 return new GetAccountsResult

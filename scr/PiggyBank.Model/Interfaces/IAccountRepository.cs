@@ -11,6 +11,6 @@ namespace PiggyBank.Model.Interfaces
         Task<Account> AddAsync(Account newAccount, CancellationToken token);
         Task<Account> GetAsync(Guid userId, int accountId, CancellationToken token);
         Task<Account> UpdateAsync(Account updatedAccount, CancellationToken token);
-        Task<IQueryable<Account>> GetAccountsAsync(Guid userId, CancellationToken token);
+        IQueryable<Account> GetAccountsAsync(Guid userId);
     }
 }
