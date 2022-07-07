@@ -1,8 +1,10 @@
 ﻿using Common.Enums;
+using Common.Results.Categories;
+using MediatR;
 
 namespace Common.Commands.Categories
 {
-    public class AddCategoryCommand : BaseCreateCommand
+    public class AddCategoryCommand : BaseCreateCommand, IRequest<AddCategoryResult>
     {
         public string Title { get; set; }
 

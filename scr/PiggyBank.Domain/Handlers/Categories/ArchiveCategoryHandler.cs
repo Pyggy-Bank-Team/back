@@ -1,29 +1,36 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Common;
 using Common.Commands.Categories;
-using Microsoft.EntityFrameworkCore;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
+using Common.Results.Categories;
+using MediatR;
+using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.Handlers.Categories
 {
-    public class ArchiveCategoryHandler : BaseHandler<ArchiveCategoryCommand>
+    public class ArchiveCategoryHandler : IRequestHandler<ArchiveCategoryCommand, ArchiveCategoryResult>
     {
-        public ArchiveCategoryHandler(PiggyContext context, ArchiveCategoryCommand command)
-            : base(context, command) { }
+        private readonly ICategoryRepository _repository;
 
-        public override async Task Invoke(CancellationToken token)
+        public ArchiveCategoryHandler(ICategoryRepository repository)
+            => _repository = repository;
+
+        public async Task<ArchiveCategoryResult> Handle(ArchiveCategoryCommand request, CancellationToken cancellationToken)
         {
-            var repository = GetRepository<Category>();
-            var category = await repository.FirstOrDefaultAsync(a => a.Id == Command.Id && !a.IsDeleted, token);
+            var category = await _repository.GetAsync(request.ModifiedBy, request.Id, cancellationToken);
 
-            if (category == null || category.IsArchived)
-                return;
+            if (category == null)
+                return new ArchiveCategoryResult { ErrorCode = ErrorCodes.NotFound };
+
+            if (category.IsArchived || category.IsDeleted)
+                return new ArchiveCategoryResult { ErrorCode = ErrorCodes.InvalidRequest, Messages = new[] { "Category is already archived or deleted" } };
 
             category.IsArchived = true;
-            category.ModifiedOn = Command.ModifiedOn;
-            category.ModifiedBy = Command.ModifiedBy;
-            repository.Update(category);
+            category.ModifiedBy = request.ModifiedBy;
+            category.ModifiedOn = request.ModifiedOn;
+
+            _ = await _repository.UpdateAsync(category, cancellationToken);
+            return new ArchiveCategoryResult();
         }
     }
 }

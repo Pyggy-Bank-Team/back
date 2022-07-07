@@ -22,27 +22,9 @@ namespace PiggyBank.Domain.Handlers.Accounts
         public async Task<GetAccountsResult> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
         {
             var accounts = _repository.GetAccountsAsync(request.UserId);
-
-            if (request.All)
-                return new GetAccountsResult
-                {
-                    Data = await accounts.Select(a => new AccountDto
-                    {
-                        Id = a.Id,
-                        Type = a.Type,
-                        Balance = a.Balance,
-                        Currency = a.Currency,
-                        Title = a.Title,
-                        IsArchived = a.IsArchived,
-                        IsDeleted = a.IsDeleted,
-                        CreatedOn = a.CreatedOn,
-                        CreatedBy = a.CreatedBy
-                    }).ToArrayAsync(cancellationToken)
-                };
-
             return new GetAccountsResult
             {
-                Data = await accounts.Where(a => !a.IsDeleted).Select(a => new AccountDto
+                Data = await accounts.Select(a => new AccountDto
                 {
                     Id = a.Id,
                     Type = a.Type,

@@ -29,7 +29,7 @@ namespace PiggyBank.Domain.Handlers.Accounts
             account.ModifiedBy = request.ModifiedBy;
             account.ModifiedOn = request.ModifiedOn;
 
-            var _ = await _repository.UpdateAsync(account, cancellationToken);
+            _ = await _repository.UpdateAsync(account, cancellationToken);
             return new ArchiveAccountResult();
         }
     }

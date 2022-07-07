@@ -1,41 +1,48 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Common.Commands.Categories;
+using Common.Results.Categories;
 using Common.Results.Models.Dto;
-using PiggyBank.Model;
+using MediatR;
+using PiggyBank.Model.Interfaces;
 using PiggyBank.Model.Models.Entities;
 
 namespace PiggyBank.Domain.Handlers.Categories
 {
-    public class AddCategoryHandler : BaseHandler<AddCategoryCommand>
+    public class AddCategoryHandler : IRequestHandler<AddCategoryCommand, AddCategoryResult>
     {
-        public AddCategoryHandler(PiggyContext context, AddCategoryCommand command)
-            : base(context, command) { }
+        private readonly ICategoryRepository _repository;
 
-        public override async Task Invoke(CancellationToken token)
+        public AddCategoryHandler(ICategoryRepository repository)
+            => _repository = repository;
+
+        public async Task<AddCategoryResult> Handle(AddCategoryCommand request, CancellationToken cancellationToken)
         {
-            var result = await GetRepository<Category>().AddAsync(new Category
+            var newCategory = new Category
             {
-                Title = Command.Title,
-                HexColor = Command.HexColor,
-                Type = Command.Type,
-                CreatedBy = Command.CreatedBy,
-                CreatedOn = Command.CreatedOn,
-                IsArchived = Command.IsArchived
-            }, token);
+                Title = request.Title,
+                Type = request.Type,
+                CreatedBy = request.CreatedBy,
+                CreatedOn = request.CreatedOn,
+                HexColor = request.HexColor,
+                IsArchived = request.IsArchived
+            };
 
-            await SaveAsync();
-            var entity = result.Entity;
-            Result = new CategoryDto
+            var createdCategory = await _repository.AddAsync(newCategory, cancellationToken);
+
+            return new AddCategoryResult
             {
-                Id = entity.Id,
-                Title = entity.Title,
-                Type = entity.Type,
-                HexColor = entity.HexColor,
-                IsArchived = entity.IsArchived,
-                IsDeleted = entity.IsDeleted,
-                CreatedBy = entity.CreatedBy,
-                CreatedOn = entity.CreatedOn
+                Data = new CategoryDto
+                {
+                    Id = createdCategory.Id,
+                    Title = createdCategory.Title,
+                    Type = createdCategory.Type,
+                    CreatedBy = createdCategory.CreatedBy,
+                    CreatedOn = createdCategory.CreatedOn,
+                    HexColor = createdCategory.HexColor,
+                    IsArchived = createdCategory.IsArchived,
+                    IsDeleted = createdCategory.IsDeleted
+                }
             };
         }
     }

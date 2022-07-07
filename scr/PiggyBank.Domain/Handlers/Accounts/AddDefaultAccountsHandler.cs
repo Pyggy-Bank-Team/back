@@ -5,19 +5,21 @@ using Common.Commands.Accounts;
 using Common.Enums;
 using Common.Results.Accounts;
 using MediatR;
+using PiggyBank.Domain.Helpers;
 
 namespace PiggyBank.Domain.Handlers.Accounts
 {
     public class AddDefaultAccountsHandler : IRequestHandler<AddDefaultAccountsCommand, AddDefaultAccountsResult>
     {
+        private readonly ILanguageHelper _languageHelper;
         private readonly IMediator _mediator;
 
-        public AddDefaultAccountsHandler(IMediator mediator)
-            => _mediator = mediator;
+        public AddDefaultAccountsHandler(IMediator mediator, ILanguageHelper languageHelper)
+            => (_mediator, _languageHelper) = (mediator, languageHelper);
 
         public async Task<AddDefaultAccountsResult> Handle(AddDefaultAccountsCommand request, CancellationToken cancellationToken)
         {
-            if (UseRussianLanguage(request.Locale))
+            if (_languageHelper.UseRussianLanguage(request.Locale))
             {
                 foreach (var command in GenerateAccountsWithRussianTitles(request))
                 {
@@ -33,15 +35,6 @@ namespace PiggyBank.Domain.Handlers.Accounts
             }
 
             return new AddDefaultAccountsResult();
-        }
-
-        private bool UseRussianLanguage(string locale)
-        {
-            if (string.IsNullOrWhiteSpace(locale))
-                return false;
-
-            var lower = locale.ToLowerInvariant();
-            return lower.Contains("ru") || lower.Contains("kz") || lower.Contains("by") || lower.Contains("ua");
         }
 
         private IEnumerable<AddAccountCommand> GenerateAccountsWithRussianTitles(AddDefaultAccountsCommand request)

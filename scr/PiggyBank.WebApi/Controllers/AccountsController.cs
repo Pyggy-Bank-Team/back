@@ -23,9 +23,9 @@ namespace PiggyBank.WebApi.Controllers
              => _mediator = mediator;
         
          [HttpGet]
-         public async Task<IActionResult> Get(bool all = false, CancellationToken token = default)
+         public async Task<IActionResult> Get(CancellationToken token = default)
          {
-             var query = new GetAccountsQuery { All = all, UserId = User.GetUserId() };
+             var query = new GetAccountsQuery { UserId = User.GetUserId() };
              var result = await _mediator.Send(query, token);
 
              if (result.IsSuccess)

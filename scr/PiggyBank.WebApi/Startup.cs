@@ -15,6 +15,7 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PiggyBank.Domain;
+using PiggyBank.Domain.Helpers;
 using PiggyBank.Domain.PipelineBehaviours;
 using PiggyBank.Domain.Validators.Accounts;
 using PiggyBank.Domain.Validators.Operations;
@@ -159,6 +160,8 @@ namespace PiggyBank.WebApi
             services.AddScoped<IValidator<DeleteAccountCommand>, DeleteAccountCommandValidator>();
             services.AddScoped<IValidator<DeleteAccountsCommand>, DeleteAccountsCommandValidator>();
             services.AddScoped<IValidator<DeleteRelatedOperationsCommand>, DeleteRelatedOperationsCommandValidator>();
+
+            services.AddScoped<ILanguageHelper, LanguageHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
