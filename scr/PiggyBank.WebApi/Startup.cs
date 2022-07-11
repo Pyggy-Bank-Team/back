@@ -1,5 +1,6 @@
 using System.Text;
 using Common.Commands.Accounts;
+using Common.Commands.Categories;
 using Common.Commands.Operations;
 using Common.Queries;
 using FluentValidation;
@@ -18,12 +19,12 @@ using PiggyBank.Domain;
 using PiggyBank.Domain.Helpers;
 using PiggyBank.Domain.PipelineBehaviours;
 using PiggyBank.Domain.Validators.Accounts;
+using PiggyBank.Domain.Validators.Categories;
 using PiggyBank.Domain.Validators.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Interfaces;
 using PiggyBank.Model.Repositories;
 using PiggyBank.WebApi.Extensions;
-using PiggyBank.WebApi.Factories;
 using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Interfaces;
 using PiggyBank.WebApi.Middlewares;
@@ -54,7 +55,6 @@ namespace PiggyBank.WebApi
             // services.AddScoped<IOperationService, OperationService>();
             // services.AddScoped<IReportService, ReportService>();
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IItemFactory, ItemFactory>();
             // services.AddScoped<IBotService, BotService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<InvalidState>();
@@ -160,6 +160,8 @@ namespace PiggyBank.WebApi
             services.AddScoped<IValidator<DeleteAccountCommand>, DeleteAccountCommandValidator>();
             services.AddScoped<IValidator<DeleteAccountsCommand>, DeleteAccountsCommandValidator>();
             services.AddScoped<IValidator<DeleteRelatedOperationsCommand>, DeleteRelatedOperationsCommandValidator>();
+            services.AddScoped<IValidator<AddCategoryCommand>, AddCategoryCommandValidator>();
+            services.AddScoped<IValidator<AddDefaultCategoriesCommand>, AddDefaultCategoriesCommandValidator>();
 
             services.AddScoped<ILanguageHelper, LanguageHelper>();
         }

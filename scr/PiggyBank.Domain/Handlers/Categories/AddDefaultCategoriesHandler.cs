@@ -21,14 +21,14 @@ namespace PiggyBank.Domain.Handlers.Categories
         {
             if (_languageHelper.UseRussianLanguage(request.Locale))
             {
-                foreach (var command in GenerateCategoryCommandsWithRussiansTitle())
+                foreach (var command in GenerateCategoryCommandsWithRussiansTitle(request))
                 {
                     _ = await _mediator.Send(command, cancellationToken);
                 }
             }
             else
             {
-                foreach (var command in GenerateCategoryCommandsWithEnglishTitle())
+                foreach (var command in GenerateCategoryCommandsWithEnglishTitle(request))
                 {
                     _ = await _mediator.Send(command, cancellationToken);
                 }
@@ -37,14 +37,16 @@ namespace PiggyBank.Domain.Handlers.Categories
             return new AddDefaultCategoriesResult();
         }
 
-        private IEnumerable<AddCategoryCommand> GenerateCategoryCommandsWithRussiansTitle()
+        private IEnumerable<AddCategoryCommand> GenerateCategoryCommandsWithRussiansTitle(AddDefaultCategoriesCommand request)
         {
             yield return new AddCategoryCommand
             {
                 Title = "Доход",
                 Type = CategoryType.Income,
                 HexColor = "#bf0077",
-                IsArchived = false
+                IsArchived = false,
+                CreatedBy = request.CreatedBy,
+                CreatedOn = request.CreatedOn
             };
                 
             yield return new AddCategoryCommand
@@ -52,18 +54,22 @@ namespace PiggyBank.Domain.Handlers.Categories
                 Title = "Расход",
                 Type = CategoryType.Expense,
                 HexColor = "#0078d7",
-                IsArchived = false
+                IsArchived = false,
+                CreatedBy = request.CreatedBy,
+                CreatedOn = request.CreatedOn
             };
         }
         
-        private IEnumerable<AddCategoryCommand> GenerateCategoryCommandsWithEnglishTitle()
+        private IEnumerable<AddCategoryCommand> GenerateCategoryCommandsWithEnglishTitle(AddDefaultCategoriesCommand request)
         {
             yield return new AddCategoryCommand
             {
                 Title = "Income",
                 Type = CategoryType.Income,
                 HexColor = "#bf0077",
-                IsArchived = false
+                IsArchived = false,
+                CreatedBy = request.CreatedBy,
+                CreatedOn = request.CreatedOn
             };
                 
             yield return new AddCategoryCommand
@@ -71,7 +77,9 @@ namespace PiggyBank.Domain.Handlers.Categories
                 Title = "Expense",
                 Type = CategoryType.Expense,
                 HexColor = "#0078d7",
-                IsArchived = false
+                IsArchived = false,
+                CreatedBy = request.CreatedBy,
+                CreatedOn = request.CreatedOn
             };
         }
     }

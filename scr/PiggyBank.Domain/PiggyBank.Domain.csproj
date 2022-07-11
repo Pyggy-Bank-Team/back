@@ -30,8 +30,4 @@
     <ProjectReference Include="..\Identity.Model\Identity.Model.csproj" />
     <ProjectReference Include="..\PiggyBank.Model\PiggyBank.Model.csproj" />
   </ItemGroup>
-
-  <ItemGroup>
-    <Folder Include="Validators\Categories" />
-  </ItemGroup>
 </Project>
