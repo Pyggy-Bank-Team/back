@@ -1,34 +1,35 @@
-﻿using System.Linq;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
 using Common.Commands.Categories;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
+using Common.Results.Categories;
+using MediatR;
+using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.Handlers.Categories
 {
-    public class DeleteCategoriesHandler : BaseHandler<DeleteCategoriesCommand>
+    public class DeleteCategoriesHandler : IRequestHandler<DeleteCategoriesCommand, DeleteCategoryResult>
     {
-        public DeleteCategoriesHandler(PiggyContext context, DeleteCategoriesCommand command)
-            : base(context, command)
+        private readonly ICategoryRepository _repository;
+        private readonly IMediator _mediator;
+
+        public DeleteCategoriesHandler(ICategoryRepository repository, IMediator mediator)
         {
+            _repository = repository;
+            _mediator = mediator;
         }
 
-        public override Task Invoke(CancellationToken token)
-            => Task.Run(() =>
+        public async Task<DeleteCategoryResult> Handle(DeleteCategoriesCommand request, CancellationToken cancellationToken)
+        {
+            foreach (var categoryId in request.Ids)
             {
-                var repository = GetRepository<Category>();
+                var deleteCategoryCommand = new DeleteCategoryCommand { Id = categoryId, ModifiedBy = request.ModifiedBy, ModifiedOn = request.ModifiedOn };
+                var deleteCategoryResult = await _mediator.Send(deleteCategoryCommand, cancellationToken);
 
-                var ids = Command.Ids;
-                foreach (var category in repository.Where(c => !c.IsDeleted && ids.Contains(c.Id)))
-                {
-                    category.IsDeleted = true;
-                    category.Title = "Deleted";
-                    category.HexColor = "#FFFFFF";
-                    category.ModifiedBy = Command.ModifiedBy;
-                    category.ModifiedOn = Command.ModifiedOn;
-                    GetRepository<Category>().Update(category);
-                }
-            }, token);
+                if (!deleteCategoryResult.IsSuccess)
+                    return new DeleteCategoryResult { ErrorCode = deleteCategoryResult.ErrorCode, Messages = deleteCategoryResult.Messages};
+            }
+
+            return new DeleteCategoryResult();
+        }
     }
 }

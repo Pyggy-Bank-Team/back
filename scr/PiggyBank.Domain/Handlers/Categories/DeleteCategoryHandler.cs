@@ -1,31 +1,40 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Common;
 using Common.Commands.Categories;
-using Microsoft.EntityFrameworkCore;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
+using Common.Results.Categories;
+using MediatR;
+using PiggyBank.Domain.Helpers;
+using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.Handlers.Categories
 {
-    public class DeleteCategoryHandler : BaseHandler<DeleteCategoryCommand>
+    public class DeleteCategoryHandler : IRequestHandler<DeleteCategoryCommand, DeleteCategoryResult>
     {
-        public DeleteCategoryHandler(PiggyContext context, DeleteCategoryCommand command)
-            : base(context, command) { }
+        private readonly ICategoryRepository _repository;
+        private readonly ILanguageHelper _languageHelper;
 
-        public override async Task Invoke(CancellationToken token)
+        public DeleteCategoryHandler(ICategoryRepository repository, ILanguageHelper languageHelper)
+            => (_repository, _languageHelper) = (repository, languageHelper);
+
+        public async Task<DeleteCategoryResult> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
-            var repository = GetRepository<Category>();
-            var category = await repository.FirstOrDefaultAsync(c => c.Id == Command.Id && !c.IsDeleted, token);
+            var category = await _repository.GetAsync(request.ModifiedBy, request.Id, cancellationToken);
 
             if (category == null)
-                return;
+                return new DeleteCategoryResult{ErrorCode = ErrorCodes.NotFound};
+
+            if (category.IsDeleted)
+                return new DeleteCategoryResult();
 
             category.IsDeleted = true;
-            category.Title = "Deleted";
-            category.HexColor = "#FFFFFF";
-            category.ModifiedBy = Command.ModifiedBy;
-            category.ModifiedOn = Command.ModifiedOn;
-            repository.Update(category);
+            category.Title = _languageHelper.UseRussianLanguage(request.Locale) ? "Без категории" : "Deleted";
+            category.HexColor = CategoryColors.White;
+            category.ModifiedBy = request.ModifiedBy;
+            category.ModifiedOn = request.ModifiedOn;
+
+            _ = await _repository.UpdateAsync(category, cancellationToken);
+            return new DeleteCategoryResult();
         }
     }
 }
