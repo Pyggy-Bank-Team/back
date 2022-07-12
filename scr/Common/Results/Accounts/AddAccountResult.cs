@@ -2,8 +2,7 @@ using Common.Results.Models.Dto;
 
 namespace Common.Results.Accounts
 {
-    public class AddAccountResult : BaseResult
+    public class AddAccountResult : BaseResult<AccountDto>
     {
-        public AccountDto Data { get; set; }
     }
 }

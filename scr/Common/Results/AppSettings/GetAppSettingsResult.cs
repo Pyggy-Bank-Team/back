@@ -2,8 +2,7 @@ using Common.Results.Models.Dto;
 
 namespace Common.Results.AppSettings
 {
-    public class GetAppSettingsResult : BaseResult
+    public class GetAppSettingsResult : BaseResult<AppSettingsDto>
     {
-        public AppSettingsDto Data { get; set; }
     }
 }
