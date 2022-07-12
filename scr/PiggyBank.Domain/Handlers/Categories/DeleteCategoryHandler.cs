@@ -2,6 +2,7 @@
 using System.Threading.Tasks;
 using Common;
 using Common.Commands.Categories;
+using Common.Queries;
 using Common.Results.Categories;
 using MediatR;
 using PiggyBank.Domain.Helpers;
@@ -13,9 +14,10 @@ namespace PiggyBank.Domain.Handlers.Categories
     {
         private readonly ICategoryRepository _repository;
         private readonly ILanguageHelper _languageHelper;
+        private readonly IMediator _mediator;
 
-        public DeleteCategoryHandler(ICategoryRepository repository, ILanguageHelper languageHelper)
-            => (_repository, _languageHelper) = (repository, languageHelper);
+        public DeleteCategoryHandler(ICategoryRepository repository, ILanguageHelper languageHelper, IMediator mediator)
+            => (_repository, _languageHelper, _mediator) = (repository, languageHelper, mediator);
 
         public async Task<DeleteCategoryResult> Handle(DeleteCategoryCommand request, CancellationToken cancellationToken)
         {
@@ -27,8 +29,10 @@ namespace PiggyBank.Domain.Handlers.Categories
             if (category.IsDeleted)
                 return new DeleteCategoryResult();
 
+            var appSettings = await _mediator.Send(new GetAppSettingsQuery { UserId = request.ModifiedBy }, cancellationToken);
+
             category.IsDeleted = true;
-            category.Title = _languageHelper.UseRussianLanguage(request.Locale) ? "Без категории" : "Deleted";
+            category.Title = _languageHelper.UseRussianLanguage(appSettings.Data?.Locale) ? "Без категории" : "Deleted";
             category.HexColor = CategoryColors.White;
             category.ModifiedBy = request.ModifiedBy;
             category.ModifiedOn = request.ModifiedOn;

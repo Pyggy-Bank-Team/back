@@ -6,6 +6,5 @@ namespace Common.Commands.Categories
     public class DeleteCategoryCommand : BaseModifiedCommand, IRequest<DeleteCategoryResult>
     {
         public int Id { get; set; }
-        public string Locale { get; set; }
     }
 }
