@@ -4,7 +4,7 @@ using System.Threading.Tasks;
 using Common.Commands.Accounts;
 using Common.Enums;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Domain.Handlers.Accounts;
+using PiggyBank.Domain.CommandHandlers.Accounts;
 using PiggyBank.Model;
 using PiggyBank.Model.Repositories;
 using Xunit;

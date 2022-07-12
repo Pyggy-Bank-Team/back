@@ -1,8 +1,10 @@
 ﻿using System;
+using Common.Results.Operations;
+using MediatR;
 
 namespace Common.Commands.Operations.Budget
 {
-    public class AddBudgetOperationCommand : BaseCreateCommand
+    public class AddBudgetOperationCommand : BaseCreateCommand, IRequest<AddBudgetOperationResult>
     {
         public int CategoryId { get; set; }
 
