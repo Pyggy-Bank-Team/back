@@ -1,6 +1,6 @@
 namespace PiggyBank.Domain
 {
-    public class MediatREntryPoint
+    public class EntryPoint
     {
         
     }

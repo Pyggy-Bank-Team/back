@@ -4,14 +4,14 @@ using Common.Results;
 using MediatR;
 using Serilog;
 
-namespace PiggyBank.Domain.PipelineBehaviours
+namespace PiggyBank.Domain.Behaviours
 {
-    public class LoggingPipelineBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>  where TRequest : IRequest<TResponse> 
+    public class LoggingBehavior<TRequest, TResponse> : IPipelineBehavior<TRequest, TResponse>  where TRequest : IRequest<TResponse> 
                                                                                                         where TResponse : BaseResult, new()
     {
         private readonly ILogger _logger;
 
-        public LoggingPipelineBehavior(ILogger logger)
+        public LoggingBehavior(ILogger logger)
             =>  _logger = logger;
         
         public async Task<TResponse> Handle(TRequest request, CancellationToken cancellationToken, RequestHandlerDelegate<TResponse> next)

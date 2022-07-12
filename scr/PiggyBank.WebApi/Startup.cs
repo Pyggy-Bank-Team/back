@@ -1,8 +1,4 @@
 using System.Text;
-using Common.Commands.Accounts;
-using Common.Commands.Categories;
-using Common.Commands.Operations;
-using Common.Queries;
 using FluentValidation;
 using Identity.Model;
 using Identity.Model.Models;
@@ -16,11 +12,8 @@ using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
 using Microsoft.OpenApi.Models;
 using PiggyBank.Domain;
+using PiggyBank.Domain.Behaviours;
 using PiggyBank.Domain.Helpers;
-using PiggyBank.Domain.PipelineBehaviours;
-using PiggyBank.Domain.Validators.Accounts;
-using PiggyBank.Domain.Validators.Categories;
-using PiggyBank.Domain.Validators.Operations;
 using PiggyBank.Model;
 using PiggyBank.Model.Interfaces;
 using PiggyBank.Model.Repositories;
@@ -50,15 +43,11 @@ namespace PiggyBank.WebApi
             services.AddControllers()
                 .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true)
                 .AddNewtonsoftJson();
-            
-            // services.AddScoped<ICategoryService, CategoryService>();
-            // services.AddScoped<IOperationService, OperationService>();
-            // services.AddScoped<IReportService, ReportService>();
+
             services.AddScoped<ITokenService, TokenService>();
-            // services.AddScoped<IBotService, BotService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
             services.AddScoped<InvalidState>();
-            services.AddMediatR(typeof(MediatREntryPoint).Assembly);
+            services.AddMediatR(typeof(EntryPoint).Assembly);
 
             services.AddIdentityServices<ApplicationUser>();
             services.AddStore<IdentityContext>(typeof(ApplicationUser));
@@ -147,22 +136,11 @@ namespace PiggyBank.WebApi
             services.Configure<BotOptions>(Configuration.GetSection(BotOptions.BotSection));
             services.AddHostedService<ConfigureWebHookService>();
 
-            services.AddMediatR(typeof(PiggyBank.Domain.MediatREntryPoint).Assembly);
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidatorPipelineBehavior<,>));
-            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingPipelineBehavior<,>));
+            services.AddMediatR(typeof(PiggyBank.Domain.EntryPoint).Assembly);
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
 
-            services.AddScoped<IValidator<AddAccountCommand>, AddAccountCommandValidator>();
-            services.AddScoped<IValidator<ArchiveAccountCommand>, ArchiveAccountCommandValidator>();
-            services.AddScoped<IValidator<GetAccountsQuery>, GetAccountsQueryValidator>();
-            services.AddScoped<IValidator<UpdateAccountCommand>, UpdateAccountCommandValidator>();
-            services.AddScoped<IValidator<PartialUpdateAccountCommand>, PartialUpdateAccountCommandValidator>();
-            services.AddScoped<IValidator<GetAccountQuery>, GetAccountQueryValidator>();
-            services.AddScoped<IValidator<DeleteAccountCommand>, DeleteAccountCommandValidator>();
-            services.AddScoped<IValidator<DeleteAccountsCommand>, DeleteAccountsCommandValidator>();
-            services.AddScoped<IValidator<DeleteRelatedOperationsCommand>, DeleteRelatedOperationsCommandValidator>();
-            services.AddScoped<IValidator<AddCategoryCommand>, AddCategoryCommandValidator>();
-            services.AddScoped<IValidator<AddDefaultCategoriesCommand>, AddDefaultCategoriesCommandValidator>();
-
+            services.AddValidatorsFromAssembly(typeof(PiggyBank.Domain.EntryPoint).Assembly);
             services.AddScoped<ILanguageHelper, LanguageHelper>();
         }
 

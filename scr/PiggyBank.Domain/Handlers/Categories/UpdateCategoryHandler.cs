@@ -1,32 +1,49 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Common;
 using Common.Commands.Categories;
-using Microsoft.EntityFrameworkCore;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
+using Common.Results.Categories;
+using Common.Results.Models.Dto;
+using MediatR;
+using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.Handlers.Categories
 {
-    public class UpdateCategoryHandler : BaseHandler<UpdateCategoryCommand>
+    public class UpdateCategoryHandler : IRequestHandler<UpdateCategoryCommand, UpdateCategoryResult>
     {
-        public UpdateCategoryHandler(PiggyContext context, UpdateCategoryCommand command)
-            : base(context, command) { }
+        private readonly ICategoryRepository _repository;
 
-        public override async Task Invoke(CancellationToken token)
+        public UpdateCategoryHandler(ICategoryRepository repository)
+            => _repository = repository;
+
+        public async Task<UpdateCategoryResult> Handle(UpdateCategoryCommand request, CancellationToken cancellationToken)
         {
-            var repository = GetRepository<Category>();
-            var category = await repository.FirstOrDefaultAsync(a => a.Id == Command.Id, token);
+            var category = await _repository.GetAsync(request.ModifiedBy, request.Id, cancellationToken);
 
-            if (category == null)
-                return;
+            if (category == null || category.IsDeleted)
+                return new UpdateCategoryResult{ErrorCode = ErrorCodes.InvalidRequest, Messages = new []{"Category not found or deleted"}};
 
-            category.Title = Command.Title;
-            category.HexColor = Command.HexColor;
-            category.IsArchived = Command.IsArchived;
-            category.ModifiedBy = Command.ModifiedBy;
-            category.ModifiedOn = Command.ModifiedOn;
+            category.Title = request.Title;
+            category.HexColor = request.HexColor;
+            category.IsArchived = request.IsArchived;
+            category.ModifiedBy = request.ModifiedBy;
+            category.ModifiedOn = request.ModifiedOn;
 
-            repository.Update(category);
+            var updatedCategory = await _repository.UpdateAsync(category, cancellationToken);
+            return new UpdateCategoryResult
+            {
+                Data = new CategoryDto
+                {
+                    Id = updatedCategory.Id,
+                    Title = updatedCategory.Title,
+                    Type = updatedCategory.Type,
+                    CreatedBy = updatedCategory.CreatedBy,
+                    CreatedOn = updatedCategory.CreatedOn,
+                    HexColor = updatedCategory.HexColor,
+                    IsArchived = updatedCategory.IsArchived,
+                    IsDeleted = updatedCategory.IsDeleted
+                }
+            };
         }
     }
 }
