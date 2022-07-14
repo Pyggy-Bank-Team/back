@@ -1,5 +1,6 @@
 ﻿using System;
 using Common.Results.Operations;
+using Common.Results.Operations.Budget;
 using MediatR;
 
 namespace Common.Commands.Operations.Budget

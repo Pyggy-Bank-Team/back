@@ -1,7 +1,8 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
 using Common.Commands.Accounts;
-using Common.Commands.Operations;
+using Common.Commands.Operations.Budget;
+using Common.Commands.Operations.Transfer;
 using Common.Results.Accounts;
 using MediatR;
 using PiggyBank.Model.Interfaces;
@@ -29,20 +30,32 @@ namespace PiggyBank.Domain.CommandHandlers.Accounts
             account.IsDeleted = true;
             account.ModifiedBy = request.ModifiedBy;
             account.ModifiedOn = request.ModifiedOn;
+            
+            var _ = await _repository.UpdateAsync(account, cancellationToken);
 
-            var deleteRelatedOperationsCommand = new DeleteRelatedOperationsCommand
+            var deleteTransferOperationsCommand = new DeleteTransferOperationsByAccountIdCommand
             {
                 AccountId = account.Id,
                 ModifiedBy = request.ModifiedBy,
                 ModifiedOn = request.ModifiedOn
             };
             
-            var deleteRelatedOperationsResult = await _mediator.Send(deleteRelatedOperationsCommand, cancellationToken);
+            var deleteTransferOperationsResult = await _mediator.Send(deleteTransferOperationsCommand, cancellationToken);
 
-            if (!deleteRelatedOperationsResult.IsSuccess)
-                return new DeleteAccountResult { ErrorCode = deleteRelatedOperationsResult.ErrorCode, Messages = deleteRelatedOperationsResult.Messages};
+            if (!deleteTransferOperationsResult.IsSuccess)
+                return new DeleteAccountResult { ErrorCode = deleteTransferOperationsResult.ErrorCode, Messages = deleteTransferOperationsResult.Messages};
             
-            var _ = await _repository.UpdateAsync(account, cancellationToken);
+            var deleteBudgetOperationsCommand = new DeleteBudgetOperationsByAccountIdCommand
+            {
+                AccountId = account.Id,
+                ModifiedBy = request.ModifiedBy,
+                ModifiedOn = request.ModifiedOn
+            };
+            
+            var deleteBudgetOperationsResult = await _mediator.Send(deleteBudgetOperationsCommand, cancellationToken);
+
+            if (!deleteBudgetOperationsResult.IsSuccess)
+                return new DeleteAccountResult { ErrorCode = deleteBudgetOperationsResult.ErrorCode, Messages = deleteBudgetOperationsResult.Messages};
 
             return new DeleteAccountResult();
         }

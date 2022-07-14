@@ -1,22 +1,50 @@
 ﻿using System.Threading;
 using System.Threading.Tasks;
+using Common;
+using Common.Commands.Accounts;
 using Common.Commands.Operations.Budget;
-using PiggyBank.Domain.InternalServices;
-using PiggyBank.Model;
+using Common.Enums;
+using Common.Results.Operations.Budget;
+using MediatR;
+using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.CommandHandlers.Operations.Budget
 {
-    public class DeleteBudgetOperationHandler : BaseHandler<DeleteBudgetOperationCommand>
+    public class DeleteBudgetOperationHandler : IRequestHandler<DeleteBudgetOperationCommand, DeleteBudgetOperationResult>
     {
-        public DeleteBudgetOperationHandler(PiggyContext context, DeleteBudgetOperationCommand command)
-            : base(context, command)
+        private readonly IBudgetOperationRepository _repository;
+        private readonly IMediator _mediator;
+
+        public DeleteBudgetOperationHandler(IBudgetOperationRepository repository, IMediator mediator)
         {
+            _repository = repository;
+            _mediator = mediator;
         }
 
-        public override Task Invoke(CancellationToken token)
+        public async Task<DeleteBudgetOperationResult> Handle(DeleteBudgetOperationCommand request, CancellationToken cancellationToken)
         {
-            var deletionService = new DeleteOperationService((PiggyContext)Context);
-            return deletionService.DeleteBudgetOperation(Command.Id, Command, token);
+            var operation = await _repository.GetAsync(request.ModifiedBy, request.Id, cancellationToken);
+
+            if (operation == null)
+                return new DeleteBudgetOperationResult { ErrorCode = ErrorCodes.NotFound };
+
+            if (operation.IsDeleted)
+                return new DeleteBudgetOperationResult();
+
+            operation.IsDeleted = true;
+            operation.ModifiedBy = request.ModifiedBy;
+            operation.ModifiedOn = request.ModifiedOn;
+
+            _ = await _repository.UpdateAsync(operation, cancellationToken);
+
+            _ = await _mediator.Send(new ChangeBalanceCommand
+            {
+                Amount = operation.Category.Type == CategoryType.Income ? -operation.Amount : operation.Amount,
+                AccountId = operation.AccountId,
+                UserId = request.ModifiedBy
+            }, cancellationToken);
+
+            return new DeleteBudgetOperationResult();
         }
     }
 }
