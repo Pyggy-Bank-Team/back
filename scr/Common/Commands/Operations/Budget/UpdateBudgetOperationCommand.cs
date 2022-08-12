@@ -1,9 +1,11 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
+using Common.Results.Operations.Budget;
+using MediatR;
 
 namespace Common.Commands.Operations.Budget
 {
-    public class UpdateBidgetOperationCommand : BaseModifiedCommand
+    public class UpdateBudgetOperationCommand : BaseModifiedCommand, IRequest<UpdateBudgetOperationResult>
     {
         public int Id { get; set; }
 
