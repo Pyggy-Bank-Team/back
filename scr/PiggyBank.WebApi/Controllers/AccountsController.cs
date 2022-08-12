@@ -34,7 +34,7 @@ namespace PiggyBank.WebApi.Controllers
              return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
          }
 
-         [HttpPost, InvalidState]
+         [HttpPost, ValidateRequest]
          public async Task<IActionResult> Post(CreateAccountRequest request, CancellationToken token)
          {
              var command = new AddAccountCommand
@@ -56,7 +56,7 @@ namespace PiggyBank.WebApi.Controllers
              return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
          }
         
-         [InvalidState, HttpPut("{accountId}")]
+         [ValidateRequest, HttpPut("{accountId}")]
          public async Task<IActionResult> Update(int accountId, UpdateAccountRequest request, CancellationToken token)
          {
              var command = new UpdateAccountCommand

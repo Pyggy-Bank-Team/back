@@ -46,7 +46,7 @@ namespace PiggyBank.WebApi
 
             services.AddScoped<ITokenService, TokenService>();
             services.AddScoped<IAccountRepository, AccountRepository>();
-            services.AddScoped<InvalidState>();
+            services.AddScoped<ValidateRequestAttribute>();
             services.AddMediatR(typeof(EntryPoint).Assembly);
 
             services.AddIdentityServices<ApplicationUser>();
