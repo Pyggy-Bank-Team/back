@@ -5,7 +5,6 @@ using Common.Queries;
 using Common.Results.Accounts;
 using Common.Results.Models.Dto;
 using MediatR;
-using Microsoft.EntityFrameworkCore;
 using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.QueriesHandlers.Accounts
@@ -17,12 +16,12 @@ namespace PiggyBank.Domain.QueriesHandlers.Accounts
         public GetAccountsHandler(IAccountRepository repository)
             => _repository = repository;
 
-        public async Task<GetAccountsResult> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
+        public Task<GetAccountsResult> Handle(GetAccountsQuery request, CancellationToken cancellationToken)
         {
-            var accounts = _repository.GetAccountsAsync(request.UserId);
-            return new GetAccountsResult
+            var accounts =  _repository.GetAllAsync(request.UserId);
+            var result = new GetAccountsResult
             {
-                Data = await accounts.Select(a => new AccountDto
+                Data = accounts.Select(a => new AccountDto
                 {
                     Id = a.Id,
                     Type = a.Type,
@@ -33,8 +32,10 @@ namespace PiggyBank.Domain.QueriesHandlers.Accounts
                     IsDeleted = a.IsDeleted,
                     CreatedOn = a.CreatedOn,
                     CreatedBy = a.CreatedBy
-                }).ToArrayAsync(cancellationToken)
+                }).ToArray()
             };
+
+            return Task.FromResult(result);
         }
     }
 }

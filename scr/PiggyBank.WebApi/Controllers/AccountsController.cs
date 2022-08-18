@@ -23,7 +23,7 @@ namespace PiggyBank.WebApi.Controllers
              => _mediator = mediator;
         
          [HttpGet]
-         public async Task<IActionResult> Get(CancellationToken token = default)
+         public async Task<IActionResult> Get(CancellationToken token)
          {
              var query = new GetAccountsQuery { UserId = User.GetUserId() };
              var result = await _mediator.Send(query, token);

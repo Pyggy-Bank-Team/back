@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Model.Models.Entities;
@@ -11,6 +11,6 @@ namespace PiggyBank.Model.Interfaces
         Task<Account> AddAsync(Account newAccount, CancellationToken token);
         Task<Account> GetAsync(Guid userId, int accountId, CancellationToken token);
         Task<Account> UpdateAsync(Account updatedAccount, CancellationToken token);
-        IQueryable<Account> GetAccountsAsync(Guid userId);
+        IEnumerable<Account> GetAllAsync(Guid userId);
     }
 }

@@ -9,11 +9,11 @@ using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.QueriesHandlers.Operations
 {
-    public class GetBudgetOperationQueryHandler : IRequestHandler<GetBudgetOperationQuery, GetBudgetOperationResult>
+    public class GetBudgetOperationHandler : IRequestHandler<GetBudgetOperationQuery, GetBudgetOperationResult>
     {
         private readonly IBudgetOperationRepository _repository;
 
-        public GetBudgetOperationQueryHandler(IBudgetOperationRepository repository)
+        public GetBudgetOperationHandler(IBudgetOperationRepository repository)
         {
             _repository = repository;
         }
