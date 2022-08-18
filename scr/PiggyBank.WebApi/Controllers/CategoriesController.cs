@@ -5,11 +5,13 @@ using System;
 using System.Threading;
 using System.Threading.Tasks;
 using Common.Commands.Categories;
+using Common.Queries;
 using Common.Results.Models.Dto;
 using MediatR;
 using PiggyBank.Domain.QueriesHandlers.Categories;
 using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Requests.Categories;
+using PiggyBank.WebApi.Responses;
 
 namespace PiggyBank.WebApi.Controllers
 {
@@ -23,10 +25,15 @@ namespace PiggyBank.WebApi.Controllers
             => _mediator = mediator;
 
         [HttpGet]
-        public Task<IActionResult> Get(CancellationToken token)
+        public async Task<IActionResult> Get(CancellationToken token)
         {
-            var query = new GetCategoriesHandler{}
-            
+            var query = new GetCategoriesQuery { UserId = User.GetUserId() };
+            var result = await _mediator.Send(query, token);
+
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
         }
 
         [HttpGet("{categoryId}")]

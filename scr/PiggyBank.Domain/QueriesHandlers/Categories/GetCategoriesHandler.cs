@@ -16,10 +16,10 @@ namespace PiggyBank.Domain.QueriesHandlers.Categories
         public GetCategoriesHandler(ICategoryRepository repository)
             => _repository = repository;
 
-        public async Task<GetCategoriesResult> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
+        public Task<GetCategoriesResult> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
         {
-            var categories = await _repository.GetAllAsync(request.UserId, cancellationToken);
-            return new GetCategoriesResult
+            var categories = _repository.GetAllAsync(request.UserId, cancellationToken);
+            var result = new GetCategoriesResult
             {
                 Data = categories.Select(c => new CategoryDto
                 {
@@ -33,6 +33,7 @@ namespace PiggyBank.Domain.QueriesHandlers.Categories
                     IsDeleted = c.IsDeleted
                 }).ToArray()
             };
+            return Task.FromResult(result);
         }
     }
 }
