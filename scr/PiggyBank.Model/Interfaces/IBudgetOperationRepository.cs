@@ -1,5 +1,5 @@
 using System;
-using System.Linq;
+using System.Collections.Generic;
 using System.Threading;
 using System.Threading.Tasks;
 using PiggyBank.Model.Models.Entities;
@@ -10,7 +10,7 @@ namespace PiggyBank.Model.Interfaces
     {
         Task<BudgetOperation> AddAsync(BudgetOperation operation, CancellationToken token);
         Task<BudgetOperation> GetAsync(Guid userId, int operationId, CancellationToken token);
-        Task<IQueryable<BudgetOperation>> GetAllAsync(Guid userId, CancellationToken token);
+        IEnumerable<BudgetOperation> GetAllAsync(Guid userId);
         Task<BudgetOperation> UpdateAsync(BudgetOperation operation, CancellationToken token);
     }
 }

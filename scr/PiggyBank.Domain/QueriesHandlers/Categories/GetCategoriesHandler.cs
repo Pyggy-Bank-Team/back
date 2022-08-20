@@ -18,7 +18,7 @@ namespace PiggyBank.Domain.QueriesHandlers.Categories
 
         public Task<GetCategoriesResult> Handle(GetCategoriesQuery request, CancellationToken cancellationToken)
         {
-            var categories = _repository.GetAllAsync(request.UserId, cancellationToken);
+            var categories = _repository.GetAllAsync(request.UserId);
             var result = new GetCategoriesResult
             {
                 Data = categories.Select(c => new CategoryDto

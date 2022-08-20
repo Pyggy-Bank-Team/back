@@ -18,7 +18,7 @@ namespace PiggyBank.Domain.CommandHandlers.Operations.Budget
 
         public async Task<DeleteBudgetOperationsByAccountIdResult> Handle(DeleteBudgetOperationsByAccountIdCommand request, CancellationToken cancellationToken)
         {
-            var allBudgetOperations = await _repository.GetAllAsync(request.ModifiedBy, cancellationToken);
+            var allBudgetOperations = _repository.GetAllAsync(request.ModifiedBy);
             
             foreach (var budgetOperation in allBudgetOperations.Where(b => b.AccountId == request.AccountId))
             {
