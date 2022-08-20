@@ -1,8 +1,10 @@
 ﻿using System;
+using Common.Results.Operations.Transfer;
+using MediatR;
 
 namespace Common.Commands.Operations.Transfer
 {
-    public class UpdateTransferOperationCommand : BaseModifiedCommand
+    public class UpdateTransferOperationCommand : BaseModifiedCommand, IRequest<UpdateTransferOperationResult>
     {
         public int Id { get; set; }
         

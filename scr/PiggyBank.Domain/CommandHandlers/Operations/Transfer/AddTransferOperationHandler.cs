@@ -1,60 +1,75 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Common.Commands.Accounts;
 using Common.Commands.Operations.Transfer;
 using Common.Enums;
+using Common.Queries;
 using Common.Results.Models.Dto.Operations;
-using Microsoft.EntityFrameworkCore;
-using PiggyBank.Model;
+using Common.Results.Operations.Transfer;
+using MediatR;
+using PiggyBank.Model.Interfaces;
 using PiggyBank.Model.Models.Entities;
 
 namespace PiggyBank.Domain.CommandHandlers.Operations.Transfer
 {
-    public class AddTransferOperationHandler : BaseHandler<AddTransferOperationCommand>
+    public class AddTransferOperationHandler : IRequestHandler<AddTransferOperationCommand, AddTransferOperationResult>
     {
-        public AddTransferOperationHandler(PiggyContext context, AddTransferOperationCommand command)
-            : base(context, command) { }
+        private readonly ITransferOperationRepository _repository;
+        private readonly IMediator _mediator;
 
-        public override async Task Invoke(CancellationToken token)
+        public AddTransferOperationHandler(ITransferOperationRepository repository, IMediator mediator)
         {
-            var accountRepository = GetRepository<Account>();
+            _repository = repository;
+            _mediator = mediator;
+        }
 
-            var fromAccount = await accountRepository.FirstOrDefaultAsync(a => a.Id == Command.From && !a.IsDeleted, token)
-                ?? throw new ArgumentException($"Can't found account by {Command.From}");
+        public async Task<AddTransferOperationResult> Handle(AddTransferOperationCommand request, CancellationToken cancellationToken)
+        {
+            var getFromAccountResult = await _mediator.Send(new GetAccountQuery{AccountId = request.From, UserId = request.CreatedBy}, cancellationToken);
 
-            var toAccount = await accountRepository.FirstOrDefaultAsync(a => a.Id == Command.To && !a.IsDeleted, token)
-                ?? throw new ArgumentException($"Can't found account by {Command.To}");
+            if (!getFromAccountResult.IsSuccess)
+                return new AddTransferOperationResult { ErrorCode = getFromAccountResult.ErrorCode, Messages = getFromAccountResult.Messages };
+
+            var getToAccountResult = await _mediator.Send(new GetAccountQuery{AccountId = request.To, UserId = request.CreatedBy}, cancellationToken);
+
+            if (!getToAccountResult.IsSuccess)
+                return new AddTransferOperationResult { ErrorCode = getToAccountResult.ErrorCode, Messages = getToAccountResult.Messages};
+            
+            var changeFromAccountAmountResult = await _mediator.Send(new ChangeBalanceCommand{AccountId = getFromAccountResult.Data.Id, Amount = -request.Amount, UserId = request.CreatedBy}, cancellationToken);
+
+            if (!changeFromAccountAmountResult.IsSuccess)
+                return new AddTransferOperationResult { ErrorCode = changeFromAccountAmountResult.ErrorCode, Messages = changeFromAccountAmountResult.Messages };
+            
+            var changeToAccountAmountResult = await _mediator.Send(new ChangeBalanceCommand{AccountId = getToAccountResult.Data.Id, Amount = request.Amount, UserId = request.CreatedBy}, cancellationToken);
+
+            if (!changeToAccountAmountResult.IsSuccess)
+                return new AddTransferOperationResult { ErrorCode = changeToAccountAmountResult.ErrorCode, Messages = changeToAccountAmountResult.Messages };
 
             var operation = new TransferOperation
             {
-                Amount = Command.Amount,
-                Type = OperationType.Transfer,
-                From = Command.From,
-                To = Command.To,
-                OperationDate = Command.OperationDate,
-                CreatedOn = Command.CreatedOn,
-                Comment = Command.Comment,
-                CreatedBy = Command.CreatedBy
+                Amount = request.Amount,
+                Comment = request.Comment,
+                From = request.From,
+                To = request.To,
+                CreatedBy = request.CreatedBy,
+                CreatedOn = request.CreatedOn,
+                OperationDate = request.OperationDate,
+                Type = OperationType.Transfer
             };
 
-            fromAccount.ChangeBalance(-Command.Amount);
-            toAccount.ChangeBalance(Command.Amount);
-
-            accountRepository.UpdateRange(new[] { fromAccount, toAccount });
-
-            var result = await GetRepository<TransferOperation>().AddAsync(operation, token);
-            await SaveAsync();
-
-            var entity = result.Entity;
-            Result = new TransferDto
+            var createdOperation = await _repository.AddAsync(operation, cancellationToken);
+            return new AddTransferOperationResult
             {
-                Id = entity.Id,
-                Amount = entity.Amount,
-                Comment = entity.Comment,
-                Date = entity.OperationDate,
-                Type = entity.Type,
-                FromId = entity.From,
-                ToId = entity.To
+                Data = new TransferDto
+                {
+                    Amount = createdOperation.Amount,
+                    Comment = createdOperation.Comment,
+                    Date = createdOperation.OperationDate,
+                    Id = createdOperation.Id,
+                    Type = createdOperation.Type,
+                    FromId = createdOperation.From,
+                    ToId = createdOperation.To
+                }
             };
         }
     }

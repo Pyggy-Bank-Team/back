@@ -1,66 +1,86 @@
-﻿using System;
-using System.Threading;
+﻿using System.Threading;
 using System.Threading.Tasks;
+using Common;
+using Common.Commands.Accounts;
 using Common.Commands.Operations.Transfer;
-using Microsoft.EntityFrameworkCore;
-using PiggyBank.Model;
-using PiggyBank.Model.Models.Entities;
+using Common.Queries;
+using Common.Results.Models.Dto.Operations;
+using Common.Results.Operations.Transfer;
+using MediatR;
+using PiggyBank.Model.Interfaces;
 
 namespace PiggyBank.Domain.CommandHandlers.Operations.Transfer
 {
-    public class UpdateTransferOperationHandler : BaseHandler<UpdateTransferOperationCommand>
+    public class UpdateTransferOperationHandler : IRequestHandler<UpdateTransferOperationCommand, UpdateTransferOperationResult>
     {
-        public UpdateTransferOperationHandler(PiggyContext context, UpdateTransferOperationCommand command) 
-            : base(context, command) { }
+        private readonly ITransferOperationRepository _repository;
+        private readonly IMediator _mediator;
 
-        public override async Task Invoke(CancellationToken token)
+        public UpdateTransferOperationHandler(ITransferOperationRepository repository, IMediator mediator)
         {
-            var repository = GetRepository<TransferOperation>();
-            var operation = await repository.FirstOrDefaultAsync(o => o.Id == Command.Id, token);
+            _repository = repository;
+            _mediator = mediator;
+        }
+
+        public async Task<UpdateTransferOperationResult> Handle(UpdateTransferOperationCommand request, CancellationToken cancellationToken)
+        {
+            var operation = await _repository.GetAsync(request.ModifiedBy, request.Id, cancellationToken);
 
             if (operation == null)
+                return new UpdateTransferOperationResult { ErrorCode = ErrorCodes.NotFound };
+            
+            var getFromAccountResult = await _mediator.Send(new GetAccountQuery{AccountId = request.From, UserId = request.ModifiedBy}, cancellationToken);
+
+            if (!getFromAccountResult.IsSuccess)
+                return new UpdateTransferOperationResult { ErrorCode = getFromAccountResult.ErrorCode, Messages = getFromAccountResult.Messages };
+
+            var getToAccountResult = await _mediator.Send(new GetAccountQuery{AccountId = request.To, UserId = request.ModifiedBy}, cancellationToken);
+
+            if (!getToAccountResult.IsSuccess)
+                return new UpdateTransferOperationResult { ErrorCode = getToAccountResult.ErrorCode, Messages = getToAccountResult.Messages};
+            
+            var changeFromAccountAmountResult = await _mediator.Send(new ChangeBalanceCommand{AccountId = operation.From, Amount = operation.Amount, UserId = request.ModifiedBy}, cancellationToken);
+
+            if (!changeFromAccountAmountResult.IsSuccess)
+                return new UpdateTransferOperationResult { ErrorCode = changeFromAccountAmountResult.ErrorCode, Messages = changeFromAccountAmountResult.Messages };
+            
+            var changeToAccountAmountResult = await _mediator.Send(new ChangeBalanceCommand{AccountId = operation.To, Amount = -operation.Amount, UserId = request.ModifiedBy}, cancellationToken);
+
+            if (!changeToAccountAmountResult.IsSuccess)
+                return new UpdateTransferOperationResult { ErrorCode = changeToAccountAmountResult.ErrorCode, Messages = changeToAccountAmountResult.Messages };
+            
+            changeFromAccountAmountResult = await _mediator.Send(new ChangeBalanceCommand{AccountId = getFromAccountResult.Data.Id, Amount = -request.Amount, UserId = request.ModifiedBy}, cancellationToken);
+
+            if (!changeFromAccountAmountResult.IsSuccess)
+                return new UpdateTransferOperationResult { ErrorCode = changeFromAccountAmountResult.ErrorCode, Messages = changeFromAccountAmountResult.Messages };
+            
+            changeToAccountAmountResult = await _mediator.Send(new ChangeBalanceCommand{AccountId = getToAccountResult.Data.Id, Amount = request.Amount, UserId = request.ModifiedBy}, cancellationToken);
+
+            if (!changeToAccountAmountResult.IsSuccess)
+                return new UpdateTransferOperationResult { ErrorCode = changeToAccountAmountResult.ErrorCode, Messages = changeToAccountAmountResult.Messages };
+
+            operation.Amount = request.Amount;
+            operation.From = request.From;
+            operation.To = request.To;
+            operation.Comment = request.Comment;
+            operation.OperationDate = request.OperationDate ?? operation.OperationDate;
+            operation.ModifiedBy = request.ModifiedBy;
+            operation.ModifiedOn = request.ModifiedOn;
+
+            var updatedOperation = await _repository.UpdateAsync(operation, cancellationToken);
+            return new UpdateTransferOperationResult
             {
-                //TODO: Add a log
-                throw new ArgumentException($"Can't find operation with {Command.Id}");
-            }
-
-            var fromAccount = await GetRepository<Account>().FirstOrDefaultAsync(a => !a.IsArchived && a.Id == Command.From, token);
-            if (fromAccount == null)
-            {
-                //TODO: Add a log
-                throw new ArgumentException($"Can't find from account with id {Command.From}");
-            }
-
-            var toAccount = await GetRepository<Account>().FirstOrDefaultAsync(c => !c.IsArchived && c.Id == Command.To, token);
-            if (toAccount == null)
-            {
-                //TODO: Add a log
-                throw new ArgumentException($"Can't find to account with id {Command.To}");
-            }
-
-            //If the amount was changed then I undo the last change and 
-            //Confirm the current amount
-            if (operation.Amount != Command.Amount)
-            {
-                fromAccount.ChangeBalance(operation.Amount);
-                toAccount.ChangeBalance(-operation.Amount);
-                
-                fromAccount.ChangeBalance(-Command.Amount);
-                toAccount.ChangeBalance(Command.Amount);
-
-                GetRepository<Account>().Update(fromAccount);
-                GetRepository<Account>().Update(toAccount);
-            }
-
-            operation.Amount = Command.Amount;
-            operation.Comment = Command.Comment;
-            operation.From = Command.From;
-            operation.To = Command.To;
-            operation.ModifiedBy = Command.ModifiedBy;
-            operation.ModifiedOn = Command.ModifiedOn;
-            operation.OperationDate = Command.OperationDate ?? operation.OperationDate;
-
-            repository.Update(operation);
+                Data = new TransferDto
+                {
+                    Amount = updatedOperation.Amount,
+                    Comment = updatedOperation.Comment,
+                    Date = updatedOperation.OperationDate,
+                    Id = updatedOperation.Id,
+                    Type = updatedOperation.Type,
+                    FromId = updatedOperation.From,
+                    ToId = updatedOperation.To
+                }
+            };
         }
     }
 }
