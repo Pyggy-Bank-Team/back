@@ -6,9 +6,7 @@ using System.Threading;
 using System.Threading.Tasks;
 using Common.Commands.Categories;
 using Common.Queries;
-using Common.Results.Models.Dto;
 using MediatR;
-using PiggyBank.Domain.QueriesHandlers.Categories;
 using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Requests.Categories;
 using PiggyBank.WebApi.Responses;
@@ -37,10 +35,18 @@ namespace PiggyBank.WebApi.Controllers
         }
 
         [HttpGet("{categoryId}")]
-        public Task<CategoryDto> GetById(int categoryId, CancellationToken token)
-            => _service.GetCategory(categoryId, token);
+        public async Task<IActionResult> GetById(int categoryId, CancellationToken token)
+        {
+            var query = new GetCategoryQuery { CategoryId = categoryId, UserId = User.GetUserId() };
+            var result = await _mediator.Send(query, token);
 
-        [HttpPost, InvalidState]
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+        }
+
+        [HttpPost, ValidateRequest]
         public async Task<IActionResult> Post(CreateCategoryRequest request, CancellationToken token)
         {
             var command = new AddCategoryCommand
@@ -53,11 +59,15 @@ namespace PiggyBank.WebApi.Controllers
                 IsArchived = request.IsArchived
             };
 
-            var newCategory = await _service.AddCategory(command, token);
-            return Ok(newCategory);
+            var result = await _mediator.Send(command, token);
+
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
         }
 
-        [InvalidState, HttpPut("{categoryId}")]
+        [ValidateRequest, HttpPut("{categoryId}")]
         public async Task<IActionResult> Update(int categoryId, UpdateCategoryRequest request, CancellationToken token)
         {
             var command = new UpdateCategoryCommand
@@ -70,9 +80,12 @@ namespace PiggyBank.WebApi.Controllers
                 ModifiedOn = DateTime.UtcNow
             };
 
-            await _service.UpdateCategory(command, token);
+            var result = await _mediator.Send(command, token);
 
-            return Ok();
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
         }
 
         [HttpPatch("{categoryId}")]
@@ -88,9 +101,12 @@ namespace PiggyBank.WebApi.Controllers
                 ModifiedOn = DateTime.UtcNow
             };
 
-            await _service.PartialUpdateCategory(command, token);
+            var result = await _mediator.Send(command, token);
 
-            return Ok();
+            if (result.IsSuccess)
+                return Ok(result.Data);
+
+            return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
         }
 
         [HttpDelete("{categoryId}")]
@@ -103,23 +119,30 @@ namespace PiggyBank.WebApi.Controllers
                 ModifiedOn = DateTime.UtcNow
             };
 
-            await _service.DeleteCategory(command, token);
-            return Ok();
+            var result = await _mediator.Send(command, token);
+
+            if (result.IsSuccess)
+                return Ok();
+
+            return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
         }
 
-        [HttpPatch("{categoryId}/Archive")]
+        [HttpPatch("{categoryId}/archive")]
         public async Task<IActionResult> Archive(int categoryId, CancellationToken token)
         {
-            var userId = User.GetUserId();
             var command = new ArchiveCategoryCommand
             {
                 Id = categoryId,
-                ModifiedBy = userId,
+                ModifiedBy = User.GetUserId(),
                 ModifiedOn = DateTime.UtcNow
             };
 
-            await _service.ArchiveCategory(command, token);
-            return Ok();
+            var result = await _mediator.Send(command, token);
+
+            if (result.IsSuccess)
+                return Ok();
+
+            return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
         }
 
         [HttpDelete]
@@ -132,8 +155,12 @@ namespace PiggyBank.WebApi.Controllers
                 ModifiedOn = DateTime.UtcNow
             };
 
-            await _service.DeleteCategories(command, token);
-            return Ok();
+            var result = await _mediator.Send(command, token);
+
+            if (result.IsSuccess)
+                return Ok();
+
+            return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
         }
     }
 }
