@@ -26,8 +26,11 @@ namespace PiggyBank.Model.Repositories
         public Task<BudgetOperation> GetAsync(Guid userId, int operationId, CancellationToken token)
             => _context.BudgetOperations.FirstOrDefaultAsync(b => b.CreatedBy == userId && b.Id == operationId, token);
 
-        public IEnumerable<BudgetOperation> GetAllAsync(Guid userId)
+        public IEnumerable<BudgetOperation> GetAll(Guid userId)
             => _context.BudgetOperations.Where(b => b.CreatedBy == userId);
+
+        public IQueryable<BudgetOperation> GetAllAsQueryable(Guid userId)
+            => _context.BudgetOperations;
 
         public async Task<BudgetOperation> UpdateAsync(BudgetOperation operation, CancellationToken token)
         {

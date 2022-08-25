@@ -1,6 +1,6 @@
 ﻿using Newtonsoft.Json;
 
-namespace Common.Results.Models
+namespace Common.Results
 {
     public class PageResult<T>
     {

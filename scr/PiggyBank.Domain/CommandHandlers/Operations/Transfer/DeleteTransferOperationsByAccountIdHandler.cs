@@ -18,7 +18,7 @@ namespace PiggyBank.Domain.CommandHandlers.Operations.Transfer
 
         public async Task<DeleteTransferOperationsByAccountIdResult> Handle(DeleteTransferOperationsByAccountIdCommand request, CancellationToken cancellationToken)
         {
-            var allTransferOperations = _repository.GetAllAsync(request.UserId);
+            var allTransferOperations = _repository.GetAll(request.UserId);
             
             foreach (var transferOperation in allTransferOperations.Where(to => to.From == request.AccountId))
             {
