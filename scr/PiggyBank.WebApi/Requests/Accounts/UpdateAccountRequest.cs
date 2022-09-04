@@ -1,5 +1,5 @@
 ﻿using System.ComponentModel.DataAnnotations;
-using PiggyBank.Common.Enums;
+using Common.Enums;
 
 namespace PiggyBank.WebApi.Requests.Accounts
 {

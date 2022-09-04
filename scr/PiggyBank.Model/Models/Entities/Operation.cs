@@ -1,6 +1,6 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations.Schema;
-using PiggyBank.Common.Enums;
+using Common.Enums;
 
 namespace PiggyBank.Model.Models.Entities
 {

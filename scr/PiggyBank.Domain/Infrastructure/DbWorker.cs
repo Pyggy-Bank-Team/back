@@ -1,7 +1,6 @@
 ﻿using System;
 using System.Threading.Tasks;
 using Microsoft.EntityFrameworkCore;
-using PiggyBank.Common.Interfaces.Models;
 
 namespace PiggyBank.Domain.Infrastructure
 {
@@ -14,7 +13,7 @@ namespace PiggyBank.Domain.Infrastructure
 
         public DbContext Context => _context;
 
-        public DbSet<T> GetRepository<T>() where T : class, IBaseModel
+        public DbSet<T> GetRepository<T>() where T : class
             => _context.Set<T>();
   
         //TODO Refactor

@@ -21,7 +21,7 @@ namespace PiggyBank.WebApi.Controllers
         public TokensController(ITokenService service, IOptions<TokenOptions> options)
             => (_tokenService, _options) = (service, options.Value);
 
-        [AllowAnonymous, InvalidState, HttpPost("Connect")]
+        [AllowAnonymous, ValidateRequest, HttpPost("Connect")]
         public async Task<IActionResult> Connect(GetTokenRequest request, CancellationToken token)
         {
             var bearerToken = await _tokenService.GetBearerToken(request.UserName, request.Password);

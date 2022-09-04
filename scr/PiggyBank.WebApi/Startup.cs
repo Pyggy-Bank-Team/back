@@ -1,6 +1,8 @@
 using System.Text;
+using FluentValidation;
 using Identity.Model;
 using Identity.Model.Models;
+using MediatR;
 using Microsoft.AspNetCore.Builder;
 using Microsoft.AspNetCore.Hosting;
 using Microsoft.EntityFrameworkCore;
@@ -8,13 +10,14 @@ using Microsoft.Extensions.Configuration;
 using Microsoft.Extensions.DependencyInjection;
 using Microsoft.Extensions.Hosting;
 using Microsoft.IdentityModel.Tokens;
-using Microsoft.Net.Http.Headers;
 using Microsoft.OpenApi.Models;
-using PiggyBank.Common.Interfaces;
-using PiggyBank.Domain.Services;
+using PiggyBank.Domain;
+using PiggyBank.Domain.Behaviours;
+using PiggyBank.Domain.Helpers;
 using PiggyBank.Model;
+using PiggyBank.Model.Interfaces;
+using PiggyBank.Model.Repositories;
 using PiggyBank.WebApi.Extensions;
-using PiggyBank.WebApi.Factories;
 using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Interfaces;
 using PiggyBank.WebApi.Middlewares;
@@ -29,7 +32,6 @@ namespace PiggyBank.WebApi
 {
     public class Startup
     {
-        private const string AllowOrigins = "SpecificOrigins";
         public Startup(IConfiguration configuration, IWebHostEnvironment environment)
             => (Configuration, Environment) = (configuration, environment);
 
@@ -42,14 +44,12 @@ namespace PiggyBank.WebApi
                 .ConfigureApiBehaviorOptions(opt => opt.SuppressModelStateInvalidFilter = true)
                 .AddNewtonsoftJson();
 
-            services.AddScoped<IAccountService, AccountService>();
-            services.AddScoped<ICategoryService, CategoryService>();
-            services.AddScoped<IOperationService, OperationService>();
-            services.AddScoped<IReportService, ReportService>();
             services.AddScoped<ITokenService, TokenService>();
-            services.AddScoped<IItemFactory, ItemFactory>();
-            services.AddScoped<IBotService, BotService>();
-            services.AddScoped<InvalidState>();
+            services.AddScoped<IAccountRepository, AccountRepository>();
+            services.AddScoped<ICategoryRepository, CategoryRepository>();
+            services.AddScoped<IBudgetOperationRepository, BudgetOperationRepository>();
+            services.AddScoped<ValidateRequestAttribute>();
+            services.AddMediatR(typeof(EntryPoint).Assembly);
 
             services.AddIdentityServices<ApplicationUser>();
             services.AddStore<IdentityContext>(typeof(ApplicationUser));
@@ -65,7 +65,7 @@ namespace PiggyBank.WebApi
             {
                 services.AddSwaggerGen(c =>
                 {
-                    c.SwaggerDoc("v1", new OpenApiInfo {Title = "PiggyBank API", Version = "v1"});
+                    c.SwaggerDoc("v1", new OpenApiInfo { Title = "PiggyBank API", Version = "v1" });
 
                     var scheme = new OpenApiSecurityScheme
                     {
@@ -97,7 +97,6 @@ namespace PiggyBank.WebApi
             #endregion
 
             var tokenOptions = Configuration.GetSection(TokenOptions.SectionName);
-
             services.AddAuthentication("Bearer")
                 .AddJwtBearer("Bearer", options =>
                 {
@@ -125,30 +124,26 @@ namespace PiggyBank.WebApi
                 SchemaName = "Audit",
                 AutoCreateSqlTable = true
             };
-            
+
             Log.Logger = new LoggerConfiguration()
                 .MinimumLevel.Override("Microsoft", LogEventLevel.Warning)
                 .WriteTo.MSSqlServer(connectionString, options).CreateLogger();
 
             services.AddSingleton(Log.Logger);
 
-            services.AddCors(corsOptions =>
-            {
-                corsOptions.AddPolicy(name: AllowOrigins, builder =>
-                {
-                    builder.WithOrigins("http://localhost:5000", "https://localhost:5001")
-                        .WithHeaders(HeaderNames.ContentType)
-                        .WithHeaders(HeaderNames.Authorization);
-                });
-            });
-
             var botOptions = Configuration.GetSection(BotOptions.BotSection);
             services.AddHttpClient("tmbot")
-                .AddTypedClient<ITelegramBotClient>(client =>new TelegramBotClient(botOptions["Token"], client));
+                .AddTypedClient<ITelegramBotClient>(client => new TelegramBotClient(botOptions["Token"], client));
 
             services.Configure<BotOptions>(Configuration.GetSection(BotOptions.BotSection));
-            
             services.AddHostedService<ConfigureWebHookService>();
+
+            services.AddMediatR(typeof(PiggyBank.Domain.EntryPoint).Assembly);
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(ValidationBehavior<,>));
+            services.AddScoped(typeof(IPipelineBehavior<,>), typeof(LoggingBehavior<,>));
+
+            services.AddValidatorsFromAssembly(typeof(PiggyBank.Domain.EntryPoint).Assembly);
+            services.AddScoped<ILanguageHelper, LanguageHelper>();
         }
 
         public void Configure(IApplicationBuilder app, IWebHostEnvironment env)
@@ -160,7 +155,6 @@ namespace PiggyBank.WebApi
             }
 
             app.UseRouting();
-            app.UseCors(AllowOrigins);
 
             app.UseAuthentication();
             app.UseAuthorization();

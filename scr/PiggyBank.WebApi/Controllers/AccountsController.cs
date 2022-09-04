@@ -1,14 +1,15 @@
 ﻿using Microsoft.AspNetCore.Authorization;
 using Microsoft.AspNetCore.Mvc;
-using PiggyBank.Common.Commands.Accounts;
-using PiggyBank.Common.Interfaces;
-using PiggyBank.Common.Models.Dto;
 using PiggyBank.WebApi.Extensions;
 using System;
 using System.Threading;
 using System.Threading.Tasks;
+using Common.Commands.Accounts;
+using Common.Queries;
+using MediatR;
 using PiggyBank.WebApi.Filters;
 using PiggyBank.WebApi.Requests.Accounts;
+using PiggyBank.WebApi.Responses;
 
 namespace PiggyBank.WebApi.Controllers
 {
@@ -16,118 +17,153 @@ namespace PiggyBank.WebApi.Controllers
     [ApiController, Route("api/[controller]")]
     public class AccountsController : ControllerBase
     {
-        private readonly IAccountService _service;
+         private readonly IMediator _mediator;
+        
+         public AccountsController(IMediator mediator)
+             => _mediator = mediator;
+        
+         [HttpGet]
+         public async Task<IActionResult> Get(CancellationToken token)
+         {
+             var query = new GetAccountsQuery { UserId = User.GetUserId() };
+             var result = await _mediator.Send(query, token);
 
-        public AccountsController(IAccountService service)
-            => _service = service;
+             if (result.IsSuccess)
+                 return Ok(result.Data);
 
-        [HttpGet]
-        public Task<AccountDto[]> Get(bool all = false, CancellationToken token = default)
-            => _service.GetAccounts(all, User.GetUserId(), token);
+             return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+         }
 
-        [HttpPost, InvalidState]
-        public async Task<IActionResult> Post(CreateAccountRequest request, CancellationToken token)
-        {
-            var command = new AddAccountCommand
-            {
-                Balance = request.Balance,
-                Currency = User.GetCurrency(),
-                Title = request.Title,
-                Type = request.Type,
-                CreatedBy = User.GetUserId(),
-                CreatedOn = DateTime.UtcNow,
-                IsArchived = request.IsArchived
-            };
+         [HttpPost, ValidateRequest]
+         public async Task<IActionResult> Post(CreateAccountRequest request, CancellationToken token)
+         {
+             var command = new AddAccountCommand
+             {
+                 Balance = request.Balance,
+                 Currency = User.GetCurrency(),
+                 Title = request.Title,
+                 Type = request.Type,
+                 CreatedBy = User.GetUserId(),
+                 CreatedOn = DateTime.UtcNow,
+                 IsArchived = request.IsArchived
+             };
+        
+             var result = await _mediator.Send(command, token);
 
-            var result = await _service.AddAccount(command, token);
+             if (result.IsSuccess)
+                 return Ok(result);
 
-            return Ok(result);
-        }
+             return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+         }
+        
+         [ValidateRequest, HttpPut("{accountId}")]
+         public async Task<IActionResult> Update(int accountId, UpdateAccountRequest request, CancellationToken token)
+         {
+             var command = new UpdateAccountCommand
+             {
+                 Id = accountId,
+                 Balance = request.Balance,
+                 Title = request.Title,
+                 Type = request.Type,
+                 IsArchived = request.IsArchived,
+                 ModifiedBy = User.GetUserId(),
+                 ModifiedOn = DateTime.UtcNow
+             };
+        
+             var result = await _mediator.Send(command, token);
 
-        [InvalidState, HttpPut("{accountId}")]
-        public async Task<IActionResult> Update(int accountId, UpdateAccountRequest request, CancellationToken token)
-        {
-            var command = new UpdateAccountCommand
-            {
-                Id = accountId,
-                Balance = request.Balance,
-                Title = request.Title,
-                Type = request.Type,
-                IsArchived = request.IsArchived,
-                ModifiedBy = User.GetUserId(),
-                ModifiedOn = DateTime.UtcNow
-            };
+             if (result.IsSuccess)
+                 return Ok();
+             
+             return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+         }
+        
+         [HttpPatch("{accountId}")]
+         public async Task<IActionResult> PartialUpdate(int accountId, PartialUpdateAccountRequest request, CancellationToken token)
+         {
+             var command = new PartialUpdateAccountCommand
+             {
+                 Id = accountId,
+                 Balance = request.Balance,
+                 IsArchive = request.IsArchived,
+                 Title = request.Title,
+                 Type = request.Type,
+                 ModifiedBy = User.GetUserId(),
+                 ModifiedOn = DateTime.UtcNow
+             };
+        
+             var result = await _mediator.Send(command, token);
 
-            await _service.UpdateAccount(command, token);
+             if (result.IsSuccess)
+                 return Ok();
 
-            return Ok();
-        }
+             return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+         }
+        
+         [HttpGet("{accountId}")]
+         public async Task<IActionResult> GetById(int accountId, CancellationToken token)
+         {
+             var query = new GetAccountQuery { AccountId = accountId, UserId = User.GetUserId() };
+             var result = await _mediator.Send(query, token);
 
-        [HttpPatch("{accountId}")]
-        public async Task<IActionResult> PartialUpdate(int accountId, PartialUpdateAccountRequest request, CancellationToken token)
-        {
-            var command = new PartialUpdateAccountCommand
-            {
-                Id = accountId,
-                Balance = request.Balance,
-                IsArchive = request.IsArchived,
-                Title = request.Title,
-                Type = request.Type,
-                ModifiedBy = User.GetUserId(),
-                ModifiedOn = DateTime.UtcNow
-            };
+             if (result.IsSuccess)
+                 return Ok(result.Data);
 
-            await _service.PartialUpdateAccount(command, token);
+             return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+         }
 
-            return Ok();
-        }
+         [HttpDelete("{accountId}")]
+         public async Task<IActionResult> Delete(int accountId, CancellationToken token)
+         {
+             var command = new DeleteAccountCommand
+             {
+                 Id = accountId,
+                 ModifiedBy = User.GetUserId(),
+                 ModifiedOn = DateTime.UtcNow
+             };
+        
+             var result = await _mediator.Send(command, token);
 
-        [HttpGet("{accountId}")]
-        public Task<AccountDto> GetById(int accountId, CancellationToken token)
-            => _service.GetAccount(accountId, token);
+             if (result.IsSuccess)
+                 return Ok();
 
-        [HttpDelete("{accountId}")]
-        public async Task<IActionResult> Delete(int accountId, CancellationToken token)
-        {
-            var userId = User.GetUserId();
-            var command = new DeleteAccountCommand
-            {
-                Id = accountId,
-                ModifiedBy = userId,
-                ModifiedOn = DateTime.UtcNow
-            };
+             return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+         }
+        
+         [HttpPatch("{accountId}/archive")]
+         public async Task<IActionResult> Archive(int accountId, CancellationToken token)
+         {
+             var command = new ArchiveAccountCommand
+             {
+                 Id = accountId,
+                 ModifiedBy = User.GetUserId(),
+                 ModifiedOn = DateTime.UtcNow
+             };
+        
+             var result = await _mediator.Send(command, token);
 
-            await _service.DeleteAccount(command, token);
-            return Ok();
-        }
+             if (result.IsSuccess)
+                 return Ok();
 
-        [HttpPatch("{accountId}/Archive")]
-        public async Task<IActionResult> Archive(int accountId, CancellationToken token)
-        {
-            var userId = User.GetUserId();
-            var command = new ArchiveAccountCommand
-            {
-                Id = accountId,
-                ModifiedBy = userId,
-                ModifiedOn = DateTime.UtcNow
-            };
+             return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+         }
+        
+         [HttpDelete]
+         public async Task<IActionResult> DeleteAccounts([FromQuery] int[] id, CancellationToken token)
+         {
+             var command = new DeleteAccountsCommand
+             {
+                 Ids = id,
+                 ModifiedBy = User.GetUserId(),
+                 ModifiedOn = DateTime.UtcNow
+             };
+        
+             var result = await _mediator.Send(command, token);
 
-            await _service.ArchiveAccount(command, token);
-            return Ok();
-        }
+             if (result.IsSuccess)
+                 return Ok();
 
-        [HttpDelete]
-        public async Task<IActionResult> DeleteAccounts([FromQuery] int[] id, CancellationToken token)
-        {
-            var command = new DeleteAccountsCommand
-            {
-                Ids = id,
-                ModifiedBy = User.GetUserId(),
-                ModifiedOn = DateTime.UtcNow
-            };
-
-            await _service.DeleteAccounts(command, token);
-            return Ok();
-        }
+             return BadRequest(new ErrorResponse(result.ErrorCode, result.Messages));
+         }
     }
 }

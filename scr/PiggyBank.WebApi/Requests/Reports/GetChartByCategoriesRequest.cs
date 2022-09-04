@@ -1,4 +1,4 @@
-﻿using PiggyBank.Common.Enums;
+﻿using Common.Enums;
 
 namespace PiggyBank.WebApi.Requests.Reports
 {

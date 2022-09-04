@@ -1,10 +1,9 @@
 ﻿using System;
 using System.ComponentModel.DataAnnotations;
-using PiggyBank.Common.Interfaces.Models;
 
 namespace PiggyBank.Model.Models
 {
-    public abstract class EntityBase : IBaseModel
+    public abstract class EntityBase
     {
         [Required]
         public DateTime CreatedOn { get; set; }
